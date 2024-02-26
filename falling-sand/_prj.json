@@ -1,0 +1,8 @@
+{
+    "name": "Falling Sand Simulation",
+    "description": "A simple falling sand simulation.",
+    "screenshot": null,
+    "tags": ["Simulation", "Love2D"],
+    "demo": null,
+    "code": "main.lua"
+}
