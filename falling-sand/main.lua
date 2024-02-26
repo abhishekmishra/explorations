@@ -68,11 +68,20 @@ function love.update()
             -- If the cell is filled
             if state == 1 then
                 local below = grid[x][y + 1]
+                local belowRight = grid[x + 1][y + 1]
+                local belowLeft = grid[x - 1][y + 1]
+
                 -- If the cell below is empty
-                if below == 0 and y < gridRows then
+                if below == 0 then
                     -- Move the cell down
                     nextGrid[x][y + 1] = 1
                     nextGrid[x][y] = 0
+                elseif belowRight == 0 then
+                    -- Move the cell down and to the right
+                    nextGrid[x + 1][y + 1] = 1
+                elseif belowLeft == 0 then
+                    -- Move the cell down and to the left
+                    nextGrid[x - 1][y + 1] = 1
                 else
                     nextGrid[x][y] = 1
                 end
