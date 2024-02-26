@@ -15,7 +15,7 @@
 -- author: Abhishek Mishra
 
 -- define square grid size
-local gridW = 10
+local gridW = 3
 
 -- grid and its dimensions
 local grid, nextGrid, gridRows, gridCols
