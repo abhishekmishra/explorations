@@ -45,6 +45,20 @@ local function createGrid(cols, rows)
     return g
 end
 
+--- check if the cell column is within the column range
+-- @param x: column number
+-- @return: true if the column is within the range, false otherwise
+local function colInGrid(x)
+    return x > 0 and x <= gridCols
+end
+
+--- check if the cell row is within the row range
+-- @param y: row number
+-- @return: true if the row is within the range, false otherwise
+local function rowInGrid(y)
+    return y > 0 and y <= gridRows
+end
+
 --- love.load: Called once at the start of the simulation
 function love.load()
     -- get the canvas size
@@ -77,8 +91,7 @@ function love.update()
         for x = -extent, extent do
             for y = -extent, extent do
                 -- ensure the cell is within the grid
-                if mouseCol + x <= gridCols and mouseRow + y <= gridRows
-                    and mouseCol + x > 0 and mouseRow + x > 0 then
+                if colInGrid(mouseCol + x) and rowInGrid(mouseRow + x) then
                     -- fill the cell with 75% probability
                     if math.random() > 0.25 then
                         nextGrid[mouseCol + x][mouseRow + y] = hue
@@ -97,20 +110,20 @@ function love.update()
             if state > 0 then
                 local below = grid[x][y + 1]
 
-                local belowA, belowB
+                local belowA = -1; local belowB = -1
 
                 -- choose a random direction, a value either -1 or 1
                 local direction = (math.random(0, 1) - 0.5) * 2
 
                 -- we have belowA direction available only if x + direction is
                 -- within the grid
-                if x + direction > 0 and x + direction <= gridCols then
+                if colInGrid(x + direction) then
                     belowA = grid[x + direction][y + 1]
                 end
 
                 -- we have belowB direction available only if x - direction is
                 -- within the grid
-                if x - direction > 0 and x - direction <= gridCols then
+                if colInGrid(x - direction) then
                     belowB = grid[x - direction][y + 1]
                 end
 
