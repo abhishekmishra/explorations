@@ -45,9 +45,6 @@ function love.load()
 
     -- Create the grid
     grid = createGrid(gridCols, gridRows)
-
-    -- Set one cell to 1
-    grid[math.floor(gridRows / 2)][1] = 1
 end
 
 --- love.update: Called every frame, updates the simulation
@@ -114,25 +111,25 @@ end
 
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
+    -- fill the background with black
+    love.graphics.setBackgroundColor(0, 0, 0)
+
     -- Draw the grid
     for x = 1, gridRows do
         for y = 1, gridCols do
-            if grid[x][y] == 0 then
-                -- Set color to black for empty cells
-                love.graphics.setColor(0, 0, 0)
-            else
+            if grid[x][y] == 1 then
                 -- Set color to purple for filled cells
                 love.graphics.setColor(128, 0, 128)
+                -- Draw a 1x1 rectangle for each cell
+                love.graphics.rectangle("fill", (x - 1) * gridW,
+                    (y - 1) * gridW, gridW, gridW)
             end
-            -- Draw a 1x1 rectangle for each cell
-            love.graphics.rectangle("fill", (x - 1) * gridW,
-                (y - 1) * gridW, gridW, gridW)
-
-            -- Set stroke color to white
-            love.graphics.setColor(255, 255, 255)
-            -- Draw a rectangle with stroke, gridW x gridW
-            love.graphics.rectangle("line", (x - 1) * gridW,
-                (y - 1) * gridW, gridW, gridW)
+            -- remove draing the grid for performance
+            -- -- Set stroke color to white
+            -- love.graphics.setColor(255, 255, 255)
+            -- -- Draw a rectangle with stroke, gridW x gridW
+            -- love.graphics.rectangle("line", (x - 1) * gridW,
+            --     (y - 1) * gridW, gridW, gridW)
         end
     end
 end
