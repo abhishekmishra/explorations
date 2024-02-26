@@ -54,10 +54,28 @@ function love.update()
 
     -- If dragging, fill the cell under the mouse
     if dragging then
-        local x, y = love.mouse.getPosition()
-        x = math.floor(x / gridW) + 1
-        y = math.floor(y / gridW) + 1
-        nextGrid[x][y] = 1
+        local mouseCol, mouseRow = love.mouse.getPosition()
+        mouseCol = math.floor(mouseCol / gridW) + 1
+        mouseRow = math.floor(mouseRow / gridW) + 1
+
+        -- lets have the mouse drag drow sand in a 5x5 matrix
+        -- but each cell in the matrix has 75% chance of being filled
+        local matrix = 3
+        local extent = math.floor(matrix / 2)
+        for x = -extent, extent do
+            for y = -extent, extent do
+                -- ensure the cell is within the grid
+                if mouseCol + x <= gridCols and mouseRow + y <= gridRows
+                    and mouseCol + x > 0 and mouseRow + x > 0 then
+                    -- fill the cell with 75% probability
+                    if math.random() > 0.25 then
+                        nextGrid[mouseCol + x][mouseRow + y] = 1
+                    end
+                end
+            end
+        end
+
+        nextGrid[mouseCol][mouseRow] = 1
     end
 
     -- Loop through the grid
@@ -67,7 +85,6 @@ function love.update()
 
             -- If the cell is filled
             if state == 1 then
-
                 local below = grid[x][y + 1]
 
                 local belowA, belowB
@@ -75,13 +92,13 @@ function love.update()
                 -- choose a random direction, a value either -1 or 1
                 local direction = (math.random(0, 1) - 0.5) * 2
 
-                -- we have belowA direction available only if x + direction is 
+                -- we have belowA direction available only if x + direction is
                 -- within the grid
                 if x + direction > 0 and x + direction <= gridCols then
                     belowA = grid[x + direction][y + 1]
                 end
 
-                -- we have belowB direction available only if x - direction is 
+                -- we have belowB direction available only if x - direction is
                 -- within the grid
                 if x - direction > 0 and x - direction <= gridCols then
                     belowB = grid[x - direction][y + 1]
