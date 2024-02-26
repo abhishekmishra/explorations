@@ -14,6 +14,9 @@ local grid, nextGrid, gridRows, gridCols
 -- dragging flag
 local dragging = false
 
+-- seed the random number generator
+math.randomseed(os.time())
+
 --- create a 2d grid, with all the cells set to 0
 --
 -- @param cols: number of columns
@@ -67,21 +70,37 @@ function love.update()
 
             -- If the cell is filled
             if state == 1 then
+
                 local below = grid[x][y + 1]
-                local belowRight = grid[x + 1][y + 1]
-                local belowLeft = grid[x - 1][y + 1]
+
+                local belowA, belowB
+
+                -- choose a random direction, a value either -1 or 1
+                local direction = (math.random(0, 1) - 0.5) * 2
+
+                -- we have belowA direction available only if x + direction is 
+                -- within the grid
+                if x + direction > 0 and x + direction <= gridCols then
+                    belowA = grid[x + direction][y + 1]
+                end
+
+                -- we have belowB direction available only if x - direction is 
+                -- within the grid
+                if x - direction > 0 and x - direction <= gridCols then
+                    belowB = grid[x - direction][y + 1]
+                end
 
                 -- If the cell below is empty
                 if below == 0 then
                     -- Move the cell down
                     nextGrid[x][y + 1] = 1
                     nextGrid[x][y] = 0
-                elseif belowRight == 0 then
-                    -- Move the cell down and to the right
-                    nextGrid[x + 1][y + 1] = 1
-                elseif belowLeft == 0 then
-                    -- Move the cell down and to the left
-                    nextGrid[x - 1][y + 1] = 1
+                elseif belowA == 0 then
+                    -- Move the cell down and to the A direction
+                    nextGrid[x + direction][y + 1] = 1
+                elseif belowB == 0 then
+                    -- Move the cell down and to the B direction
+                    nextGrid[x - direction][y + 1] = 1
                 else
                     nextGrid[x][y] = 1
                 end
