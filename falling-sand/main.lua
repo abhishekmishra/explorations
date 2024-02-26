@@ -9,18 +9,21 @@
 local gridW = 10
 
 -- grid and its dimensions
-local grid, gridRows, gridCols
+local grid, nextGrid, gridRows, gridCols
+
+-- dragging flag
+local dragging = false
 
 --- create a 2d grid, with all the cells set to 0
 --
--- @param rows: number of rows
 -- @param cols: number of columns
+-- @param rows: number of rows
 -- @return: a 2d grid
-local function createGrid(rows, cols)
+local function createGrid(cols, rows)
     local g = {}
-    for x = 1, rows do
+    for x = 1, cols do
         g[x] = {}
-        for y = 1, cols do
+        for y = 1, rows do
             g[x][y] = 0
         end
     end
@@ -38,10 +41,47 @@ function love.load()
     gridCols = ch / gridW
 
     -- Create the grid
-    grid = createGrid(gridRows, gridCols)
+    grid = createGrid(gridCols, gridRows)
 
     -- Set one cell to 1
     grid[math.floor(gridRows / 2)][1] = 1
+end
+
+--- love.update: Called every frame, updates the simulation
+function love.update()
+    -- Create a new grid
+    nextGrid = createGrid(gridCols, gridRows)
+
+    -- If dragging, fill the cell under the mouse
+    if dragging then
+        local x, y = love.mouse.getPosition()
+        x = math.floor(x / gridW) + 1
+        y = math.floor(y / gridW) + 1
+        nextGrid[x][y] = 1
+    end
+
+    -- Loop through the grid
+    for x = 1, gridCols do
+        for y = 1, gridRows do
+            local state = grid[x][y]
+
+            -- If the cell is filled
+            if state == 1 then
+                local below = grid[x][y + 1]
+                -- If the cell below is empty
+                if below == 0 and y < gridRows then
+                    -- Move the cell down
+                    nextGrid[x][y + 1] = 1
+                    nextGrid[x][y] = 0
+                else
+                    nextGrid[x][y] = 1
+                end
+            end
+        end
+    end
+
+    -- Update the grid
+    grid = nextGrid
 end
 
 --- love.draw: Called every frame, draws the simulation
@@ -66,6 +106,22 @@ function love.draw()
             love.graphics.rectangle("line", (x - 1) * gridW,
                 (y - 1) * gridW, gridW, gridW)
         end
+    end
+end
+
+--- mouse drag to fill cells
+function love.mousepressed(x, y, button)
+    --- if mouse is pressed set dragging to true
+    if button == 1 and dragging == false then
+        dragging = true
+    end
+end
+
+--- mouse release to stop filling cells
+function love.mousereleased(x, y, button)
+    --- if mouse is released set dragging to false
+    if button == 1 and dragging == true then
+        dragging = false
     end
 end
 
