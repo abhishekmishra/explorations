@@ -1,0 +1,3 @@
+TODO: implement gravity for the sand
+TODO:implement a Sand particle class like the 
+  implementation at https://jason.today/falling-sand
