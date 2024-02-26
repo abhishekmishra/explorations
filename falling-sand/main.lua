@@ -11,6 +11,23 @@ local gridW = 10
 -- grid and its dimensions
 local grid, gridRows, gridCols
 
+--- create a 2d grid, with all the cells set to 0
+--
+-- @param rows: number of rows
+-- @param cols: number of columns
+-- @return: a 2d grid
+local function createGrid(rows, cols)
+    local g = {}
+    for x = 1, rows do
+        g[x] = {}
+        for y = 1, cols do
+            g[x][y] = 0
+        end
+    end
+    return g
+end
+
+--- love.load: Called once at the start of the simulation
 function love.load()
     -- get the canvas size
     local cw = love.graphics.getWidth()
@@ -21,16 +38,13 @@ function love.load()
     gridCols = ch / gridW
 
     -- Create the grid
-    grid = {}
-    for x = 1, gridRows do
-        grid[x] = {}
-        for y = 1, gridCols do
-            -- Initialize each cell with a value of 0
-            grid[x][y] = 0
-        end
-    end
+    grid = createGrid(gridRows, gridCols)
+
+    -- Set one cell to 1
+    grid[math.floor(gridRows / 2)][1] = 1
 end
 
+--- love.draw: Called every frame, draws the simulation
 function love.draw()
     -- Draw the grid
     for x = 1, gridRows do
