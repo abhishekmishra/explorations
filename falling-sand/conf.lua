@@ -14,4 +14,9 @@ function love.conf(t)
     -- set the window size
     t.window.width = canvasWidth
     t.window.height = canvasHeight
+
+    -- disable unused modules for performance
+    t.modules.joystick = false
+    t.modules.physics = false
+    t.modules.touch = false
 end
