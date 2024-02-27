@@ -44,16 +44,20 @@ function love.draw()
     love.graphics.setColor(1, 0, 0, 1)
     love.graphics.rectangle("fill", 100, 200, 200, 100)
 
+    -- draw the image in rose.png
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.draw(love.graphics.newImage("rose.png"), 0, 0, 0, 0.5, 0.5)
+
     love.graphics.setShader()
 
     --draw the name of the current shader at the top left of the screen
-    love.graphics.setColor(0, 1, 1, 1)
+    love.graphics.setColor(0, 0.1, 0.1, 1)
     love.graphics.print('Shader: ' .. currentProgram.name, 10, 10)
 
     -- show fps
-    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setColor(0, 0.2, 0.1, 1)
     love.graphics.print('FPS: ' .. love.timer.getFPS(),
-        cw - 50, ch - 20)
+        10, ch - 20)
 end
 
 --- change the current shader to the next one

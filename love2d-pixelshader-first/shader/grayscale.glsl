@@ -10,6 +10,6 @@ vec4 effect(
 ) {
     //This is the current pixel color
     vec4 pixel = Texel(texture_image, texture_coords);
-    number gray = (color.r + color.g + color.b) / 3.0;
-    return pixel * vec4(gray, gray, gray, 1.0);
+    number gray = (pixel.r + pixel.g + pixel.b) / 3.0;
+    return vec4(gray, gray, gray, 1.0);
 }
