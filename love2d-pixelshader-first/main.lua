@@ -55,16 +55,48 @@ function love.draw()
         cw - 50, ch - 20)
 end
 
+local function nextShader()
+    currentId = currentId + 1
+    if currentId > #programs then
+        currentId = 1
+    end
+    currentProgram = programs[currentId]
+end
+
+local function prevShader()
+    currentId = currentId - 1
+    if currentId < 1 then
+        currentId = #programs
+    end
+    currentProgram = programs[currentId]
+end
+
 --- escape to exit
 function love.keypressed(key)
     if key == "escape" then
+        print('Exiting...')
         love.event.quit()
     end
-    if key == "space" or key == "enter" then
-        currentId = currentId + 1
-        if currentId > #programs then
-            currentId = 1
-        end
-        currentProgram = programs[currentId]
+
+    -- space or enter to change the shader
+    if key == "space" or key == "return" or key == "kpenter" then
+        nextShader()
+    end
+
+    -- left arrow to change the shader
+    if key == "left" then
+        prevShader()
+    end
+
+    -- right arrow to change the shader
+    if key == "right" then
+        nextShader()
+    end
+end
+
+--- left click to change the shader
+function love.mousepressed(x, y, button, istouch, presses)
+    if button == 1 then
+        nextShader()
     end
 end
