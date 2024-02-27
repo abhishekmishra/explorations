@@ -23,7 +23,8 @@ local programs = {
     shaderProg("Identity", "shader/identity.glsl"),
     shaderProg("Grayscale", "shader/grayscale.glsl"),
     shaderProg("Red Channel", "shader/redchannel.glsl"),
-    shaderProg("RGB Bands", "shader/rgbbands.glsl")
+    shaderProg("RGB Bands", "shader/rgbbands.glsl"),
+    shaderProg("Scaled Red", "shader/scalered.glsl"),
 }
 
 local shaderId
