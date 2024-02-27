@@ -12,20 +12,8 @@ local function createShaderProgram(programName, shaderCode)
     return program
 end
 
-local identityShader = [[
-    vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ) {
-      vec4 pixel = Texel(texture, texture_coords );//This is the current pixel color
-      return pixel * color;
-    }
-]]
-
-local grayscaleShader = [[
-    vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ) {
-      vec4 pixel = Texel(texture, texture_coords );//This is the current pixel color
-      number gray = (color.r + color.g + color.b) / 3.0;
-      return pixel * vec4(gray, gray, gray, 1.0);
-    }
-]]
+local identityShader = love.filesystem.read("shader/identity.glsl")
+local grayscaleShader = love.filesystem.read("shader/grayscale.glsl")
 
 local programs = {
     createShaderProgram("Identity", identityShader),
