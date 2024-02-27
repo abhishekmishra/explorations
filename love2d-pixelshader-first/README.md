@@ -5,6 +5,8 @@ The version of GLSL used depends on whether the `#pragma language glsl3` line is
 added to the top of a shader file, as well as whether LÖVE is running on a 
 desktop or mobile device.
 
+**NOTE**:"texture" is reserved in GLSL3, so we use "texture_image" instead.
+
 # Love2d Shader Resources
 
 * [Love2d Docs - Shader](https://love2d.org/wiki/Shader)
