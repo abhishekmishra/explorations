@@ -22,11 +22,15 @@ end
 local programs = {
     shaderProg("Identity", "shader/identity.glsl"),
     shaderProg("Grayscale", "shader/grayscale.glsl"),
-    shaderProg("Red Channel", "shader/redchannel.glsl")
+    shaderProg("Red Channel", "shader/redchannel.glsl"),
+    shaderProg("RGB Bands", "shader/rgbbands.glsl")
 }
 
 local shaderId
 local cw, ch
+
+-- Load the image to draw
+local imgToDraw = love.graphics.newImage("rose.png")
 
 --- set the current shader id to 1 and get the canvas size
 function love.load()
@@ -47,7 +51,7 @@ function love.draw()
 
     -- draw the image in rose.png
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.draw(love.graphics.newImage("rose.png"), 0, 0, 0, 0.5, 0.5)
+    love.graphics.draw(imgToDraw, 0, 0, 0, 0.5, 0.5)
 
     love.graphics.setShader()
 
