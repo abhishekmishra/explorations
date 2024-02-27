@@ -3,7 +3,14 @@
 -- date: 26/2/2024
 -- author: Abhishek Mishra
 
-local function createShaderProgram(programName, shaderCode)
+--- Load the shader code and return this as a shader program name 
+-- and shader object pair
+--
+-- @param programName string: The name of the shader program
+-- @param shaderFile string: The file path of the shader code
+-- @return table: The shader program object
+local function shaderProg(programName, shaderFile)
+    local shaderCode = love.filesystem.read(shaderFile)
     local shader = love.graphics.newShader(shaderCode)
     local program = {
         name = programName,
@@ -12,29 +19,23 @@ local function createShaderProgram(programName, shaderCode)
     return program
 end
 
-local identityShader = love.filesystem.read("shader/identity.glsl")
-local grayscaleShader = love.filesystem.read("shader/grayscale.glsl")
-
 local programs = {
-    createShaderProgram("Identity", identityShader),
-    createShaderProgram("Grayscale", grayscaleShader)
+    shaderProg("Identity", "shader/identity.glsl"),
+    shaderProg("Grayscale", "shader/grayscale.glsl")
 }
 
-local currentId
-local currentProgram
+local shaderId
 local cw, ch
 
+--- set the current shader id to 1 and get the canvas size
 function love.load()
-    currentId = 1
-    currentProgram = programs[currentId]
+    shaderId = 1
     cw, ch = love.graphics.getWidth(), love.graphics.getHeight()
 end
 
-function love.update()
-
-end
-
+--- draw a sample drawing with the current shader
 function love.draw()
+    local currentProgram = programs[shaderId]
     love.graphics.setShader(currentProgram.shader)
 
     --draw something here
@@ -55,23 +56,28 @@ function love.draw()
         cw - 50, ch - 20)
 end
 
+--- change the current shader to the next one
+-- if the current shader is the last one, then change to the first one
 local function nextShader()
-    currentId = currentId + 1
-    if currentId > #programs then
-        currentId = 1
+    shaderId = shaderId + 1
+    if shaderId > #programs then
+        shaderId = 1
     end
-    currentProgram = programs[currentId]
 end
 
+--- change the current shader to the previous one
+-- if the current shader is the first one, then change to the last one
 local function prevShader()
-    currentId = currentId - 1
-    if currentId < 1 then
-        currentId = #programs
+    shaderId = shaderId - 1
+    if shaderId < 1 then
+        shaderId = #programs
     end
-    currentProgram = programs[currentId]
 end
 
 --- escape to exit
+-- space or enter to change the shader
+-- left arrow to change to the previous shader
+-- right arrow to change to the next shader
 function love.keypressed(key)
     if key == "escape" then
         print('Exiting...')
