@@ -19,4 +19,7 @@ function love.conf(t)
     t.modules.joystick = false
     t.modules.physics = false
     t.modules.touch = false
+
+    -- set the console output
+    t.console = true
 end
