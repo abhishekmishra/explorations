@@ -15,3 +15,8 @@ desktop or mobile device.
 * [Share a shader](https://love2d.org/forums/viewtopic.php?f=4&t=3733)
 * [GLSL v1.20 Spec](https://registry.khronos.org/OpenGL/specs/gl/GLSLangSpec.1.20.pdf)
 * [GLSL v3.00 Spec](https://registry.khronos.org/OpenGL/specs/es/3.0/GLSL_ES_Specification_3.00.pdf)
+
+# Shader General Resources
+
+* [2D Distance Functions](https://iquilezles.org/articles/distfunctions2d/)
+* [3D Distance Functions](https://iquilezles.org/articles/distfunctions/)
