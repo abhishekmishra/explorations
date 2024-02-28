@@ -51,7 +51,8 @@ end
 function love.draw()
     local currentProgram = programs[shaderId]
     love.graphics.setShader(currentProgram.shader)
-
+    currentProgram.shader:send("delta_time", love.timer.getDelta())
+   
     -- draw a white rectangle to fill the screen
     -- this is needed so that the shader is applied to the whole screen
     love.graphics.setColor(1, 1, 1, 1)
