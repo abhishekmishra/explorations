@@ -8,7 +8,7 @@
 -- date: 28/2/2024
 -- author: Abhishek Mishra
 
---- Load the shader code and return this as a shader program name 
+--- Load the shader code and return this as a shader program name
 -- and shader object pair
 --
 -- @param programName string: The name of the shader program
@@ -19,17 +19,27 @@ local function shaderProg(programName, shaderFile)
     local shader = love.graphics.newShader(shaderCode)
     local program = {
         name = programName,
-        shader = shader
+        shader = shader,
+        text = love.graphics.newText(love.graphics.getFont(),
+            'Shader: ' .. programName)
     }
+
+    -- store the text dimensions
+    program.textWidth = program.text:getWidth()
+    program.textHeight = program.text:getHeight()
     return program
 end
 
 local programs = {
     shaderProg("Identity", "shader/identity.glsl"),
+    shaderProg("Ch 2: Hello World", "shader/ch02-helloworld.glsl"),
 }
 
 local shaderId
 local cw, ch
+local fpsText = love.graphics.newText(love.graphics.getFont(), 'FPS: 111')
+local fpsTextWidth = fpsText:getWidth()
+local fpsTextHeight = fpsText:getHeight()
 
 --- set the current shader id to 1 and get the canvas size
 function love.load()
@@ -42,15 +52,26 @@ function love.draw()
     local currentProgram = programs[shaderId]
     love.graphics.setShader(currentProgram.shader)
 
-    -- draw nothing as all the drawing is done in the shader
+    -- draw a white rectangle to fill the screen
+    -- this is needed so that the shader is applied to the whole screen
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.rectangle("fill", 0, 0, cw, ch)
     love.graphics.setShader()
 
     --draw the name of the current shader at the top left of the screen
-    love.graphics.setColor(0.1, 0.9, 0.4, 1)
-    love.graphics.print('Shader: ' .. currentProgram.name, 10, 10)
+    -- first draw a rectangle the size of the text
+    love.graphics.setColor(0.45, 0.45, 0.45, 0.7)
+    love.graphics.rectangle("fill", 0, 10, currentProgram.textWidth + 20,
+        currentProgram.textHeight + 2)
+    love.graphics.setColor(0.01, 0.14, 0.015, 1)
+    love.graphics.draw(currentProgram.text, 10, 10)
 
     -- show fps
-    love.graphics.setColor(0.4, 0.4, 0.7, 1)
+    -- first draw a rectangle the size of fps text
+    love.graphics.setColor(0.45, 0.45, 0.45, 0.7)
+    love.graphics.rectangle("fill", 0, ch - 21, fpsTextWidth + 20,
+        fpsTextHeight + 2)
+    love.graphics.setColor(0.1, 0.1, 0.3, 1)
     love.graphics.print('FPS: ' .. love.timer.getFPS(),
         10, ch - 20)
 end
