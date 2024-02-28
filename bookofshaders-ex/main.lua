@@ -33,6 +33,7 @@ end
 local programs = {
     shaderProg("Identity", "shader/identity.glsl"),
     shaderProg("Ch 2: Hello World", "shader/ch02-helloworld.glsl"),
+    shaderProg("Ch 2: Red is Abs(Sin(uTime))", "shader/ch03-redsinfn.glsl"),
 }
 
 local shaderId
@@ -51,8 +52,12 @@ end
 function love.draw()
     local currentProgram = programs[shaderId]
     love.graphics.setShader(currentProgram.shader)
-    currentProgram.shader:send("delta_time", love.timer.getDelta())
-   
+    if currentProgram.shader:hasUniform("uDeltaTime") then
+        currentProgram.shader:send("uDeltaTime", love.timer.getDelta())
+    end
+    if currentProgram.shader:hasUniform("uTime") then
+        currentProgram.shader:send("uTime", love.timer.getTime())
+    end
     -- draw a white rectangle to fill the screen
     -- this is needed so that the shader is applied to the whole screen
     love.graphics.setColor(1, 1, 1, 1)

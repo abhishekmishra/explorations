@@ -4,18 +4,12 @@
 precision mediump float;
 #endif
 
-// unused delta_time uniform
-uniform float delta_time;
-
 vec4 effect(
     vec4 color,
     Image tex,
     vec2 texture_coords,
     vec2 screen_coords
 ) {
-    // no op
-    float dt = delta_time;
-    
     // return a purple colour for all pixels.
     return vec4(1.0, 0.0, 1.0, 1.0);
 }

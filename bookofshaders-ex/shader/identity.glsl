@@ -1,8 +1,5 @@
 #pragma language glsl3
 
-// unused delta_time uniform
-uniform float delta_time;
-
 //NOTE: "texture" is reserved in GLSL3, so we use "texture_image" instead
 
 //This is the identity vertext shader
@@ -14,9 +11,6 @@ vec4 effect(
     vec2 texture_coords,
     vec2 screen_coords
 ) {
-    // no op
-    float dt = delta_time;
-
     //This is the current pixel color
     vec4 pixel = Texel(texture_image, texture_coords);
     return pixel * color;
