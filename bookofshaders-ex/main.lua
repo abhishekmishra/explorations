@@ -40,8 +40,10 @@ local programs = {
     --     "shader/ch03-ex02-redsinfn-noflicker.glsl"),
     -- shaderProg("Ch 2: Exercise 03: RGB Pulse (Diff freq/channel)",
     --     "shader/ch03-ex03-rgbpulse.glsl"),
-    shaderProg("Ch 2: Exercise 04: Red Green by Resolution",
-        "shader/ch03-ex04-rg-byres.glsl"),
+    -- shaderProg("Ch 2: Exercise 04: Red Green by Resolution",
+    --     "shader/ch03-ex04-rg-byres.glsl"),
+    shaderProg("Ch 2: Exercise 05: RED GREEN = mouse position",
+        "shader/ch03-ex05-mousepos.glsl"),
 }
 
 local shaderId
@@ -49,7 +51,7 @@ local cw, ch
 local fpsText = love.graphics.newText(love.graphics.getFont(), 'FPS: 111')
 local fpsTextWidth = fpsText:getWidth()
 local fpsTextHeight = fpsText:getHeight()
-local mousePosition = {x = 0, y = 0}
+local mousePosition = { x = 0, y = 0 }
 
 --- set the current shader id to 1 and get the canvas size
 function love.load()
@@ -73,8 +75,8 @@ function love.draw()
     end
 
     -- send the mouse position to the shader if used
-    if currentProgram.shader.hasUniform("uMouse") then
-        currentProgram.shader:send("uMouse", {mousePosition.x, mousePosition.y})
+    if currentProgram.shader:hasUniform("uMouse") then
+        currentProgram.shader:send("uMouse", { mousePosition.x, mousePosition.y })
     end
 
     -- draw a white rectangle to fill the screen
