@@ -38,8 +38,10 @@ local programs = {
     --     "shader/ch03-ex01-redsinfn-faster.glsl"),
     -- shaderProg("Ch 2: Exercise 02: Red is Abs(Sin(uTime)) No Flicker",
     --     "shader/ch03-ex02-redsinfn-noflicker.glsl"),
-    shaderProg("Ch 2: Exercise 03: RGB Pulse (Diff freq/channel)",
-        "shader/ch03-ex03-rgbpulse.glsl"),
+    -- shaderProg("Ch 2: Exercise 03: RGB Pulse (Diff freq/channel)",
+    --     "shader/ch03-ex03-rgbpulse.glsl"),
+    shaderProg("Ch 2: Exercise 04: Red Green by Resolution",
+        "shader/ch03-ex04-rg-byres.glsl"),
 }
 
 local shaderId
