@@ -49,6 +49,7 @@ local cw, ch
 local fpsText = love.graphics.newText(love.graphics.getFont(), 'FPS: 111')
 local fpsTextWidth = fpsText:getWidth()
 local fpsTextHeight = fpsText:getHeight()
+local mousePosition = {x = 0, y = 0}
 
 --- set the current shader id to 1 and get the canvas size
 function love.load()
@@ -60,12 +61,22 @@ end
 function love.draw()
     local currentProgram = programs[shaderId]
     love.graphics.setShader(currentProgram.shader)
+
+    -- send the delta time to the shader if used
     if currentProgram.shader:hasUniform("uDeltaTime") then
         currentProgram.shader:send("uDeltaTime", love.timer.getDelta())
     end
+
+    -- send the time to the shader if used
     if currentProgram.shader:hasUniform("uTime") then
         currentProgram.shader:send("uTime", love.timer.getTime())
     end
+
+    -- send the mouse position to the shader if used
+    if currentProgram.shader.hasUniform("uMouse") then
+        currentProgram.shader:send("uMouse", {mousePosition.x, mousePosition.y})
+    end
+
     -- draw a white rectangle to fill the screen
     -- this is needed so that the shader is applied to the whole screen
     love.graphics.setColor(1, 1, 1, 1)
@@ -139,4 +150,10 @@ function love.mousepressed(x, y, button, istouch, presses)
     if button == 1 then
         nextShader()
     end
+end
+
+--- update the mouse position
+function love.mousemoved(x, y, dx, dy, istouch)
+    mousePosition.x = x
+    mousePosition.y = y
 end
