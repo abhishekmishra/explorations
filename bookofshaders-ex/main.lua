@@ -42,8 +42,10 @@ local programs = {
     --     "shader/ch03-ex03-rgbpulse.glsl"),
     -- shaderProg("Ch 2: Exercise 04: Red Green by Resolution",
     --     "shader/ch03-ex04-rg-byres.glsl"),
-    shaderProg("Ch 2: Exercise 05: RED GREEN = mouse position",
-        "shader/ch03-ex05-mousepos.glsl"),
+    -- shaderProg("Ch 2: Exercise 05: RED GREEN = mouse position",
+    --     "shader/ch03-ex05-mousepos.glsl"),
+    shaderProg("Ch 2: Exercise 06: RG = mouse pos, B = pulse",
+        "shader/ch03-ex06-mousepulse.glsl"),
 }
 
 local shaderId
