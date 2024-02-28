@@ -31,11 +31,14 @@ local function shaderProg(programName, shaderFile)
 end
 
 local programs = {
-    shaderProg("Identity", "shader/identity.glsl"),
-    shaderProg("Ch 2: Hello World", "shader/ch02-helloworld.glsl"),
-    shaderProg("Ch 2: Red is Abs(Sin(uTime))", "shader/ch03-redsinfn.glsl"),
-    shaderProg("Ch 2: Exercise 01: Red is Abs(Sin(uTime))",
-        "shader/ch03-ex01-redsinfn-faster.glsl"),
+    -- shaderProg("Identity", "shader/identity.glsl"),
+    -- shaderProg("Ch 2: Hello World", "shader/ch02-helloworld.glsl"),
+    -- shaderProg("Ch 2: Red is Abs(Sin(uTime))", "shader/ch03-redsinfn.glsl"),
+    -- shaderProg("Ch 2: Exercise 01: Red is Abs(Sin(uTime)) Faster",
+    --     "shader/ch03-ex01-redsinfn-faster.glsl"),
+    shaderProg("Ch 2: Exercise 02: Red is Abs(Sin(uTime)) No Flicker",
+        "shader/ch03-ex02-redsinfn-noflicker.glsl"),
+
 }
 
 local shaderId
