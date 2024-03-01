@@ -8,6 +8,12 @@
 -- date: 28/2/2024
 -- author: Abhishek Mishra
 
+--[[
+TODO: implement pcall to catch shader errors
+see https://love2d.org/forums/viewtopic.php?p=252760#p252760
+and https://www.lua.org/manual/5.1/manual.html#pdf-pcall
+--]]
+
 --- Load the shader code and return this as a shader program name
 -- and shader object pair
 --
