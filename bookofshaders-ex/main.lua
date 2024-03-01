@@ -54,8 +54,10 @@ local programs = {
     --     "shader/ch03-ex06-mousepulse.glsl"),
     -- shaderProg("Ch 5: Line and Gradient",
     --     "shader/ch05-line.glsl"),
-    shaderProg("Ch 5: Curved Line (y=x^n) and Gradient",
-        "shader/ch05-curved-line.glsl"),
+    -- shaderProg("Ch 5: Curved Line (y=x^n) and Gradient",
+    --     "shader/ch05-curved-line.glsl"),
+    shaderProg("Ch 5: Plot exp[red]/log[green]/sqrt[blue] and Gradient",
+        "shader/ch05-exp-log-sqrt.glsl"),
 }
 
 local shaderId
