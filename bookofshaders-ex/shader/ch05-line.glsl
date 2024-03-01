@@ -21,14 +21,22 @@ vec4 effect(
     vec2 texture_coords,
     vec2 screen_coords
 ) {
-    vec2 st = screen_coords.xy/love_ScreenSize.xy;
+    //Normalize the Screen coordinates. 
+    vec2 st = screen_coords.xy / love_ScreenSize.xy;
 
+    //This is the line where y equal to x
     float y = st.x;
 
+    //Start with pixel color, where each channel is equal to y
+    //This will give us a gradient. 
     vec3 pxlColor = vec3(y);
 
-    //Plot a line
+    //Get a percentage value indicating how close we are to the line
     float pct = plot(st);
+
+    //The formula below produces a green color where the percentage is high 
+    //qnd we are close to the line.
+    //Otherwise, it will be the grayscale color of the gradient.
     pxlColor = (1.0 - pct) * pxlColor + pct * vec3(0.0, 1.0, 0.0);
 
     return vec4(pxlColor, 1.0);
