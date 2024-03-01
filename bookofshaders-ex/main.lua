@@ -89,6 +89,8 @@ function love.draw()
     -- this is needed so that the shader is applied to the whole screen
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.rectangle("fill", 0, 0, cw, ch)
+
+    -- unset the shader for all further drawing
     love.graphics.setShader()
 
     --draw the name of the current shader at the top left of the screen
