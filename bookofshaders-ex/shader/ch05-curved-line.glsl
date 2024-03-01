@@ -39,6 +39,9 @@ vec4 effect(
     // in the fractional part
     float t = mod(uTime * 1000, 1000.0);
 
+    // Note: These if statements are probably quite inefficient on the GPU,
+    // and I would like to find a better way to do this. Maybe in a later
+    // exercise.
     // if t is less than 100, then n = 0.2
     // if t is less than 200, then n = 2.0
     // if t is less than 300, then n = 5.0
