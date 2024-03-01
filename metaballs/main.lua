@@ -25,6 +25,23 @@ function Metaball:draw()
     local cw = love.graphics.getWidth()
     local ch = love.graphics.getHeight()
 
+    -- lets create an isosurface
+    local data = love.image.newImageData(cw, ch)
+    local maxDistance = math.sqrt((cw/2) ^ 2 + (ch/2) ^ 2)
+    for i=0, cw-1 do   -- remember: start at 0
+        for j = 0, ch - 1 do
+            -- calculate distance from the center of the metaball
+            local d = math.sqrt((i - self.x) ^ 2 + (j - self.y) ^ 2)/maxDistance
+            data:setPixel(i, j, d, d, d, 1)
+        end
+    end
+
+    -- create an image from the data
+    local img = love.graphics.newImage(data)
+
+    -- draw the image
+    love.graphics.draw(img, 0, 0)
+
     -- draw the metaball
     love.graphics.setColor(255, 255, 255)
     love.graphics.circle("fill", self.x, self.y, self.r)
