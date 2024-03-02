@@ -21,30 +21,9 @@ end
 
 --- Metaball:draw: Draw the metaball
 function Metaball:draw()
-    -- get the canvas size
-    local cw = love.graphics.getWidth()
-    local ch = love.graphics.getHeight()
-
-    -- lets create an isosurface
-    local data = love.image.newImageData(cw, ch)
-    local maxDistance = math.sqrt((cw/2) ^ 2 + (ch/2) ^ 2)
-    for i=0, cw-1 do   -- remember: start at 0
-        for j = 0, ch - 1 do
-            -- calculate distance from the center of the metaball
-            local d = math.sqrt((i - self.x) ^ 2 + (j - self.y) ^ 2)/maxDistance
-            data:setPixel(i, j, d, d, d, 1)
-        end
-    end
-
-    -- create an image from the data
-    local img = love.graphics.newImage(data)
-
-    -- draw the image
-    love.graphics.draw(img, 0, 0)
-
     -- draw the metaball
-    love.graphics.setColor(255, 255, 255)
-    love.graphics.circle("fill", self.x, self.y, self.r)
+    love.graphics.setColor(1, 0, 0, 1)
+    love.graphics.circle("line", self.x, self.y, self.r)
 end
 
 --- Metaball:update: Update the metaball
@@ -80,17 +59,24 @@ function Metaball:update(dt)
 end
 
 local balls
-local numBalls = 1
+local numBalls = 5
 
 --- love.load: Called once at the start of the simulation
 function love.load()
+    -- get the canvas size
+    local cw = love.graphics.getWidth()
+    local ch = love.graphics.getHeight()
+
     balls = {}
     -- create the metaballs
     for i = 1, numBalls do
-        local r = love.math.random(2, 50)
-        local x = love.math.random(r, love.graphics.getWidth() - r)
-        local y = love.math.random(r, love.graphics.getHeight() - r)
-        local v = { x = love.math.random(-200, 200), y = love.math.random(-200, 200) }
+        local r = love.math.random(ch / 16, ch / 4)
+        local x = love.math.random(r, cw - r)
+        local y = love.math.random(r, ch - r)
+        local v = {
+            x = love.math.random(-cw / 3, cw / 3),
+            y = love.math.random(-ch / 3, ch / 3)
+        }
         local b = Metaball:new(x, y, r, v)
         table.insert(balls, b)
     end
@@ -108,10 +94,41 @@ function love.draw()
     -- fill the background with black
     love.graphics.setBackgroundColor(0, 0, 0)
 
-    -- draw the metaballs
-    for _, b in ipairs(balls) do
-        b:draw()
+    -- get the canvas size
+    local cw = love.graphics.getWidth()
+    local ch = love.graphics.getHeight()
+
+    -- love.graphics.setColor(1, 1, 1, 1)
+
+    -- lets create an isosurface
+    local data = love.image.newImageData(cw, ch)
+    for i = 0, cw - 1 do -- remember: start at 0
+        for j = 0, ch - 1 do
+            local fSum = 0
+            -- calculate distance from the center of the metaball
+            for _, b in ipairs(balls) do
+                local d = math.sqrt((i - b.x) ^ 2 + (j - b.y) ^ 2)
+                fSum = fSum + (b.r / d)
+            end
+
+            -- normalize fSum
+            fSum = fSum / #balls
+            -- print(fSum)
+
+            data:setPixel(i, j, fSum, fSum, fSum, 1)
+        end
     end
+
+    -- create an image from the data
+    local img = love.graphics.newImage(data)
+
+    -- draw the image
+    love.graphics.draw(img, 0, 0)
+
+    -- -- draw the metaballs
+    -- for _, b in ipairs(balls) do
+    --     b:draw()
+    -- end
 end
 
 -- escape to exit
