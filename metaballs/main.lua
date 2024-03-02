@@ -113,9 +113,13 @@ function love.draw()
 
             -- normalize fSum
             fSum = fSum / #balls
-            -- print(fSum)
 
-            data:setPixel(i, j, fSum, fSum, fSum, 1)
+            -- monochrome mode
+            -- local r = fSum; local g = fSum; local b = fSum
+
+            -- color mode
+            local r, g, b = HSV(fSum, 1, 1)
+            data:setPixel(i, j, r, g, b, 1)
         end
     end
 
