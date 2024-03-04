@@ -58,8 +58,12 @@ local programs = {
     --     "shader/ch05-curved-line.glsl"),
     -- shaderProg("Ch 5: Plot exp[red]/log[green]/sqrt[blue] and Gradient",
     --     "shader/ch05-exp-log-sqrt.glsl"),
-    shaderProg("Ch 6: Mixtures of two colors",
-        "shader/ch06-color-mix.glsl"),
+    -- shaderProg("Ch 6: Mixtures of two colors",
+    --     "shader/ch06-color-mix.glsl"),
+    -- shaderProg("Ch 7: Rectangle#0",
+    --     "shader/ch07-rect0.glsl"),
+    shaderProg("Ch 7: Rect#1 Pos(0.1,0.1) Sz(0.8,0.8) W(0.05)",
+        "shader/ch07-rect1-position.glsl"),
 }
 
 local shaderId
