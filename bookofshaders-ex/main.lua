@@ -62,8 +62,10 @@ local programs = {
     --     "shader/ch06-color-mix.glsl"),
     -- shaderProg("Ch 7: Rectangle#0",
     --     "shader/ch07-rect0.glsl"),
-    shaderProg("Ch 7: Rect#1 Pos(0.1,0.1) Sz(0.8,0.8) W(0.05)",
-        "shader/ch07-rect1-position.glsl"),
+    -- shaderProg("Ch 7: Rect#1 Pos(0.1,0.1) Sz(0.8,0.8) W(0.05)",
+    --     "shader/ch07-rect1-position.glsl"),
+    shaderProg("Ch 7: Rect#2 Smoothstep for edges",
+        "shader/ch07-rect2-smoothstep.glsl"),
 }
 
 local shaderId
