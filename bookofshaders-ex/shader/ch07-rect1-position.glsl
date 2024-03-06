@@ -1,5 +1,5 @@
 /**
-* file: ch07-rect0.glsl: draw a rectangle/box.
+* file: ch07-rect1-position.glsl: shift position of a rectangle/box.
 *
 * date: 04/03/2024
 * author: Abhishek Mishra
