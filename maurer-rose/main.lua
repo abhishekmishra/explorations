@@ -5,6 +5,8 @@
 local n
 local d
 
+local running = false
+
 --- love.load: Called once at the start of the simulation
 function love.load()
     n = 0
@@ -13,12 +15,21 @@ end
 
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
+    if not running then
+        return
+    end
     n = n + 0.01
     d = d + 0.05
 end
 
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
+    -- if not running, display the message to start the simulation
+    if not running then
+        love.graphics.print("Press Space to start the simulation", 50, love.graphics.getHeight() / 2)
+        return
+    end
+
     love.graphics.push()
     love.graphics.setBackgroundColor(0.1, 0.1, 0.1)
 
@@ -40,7 +51,7 @@ function love.draw()
     love.graphics.setLineWidth(0.1)
     love.graphics.line(points)
 
-    -- trace the main path
+    -- uncomment to trace the main Rose Curve path
     -- points = {}
 
     -- for i = 0, 361 do
@@ -60,8 +71,12 @@ function love.draw()
 end
 
 -- escape to exit
+-- press space to toggle the simulation
 function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
+    end
+    if key == "space" then
+        running = not running
     end
 end
