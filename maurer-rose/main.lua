@@ -6,6 +6,7 @@ local n
 local d
 
 local running = false
+local tm = 0
 
 --- love.load: Called once at the start of the simulation
 function love.load()
@@ -18,8 +19,12 @@ function love.update(dt)
     if not running then
         return
     end
-    n = n + 0.01
-    d = d + 0.05
+    tm = tm + dt
+    if tm > 0.1 then
+        tm = 0
+        n = n + 0.01
+        d = d + 0.05
+    end
 end
 
 --- love.draw: Called every frame, draws the simulation
