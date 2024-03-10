@@ -60,8 +60,12 @@ function love.draw()
 end
 
 -- escape to exit
+-- "s" to save a screenshot
 function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
+    end
+    if key == "s" then
+        love.graphics.captureScreenshot('collatz-' .. os.time() .. ".png")
     end
 end
