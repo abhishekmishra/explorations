@@ -9,13 +9,14 @@ local function collatz(n)
     if n % 2 == 0 then
         return n / 2
     else
-        return 3 * n + 1
+        -- divide by 2 to speed up moving through the sequence
+        return (3 * n + 1) / 2
     end
 end
 
 local cw, ch
-local angle = math.pi / 3
-local len = 10
+local angle = 0.1
+local len = 4
 
 --- love.load: Called once at the start of the simulation
 function love.load()
@@ -30,18 +31,28 @@ end
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
     love.graphics.setBackgroundColor(0, 0, 0)
-    for i = 1, 1000 do
+    love.graphics.setLineWidth(0.1)
+    for i = 1, 10000 do
         love.graphics.origin()
         love.graphics.translate(cw / 2, ch)
         local n = i
+        local sequence = {}
         while n ~= 1 do
+            table.insert(sequence, n)
             n = collatz(n)
-            if n % 2 == 0 then
+        end
+        table.insert(sequence, 1)
+
+        -- Visualize the collatz points list in the reverse order.
+        for j = #sequence, 1, -1 do
+            local v = sequence[j]
+            if v % 2 == 0 then
                 love.graphics.rotate(angle)
+                love.graphics.setColor(1, 1, 1, 0.2)
             else
                 love.graphics.rotate(-angle)
+                love.graphics.setColor(1, 1, 1, 0.2)
             end
-            love.graphics.setColor(1, 1, 1)
             love.graphics.line(0, 0, 0, -len)
             love.graphics.translate(0, -len)
         end
