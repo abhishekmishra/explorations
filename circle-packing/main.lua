@@ -62,17 +62,32 @@ end
 
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
-    -- add a new circle every 5 frames
-    if love.timer.getFPS() % 5 == 0 then
-        local newCircle = createCircle()
-        if newCircle then
-            table.insert(circles, newCircle)
-        end
+    -- -- add a new circle every 5 frames
+    -- if love.timer.getFPS() % 5 == 0 then
+    local newCircle = createCircle()
+    if newCircle then
+        table.insert(circles, newCircle)
     end
+    -- end
 
     -- grow the circles
     for i = 1, #circles do
         circles[i]:update(dt)
+        -- if the circle is growing check if it is now touching another circle
+        -- if it is touching then stop growing
+        if circles[i]._growing then
+            for j = 1, #circles do
+                if i ~= j then
+                    local dx = circles[i].x - circles[j].x
+                    local dy = circles[i].y - circles[j].y
+                    local distance = math.sqrt(dx * dx + dy * dy)
+                    if distance < circles[i].r + circles[j].r then
+                        circles[i]._growing = false
+                        break
+                    end
+                end
+            end
+        end
         circles[i]:grow(0.1)
     end
 end
