@@ -28,7 +28,7 @@ end
 function love.update(dt)
     -- grow the circles
     for i = 1, numCircles do
-        circles[i]:grow(1)
+        circles[i]:update(dt)
     end
 end
 
