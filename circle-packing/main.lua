@@ -10,22 +10,23 @@ local cw, ch
 
 -- list of circles
 local circles = {}
-local numCircles = 100
+local numCircles = 0
 
 --- love.load: Called once at the start of the simulation
 function love.load()
     -- get the canvas size
     cw, ch = love.graphics.getDimensions()
-
-    -- create some circles with random radius and center
-    for i = 1, numCircles do
-        local r = math.random(50)
-        circles[i] = Circle:new(math.random(r, cw - r), math.random(r, ch - r), r)
-    end
 end
 
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
+    -- add a new circle every 5 frames
+    if love.timer.getFPS() % 5 == 0 then
+        numCircles = numCircles + 1
+        local r = 1 -- math.random(1, 5)
+        circles[numCircles] = Circle:new(math.random(r, cw - r), math.random(r, ch - r), r)
+    end
+
     -- grow the circles
     for i = 1, numCircles do
         circles[i]:update(dt)
