@@ -26,6 +26,10 @@ end
 
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
+    -- grow the circles
+    for i = 1, numCircles do
+        circles[i]:grow(1)
+    end
 end
 
 --- love.draw: Called every frame, draws the simulation

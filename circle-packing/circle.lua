@@ -17,6 +17,13 @@ function Circle:initialize(x, y, r)
     self.r = r
 end
 
+--- Circle:grow: Increase the radius of the circle
+-- @param dr: (default 1) amount by which to increase the radius
+function Circle:grow(dr)
+    dr = dr or 1
+    self.r = self.r + dr
+end
+
 --- Circle:draw: Draw the circle
 function Circle:draw()
     love.graphics.setColor(0.5, 0.5, 0.5)
