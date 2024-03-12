@@ -44,7 +44,6 @@ function Circle:update(dt)
     if self:edges() then
         self._growing = false
     end
-    self:grow()
 end
 
 --- Circle:draw: Draw the circle
