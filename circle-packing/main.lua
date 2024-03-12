@@ -64,11 +64,14 @@ end
 function love.update(dt)
     -- -- add a new circle every 5 frames
     -- if love.timer.getFPS() % 5 == 0 then
-    local newCircle = createCircle()
-    if newCircle then
-        table.insert(circles, newCircle)
+
+    -- try to add 10 new circles every frame
+    for i = 1, 10 do
+        local newCircle = createCircle()
+        if newCircle then
+            table.insert(circles, newCircle)
+        end
     end
-    -- end
 
     -- grow the circles
     for i = 1, #circles do
@@ -88,7 +91,7 @@ function love.update(dt)
                 end
             end
         end
-        circles[i]:grow(0.1)
+        circles[i]:grow(0.5)
     end
 end
 
