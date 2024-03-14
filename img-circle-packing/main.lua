@@ -1,0 +1,117 @@
+--- main.lua: Image Circle Packing Simulation in LÖVE
+-- based on the circle-packing project in explorations
+-- This follows video#2 in the coding train circle packing series
+--
+-- date: 14/3/2024
+-- author: Abhishek Mishra
+
+-- require the Circle class
+local Circle = require 'circle'
+
+-- canvas dimensions
+local cw, ch
+
+-- list of circles
+local circles = {}
+
+
+--- check if a circle is valid, i.e., it doesn't overlap with any existing circles
+-- nor is it inside any existing circle
+-- @param x: x-coordinate of the center of the circle
+-- @param y: y-coordinate of the center of the circle
+-- @param r: radius of the circle
+-- @return: true if the circle is valid, false otherwise
+local function isValidCircle(x, y, r)
+    for i = 1, #circles do
+        local dx = circles[i].x - x
+        local dy = circles[i].y - y
+        local distance = math.sqrt(dx * dx + dy * dy)
+        if distance < circles[i].r + r then
+            return false
+        end
+    end
+    return true
+end
+
+--- create a new circle while ensuring that it doesn't overlap with any existing circles
+-- nor is it inside any existing circle
+local function createCircle()
+    local x, y, r
+    local attempts = 0
+    local maxAttempts = 100
+
+    -- try to create a new circle
+    repeat
+        x = love.math.random(0, cw)
+        y = love.math.random(0, ch)
+        r = love.math.random(5, 50)
+        attempts = attempts + 1
+    until isValidCircle(x, y, r) or attempts > maxAttempts
+
+    -- if we have reached the maximum number of attempts, return nil
+    if attempts > maxAttempts then
+        return nil
+    end
+
+    -- create a new circle and return it
+    return Circle:new(x, y, r)
+end
+
+--- love.load: Called once at the start of the simulation
+function love.load()
+    -- get the canvas size
+    cw, ch = love.graphics.getDimensions()
+end
+
+--- love.update: Called every frame, updates the simulation
+function love.update(dt)
+    -- -- add a new circle every 5 frames
+    -- if love.timer.getFPS() % 5 == 0 then
+
+    -- try to add 10 new circles every frame
+    for i = 1, 10 do
+        local newCircle = createCircle()
+        if newCircle then
+            table.insert(circles, newCircle)
+        end
+    end
+
+    -- grow the circles
+    for i = 1, #circles do
+        circles[i]:update(dt)
+        -- if the circle is growing check if it is now touching another circle
+        -- if it is touching then stop growing
+        if circles[i]._growing then
+            for j = 1, #circles do
+                if i ~= j then
+                    local dx = circles[i].x - circles[j].x
+                    local dy = circles[i].y - circles[j].y
+                    local distance = math.sqrt(dx * dx + dy * dy)
+                    if distance < circles[i].r + circles[j].r then
+                        circles[i]._growing = false
+                        break
+                    end
+                end
+            end
+        end
+        circles[i]:grow(0.5)
+    end
+end
+
+--- love.draw: Called every frame, draws the simulation
+function love.draw()
+    -- set the background color
+    love.graphics.setBackgroundColor(0, 0, 0)
+
+    -- draw the circle
+    for i = 1, #circles do
+        circles[i]:draw()
+    end
+end
+
+-- escape to exit
+function love.keypressed(key)
+    if key == "escape" then
+        love.event.quit()
+    end
+end
