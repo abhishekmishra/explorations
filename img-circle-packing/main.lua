@@ -46,7 +46,7 @@ local function createCircle()
     repeat
         x = love.math.random(1, cw)
         y = love.math.random(1, ch)
-        r = love.math.random(2, 10)
+        r = love.math.random(1, 5)
         attempts = attempts + 1
     until isValidCircle(x, y, r) or attempts > maxAttempts
 
