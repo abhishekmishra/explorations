@@ -7,14 +7,25 @@ local class = require 'lib.middleclass'
 
 Circle = class('Circle')
 
+local DEFAULT_COLOR = { r = 0, g = 0, b = 0, a = 1.0 }
+
 --- Circle:initialize: Constructor for the Circle class
 -- @param x: x-coordinate of the center of the circle
 -- @param y: y-coordinate of the center of the circle
 -- @param r: radius of the circle
-function Circle:initialize(x, y, r)
+-- @param cr: (optional) red component of the color of the circle
+-- @param cg: (optional) green component of the color of the circle
+-- @param cb: (optional) blue component of the color of the circle
+-- @param ca: (optional) alpha component of the color of the circle
+function Circle:initialize(x, y, r, cr, cg, cb, ca)
     self.x = x
     self.y = y
     self.r = r
+    if cr and cg and cb and ca then
+        self.color = { r = cr, g = cg, b = cb, a = ca }
+    else
+        self.color = DEFAULT_COLOR
+    end
 
     -- internal state variable _growing, which is true if the circle is growing
     self._growing = true
@@ -48,7 +59,8 @@ end
 
 --- Circle:draw: Draw the circle
 function Circle:draw()
-    love.graphics.setColor(0.5, 0.5, 0.5)
+    love.graphics.setColor(self.color.r, self.color.g,
+        self.color.b, self.color.a)
     love.graphics.circle("line", self.x, self.y, self.r)
 end
 

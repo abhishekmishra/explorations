@@ -4,8 +4,8 @@
 -- author: Abhishek Mishra
 
 -- canvas size
-local canvasWidth = 400
-local canvasHeight = 400
+local canvasWidth = 512
+local canvasHeight = 512
 
 function love.conf(t)
     -- set the window title

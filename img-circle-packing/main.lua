@@ -14,6 +14,8 @@ local cw, ch
 -- list of circles
 local circles = {}
 
+-- image to be used for the circles
+local imageData
 
 --- check if a circle is valid, i.e., it doesn't overlap with any existing circles
 -- nor is it inside any existing circle
@@ -42,9 +44,9 @@ local function createCircle()
 
     -- try to create a new circle
     repeat
-        x = love.math.random(0, cw)
-        y = love.math.random(0, ch)
-        r = love.math.random(5, 50)
+        x = love.math.random(1, cw)
+        y = love.math.random(1, ch)
+        r = love.math.random(2, 10)
         attempts = attempts + 1
     until isValidCircle(x, y, r) or attempts > maxAttempts
 
@@ -54,13 +56,16 @@ local function createCircle()
     end
 
     -- create a new circle and return it
-    return Circle:new(x, y, r)
+    return Circle:new(x, y, r, imageData:getPixel(x - 1, y - 1))
 end
 
 --- love.load: Called once at the start of the simulation
 function love.load()
     -- get the canvas size
     cw, ch = love.graphics.getDimensions()
+
+    -- load the tiger image
+    imageData = love.image.newImageData('tiger.jpg')
 end
 
 --- love.update: Called every frame, updates the simulation
@@ -94,7 +99,7 @@ function love.update(dt)
                 end
             end
         end
-        circles[i]:grow(0.5)
+        circles[i]:grow(0.1)
     end
 end
 
