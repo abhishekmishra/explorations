@@ -31,3 +31,7 @@ TODO: Add video
 # Appendix
 
 * Tiger Image Source(tiger.jpg): https://www.pexels.com/photo/close-up-of-tiger-247615/
+
+[1]: https://www.youtube.com/channel/UCvjgXvBlbQiydffZU7m1_aw
+[2]: https://www.youtube.com/watch?v=QHEQuoIKgNE&t=1s
+[3]: https://www.youtube.com/watch?v=ERQcYaaZ6F0
