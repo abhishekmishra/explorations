@@ -12,6 +12,7 @@ A Circle-packing program will attempt to pack as many circles of varying sizes
 across a canvas without any two circles overlapping.
 
 Here's an example:
+
 ![Simple Circle Packing](circle-packing-simple.png)
 
 # Circle-packing on a photo
