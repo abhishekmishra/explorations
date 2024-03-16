@@ -17,6 +17,8 @@ local circles = {}
 -- image to be used for the circles
 local imageData
 
+local running = false
+
 --- check if a circle is valid, i.e., it doesn't overlap with any existing circles
 -- nor is it inside any existing circle
 -- @param x: x-coordinate of the center of the circle
@@ -70,6 +72,10 @@ end
 
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
+    if not running then
+        return
+    end
+
     -- -- add a new circle every 5 frames
     -- if love.timer.getFPS() % 5 == 0 then
 
@@ -105,6 +111,13 @@ end
 
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
+    -- if not running, display the message to start the simulation
+    if not running then
+        love.graphics.print("Press Space to start the simulation", 50,
+            love.graphics.getHeight() / 2)
+        return
+    end
+
     -- set the background color
     love.graphics.setBackgroundColor(0, 0, 0)
 
@@ -115,8 +128,12 @@ function love.draw()
 end
 
 -- escape to exit
+-- press space to toggle the simulation
 function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
+    end
+    if key == "space" then
+        running = not running
     end
 end
