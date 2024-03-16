@@ -12,7 +12,7 @@ A Circle-packing program will attempt to pack as many circles of varying sizes
 across a canvas without any two circles overlapping.
 
 Here's an example:
-TODO: example
+![Simple Circle Packing](circle-packing-simple.png)
 
 # Circle-packing on a photo
 
@@ -26,7 +26,7 @@ Here's a public domain tiger image:
 
 And the result of circle packing using the image as reference.
 
-TODO: Add video
+![Circle Packing Demo](<CirclePackingTiger01-16032024 - 1710568243086.gif>)
 
 # Appendix
 
