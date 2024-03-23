@@ -9,27 +9,27 @@ local Boid = require('boid')
 -- random seed
 math.randomseed(os.time())
 
-local flock = {}
+local boids = {}
 
 --- love.load: Called once at the start of the simulation
 function love.load()
     for i = 1, 100 do
-        table.insert(flock,
-            Boid(love.graphics.getWidth() / 2,
-                love.graphics.getHeight() / 2))
+        table.insert(boids, Boid())
     end
 end
 
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
-    for _, boid in ipairs(flock) do
+    for _, boid in ipairs(boids) do
+        boid:edges()
+        boid:flock(boids)
         boid:update()
     end
 end
 
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
-    for _, boid in ipairs(flock) do
+    for _, boid in ipairs(boids) do
         boid:show()
     end
 end
