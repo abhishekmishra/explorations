@@ -1,4 +1,5 @@
---- empty-love2d-project.lua - create an empty love2d project based on the folder at empty-love2d-project in a new folder given by the user
+--- empty-love2d-project.lua - create an empty love2d project based on the
+--folder at empty-love2d-project in a new folder given by the user
 --
 -- date: 23/03/2024
 -- author: Abhishek Mishra
@@ -25,8 +26,8 @@ end
 -- create the new project folder
 lfs.mkdir(new_project_name)
 
--- copy the contents of the empty-love2d-project folder to the new project folder
--- recursively copy all the files and folders
+--- copy the contents of the empty-love2d-project folder to the new project
+--folder recursively copy all the files and folders
 local function copy_files(src, dest)
     for file in lfs.dir(src) do
         if file ~= "." and file ~= ".." then
@@ -56,3 +57,5 @@ local function copy_files(src, dest)
 end
 
 copy_files(TEMPLATE_PROJECT_FOLDER, new_project_name)
+
+print(new_project_name .. ' folder created!')
