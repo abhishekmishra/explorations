@@ -18,7 +18,10 @@ function Boid:initialize(x, y)
     x = x or math.random(0, love.graphics.getWidth())
     y = y or math.random(0, love.graphics.getHeight())
     self.position = Vector(x, y)
-    self.velocity = Vector(math.random(-1, 1), math.random(-1, 1))
+    self.velocity = Vector.random2D()
+    -- get random value in range 0.5 to 1.5
+    local m = math.random(5, 15)/10
+    self.velocity:setMag(m)
     self.acceleration = Vector(0, 0)
     self.maxSpeed = 2
     self.maxForce = 0.03

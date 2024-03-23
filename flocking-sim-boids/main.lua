@@ -1,4 +1,4 @@
---- main.lua: Flocking Simulation in LÖVE using boids. Based on a video by 
+--- main.lua: Flocking Simulation in LÖVE using boids. Based on a video by
 -- Daniel Shiffman on the Coding Train youtube channel.
 --
 -- date: 23/3/2024
@@ -6,12 +6,17 @@
 
 local Boid = require('boid')
 
+-- random seed
+math.randomseed(os.time())
+
 local flock = {}
 
 --- love.load: Called once at the start of the simulation
 function love.load()
     for i = 1, 100 do
-        table.insert(flock, Boid())
+        table.insert(flock,
+            Boid(love.graphics.getWidth() / 2,
+                love.graphics.getHeight() / 2))
     end
 end
 
