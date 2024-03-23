@@ -174,3 +174,5 @@ function Vector.random3D()
     local vy = math.sqrt(1 - vz * vz) * math.sin(angle)
     return Vector(vx, vy, vz)
 end
+
+return Vector

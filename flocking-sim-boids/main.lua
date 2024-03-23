@@ -4,8 +4,15 @@
 -- date: 23/3/2024
 -- author: Abhishek Mishra
 
+local Boid = require('boid')
+
+local flock = {}
+
 --- love.load: Called once at the start of the simulation
 function love.load()
+    for i = 1, 1 do
+        table.insert(flock, Boid())
+    end
 end
 
 --- love.update: Called every frame, updates the simulation
@@ -14,6 +21,9 @@ end
 
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
+    for _, boid in ipairs(flock) do
+        boid:show()
+    end
 end
 
 -- escape to exit
