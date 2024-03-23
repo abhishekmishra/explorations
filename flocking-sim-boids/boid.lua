@@ -24,6 +24,12 @@ function Boid:initialize(x, y)
     self.maxForce = 0.03
 end
 
+--- update the boid
+function Boid:update()
+    self.position = self.position + self.velocity
+    self.velocity = self.velocity + self.acceleration
+end
+
 --- show the boid on the screen
 function Boid:show()
     love.graphics.setColor(1, 1, 1)

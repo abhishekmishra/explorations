@@ -10,13 +10,16 @@ local flock = {}
 
 --- love.load: Called once at the start of the simulation
 function love.load()
-    for i = 1, 1 do
+    for i = 1, 100 do
         table.insert(flock, Boid())
     end
 end
 
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
+    for _, boid in ipairs(flock) do
+        boid:update()
+    end
 end
 
 --- love.draw: Called every frame, draws the simulation
