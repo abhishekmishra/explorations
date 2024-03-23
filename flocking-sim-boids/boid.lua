@@ -20,11 +20,11 @@ function Boid:initialize(x, y)
     self.position = Vector(x, y)
     self.velocity = Vector.random2D()
     -- get random value in range 0.5 to 1.5
-    local m = math.random(20, 40)/10
+    local m = math.random(5, 15)/10
     self.velocity:setMag(m)
     self.acceleration = Vector(0, 0)
-    self.maxSpeed = 4
-    self.maxForce = 0.2
+    self.maxForce = 4
+    self.maxSpeed = 2
 end
 
 --- check if the boid is within the screen
@@ -46,16 +46,18 @@ end
 -- @param boids the list of boids
 function Boid:flock(boids)
     local alignment = self:align(boids)
-    local cohesion = Vector(0, 0) --self:cohesion(boids)
-    local separation = Vector(0, 0) --self:separation(boids)
-    self.acceleration = alignment + cohesion + separation
+    local cohesion = self:cohesion(boids)
+    local separation = self:separation(boids)
+    self.acceleration = separation
+    self.acceleration = self.acceleration + alignment
+    self.acceleration = self.acceleration + cohesion
 end
 
 --- align the boid with the other boids
 -- @param boids the list of boids
 -- @return the alignment force
 function Boid:align(boids)
-    local perceptionRadius = 50
+    local perceptionRadius = 25
     local steering = Vector(0, 0)
     local total = 0
     for _, boid in ipairs(boids) do
@@ -74,10 +76,61 @@ function Boid:align(boids)
     return steering
 end
 
+--- cohesion of the boid with the other boids
+-- @param boids the list of boids
+-- @return the cohesion force
+function Boid:cohesion(boids)
+    local perceptionRadius = 15
+    local steering = Vector(0, 0)
+    local total = 0
+    for _, boid in ipairs(boids) do
+        local distance = self.position:dist(boid.position)
+        if distance > 0 and distance < perceptionRadius then
+            steering = steering + boid.position
+            total = total + 1
+        end
+    end
+    if total > 0 then
+        steering = steering / total
+        steering = steering - self.position
+        steering:setMag(self.maxSpeed)
+        steering = steering - self.velocity
+        steering:limit(self.maxForce)
+    end
+    return steering
+end
+
+--- separation of the boid with the other boids
+-- @param boids the list of boids
+-- @return the separation force
+function Boid:separation(boids)
+    local perceptionRadius = 10
+    local steering = Vector(0, 0)
+    local total = 0
+    for _, boid in ipairs(boids) do
+        local distance = self.position:dist(boid.position)
+        if distance > 0 and distance < perceptionRadius then
+            local diff = self.position - boid.position
+            diff = diff / distance
+            steering = steering + diff
+            total = total + 1
+        end
+    end
+    if total > 0 then
+        steering = steering / total
+        steering:setMag(self.maxSpeed)
+        steering = steering - self.velocity
+        steering:limit(self.maxForce)
+    end
+    return steering
+end
+
 --- update the boid
 function Boid:update()
     self.position = self.position + self.velocity
     self.velocity = self.velocity + self.acceleration
+    self.velocity:limit(self.maxSpeed)
+    self.acceleration = self.acceleration * 0
 end
 
 --- show the boid on the screen
