@@ -68,8 +68,10 @@ local programs = {
     --     "shader/ch07-rect2-smoothstep.glsl"),
     -- shaderProg("Ch 7: Rect#3 Fill/Stroke Rectangle Util Fns",
     --     "shader/ch07-rect3-util-fns.glsl"),
-    shaderProg("Ch 7: Distance from center",
-        "shader/ch07-dist0.glsl"),
+    -- shaderProg("Ch 7: Distance from center",
+    --    "shader/ch07-dist0.glsl"),
+    shaderProg("Ch 7: Distance from center scaled/normalized",
+        "shader/ch07-dist1-fullgradient.glsl"),
 }
 
 local shaderId
