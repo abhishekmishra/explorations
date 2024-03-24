@@ -72,8 +72,10 @@ local programs = {
     --    "shader/ch07-dist0.glsl"),
     -- shaderProg("Ch 7: Distance from center scaled/normalized",
     --     "shader/ch07-dist1-fullgradient.glsl"),
-    shaderProg("Ch 7: Distance scaled and used to create circle",
-        "shader/ch07-dist2-gradientstep.glsl"),
+    -- shaderProg("Ch 7: Distance scaled and used to create circle",
+    --     "shader/ch07-dist2-gradientstep.glsl"),
+    shaderProg("Ch 7: Distance scaled to create circle (inverted)",
+        "shader/ch07-dist3-gradientstep-invert.glsl"),
 }
 
 local shaderId
