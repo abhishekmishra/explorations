@@ -19,14 +19,14 @@ local controlPanel
 local cpWidth = 150
 
 -- sliders
-local maxForceSlider
-local maxSpeedSlider
-local perceptionSlider
+local alignmentSlider
+local cohesionSlider
+local separationSlider
 
 -- slider labels
-local maxForceLabel
-local maxSpeedLabel
-local perceptionLabel
+local alignmentLabel
+local cohesionLabel
+local separationLabel
 local fpsLabel
 
 
@@ -39,9 +39,6 @@ local function initBoids()
     boids = {}
     for i = 1, 100 do
         local b = Boid(boidPanel)
-        b.maxForce = maxForceSlider.currentValue
-        b.maxSpeed = maxSpeedSlider.currentValue
-        b.perceptionRadius = perceptionSlider.currentValue
         table.insert(boids, b)
     end
 end
@@ -73,34 +70,33 @@ function love.load()
         }
     )
 
-    maxForceLabel = Text(
+    alignmentLabel = Text(
         Rect(0, 0, cpWidth, 20),
         {
-            text = 'Max Force:',
+            text = 'Alignment:',
             bgColor = {0.2, 0.2, 0, 1},
             align = 'center'
         }
     )
-    controlPanel:addChild(maxForceLabel)
+    controlPanel:addChild(alignmentLabel)
 
-    maxForceSlider = Slider(
+    alignmentSlider = Slider(
         Rect(0, 0, cpWidth, 20),
         {
             minValue = 0,
             maxValue = 10,
-            currentValue = 2,
+            currentValue = 1.5,
             bgColor = { 0.2, 0.2, 0, 1 }
         }
     )
 
-    maxForceSlider:addChangeHandler(function(value)
-        initBoids()
-        maxForceLabel:setText('Max Force: ' .. value)
+    alignmentSlider:addChangeHandler(function(value)
+        alignmentLabel:setText('Alignment: ' .. value)
     end)
 
-    controlPanel:addChild(maxForceSlider)
-    -- set initial max force
-    maxForceLabel:setText('Max Force: ' .. maxForceSlider.currentValue)
+    controlPanel:addChild(alignmentSlider)
+    -- set initial Alignment
+    alignmentLabel:setText('Alignment: ' .. alignmentSlider.currentValue)
 
 
     local emptyPanel = Panel(
@@ -111,35 +107,34 @@ function love.load()
     )
     controlPanel:addChild(emptyPanel)
 
-    maxSpeedLabel = Text(
+    cohesionLabel = Text(
         Rect(0, 0, cpWidth, 20),
         {
-            text = 'Max Speed:',
+            text = 'Cohesion:',
             bgColor = {0.2, 0.2, 0, 1},
             align = 'center'
         }
     )
 
-    controlPanel:addChild(maxSpeedLabel)
+    controlPanel:addChild(cohesionLabel)
 
-    maxSpeedSlider = Slider(
+    cohesionSlider = Slider(
         Rect(0, 0, cpWidth, 20),
         {
             minValue = 0,
             maxValue = 10,
-            currentValue = 0.1,
+            currentValue = 1,
             bgColor = { 0.2, 0.2, 0, 1 }
         }
     )
 
-    maxSpeedSlider:addChangeHandler(function(value)
-        initBoids()
-        maxSpeedLabel:setText('Max Speed: ' .. value)
+    cohesionSlider:addChangeHandler(function(value)
+        cohesionLabel:setText('Cohesion: ' .. value)
     end)
 
-    controlPanel:addChild(maxSpeedSlider)
-    -- set initial max speed
-    maxSpeedLabel:setText('Max Speed: ' .. maxSpeedSlider.currentValue)
+    controlPanel:addChild(cohesionSlider)
+    -- set initial Cohesion
+    cohesionLabel:setText('Cohesion: ' .. cohesionSlider.currentValue)
 
     emptyPanel = Panel(
         Rect(0, 0, cpWidth, 20),
@@ -149,35 +144,34 @@ function love.load()
     )
     controlPanel:addChild(emptyPanel)
 
-    perceptionLabel = Text(
+    separationLabel = Text(
         Rect(0, 0, cpWidth, 20),
         {
-            text = 'Perception:',
+            text = 'Separation:',
             bgColor = {0.2, 0.2, 0, 1},
             align = 'center'
         }
     )
 
-    controlPanel:addChild(perceptionLabel)
+    controlPanel:addChild(separationLabel)
 
-    perceptionSlider = Slider(
+    separationSlider = Slider(
         Rect(0, 0, cpWidth, 20),
         {
             minValue = 0,
-            maxValue = 500,
-            currentValue = 1,
+            maxValue = 100,
+            currentValue = 2,
             bgColor = { 0.2, 0.2, 0, 1 }
         }
     )
 
-    perceptionSlider:addChangeHandler(function(value)
-        initBoids()
-        perceptionLabel:setText('Perception: ' .. value)
+    separationSlider:addChangeHandler(function(value)
+        separationLabel:setText('Separation: ' .. value)
     end)
 
-    controlPanel:addChild(perceptionSlider)
-    -- set initial perception
-    perceptionLabel:setText('Perception: ' .. perceptionSlider.currentValue)
+    controlPanel:addChild(separationSlider)
+    -- set initial Separation
+    separationLabel:setText('Separation: ' .. separationSlider.currentValue)
 
     emptyPanel = Panel(
         Rect(0, 0, cpWidth, 200),
@@ -210,7 +204,7 @@ function love.update(dt)
 
     for _, boid in ipairs(boids) do
         boid:edges()
-        boid:flock(boids)
+        boid:flock(boids, alignmentSlider, cohesionSlider, separationSlider)
         boid:update()
     end
 end
