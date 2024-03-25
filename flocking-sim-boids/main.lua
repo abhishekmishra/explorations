@@ -27,6 +27,7 @@ local perceptionSlider
 local maxForceLabel
 local maxSpeedLabel
 local perceptionLabel
+local fpsLabel
 
 
 -- random seed
@@ -76,7 +77,8 @@ function love.load()
         Rect(0, 0, cpWidth, 20),
         {
             text = 'Max Force:',
-            bgColor = {0.2, 0.2, 0, 1}
+            bgColor = {0.2, 0.2, 0, 1},
+            align = 'center'
         }
     )
     controlPanel:addChild(maxForceLabel)
@@ -113,7 +115,8 @@ function love.load()
         Rect(0, 0, cpWidth, 20),
         {
             text = 'Max Speed:',
-            bgColor = {0.2, 0.2, 0, 1}
+            bgColor = {0.2, 0.2, 0, 1},
+            align = 'center'
         }
     )
 
@@ -150,7 +153,8 @@ function love.load()
         Rect(0, 0, cpWidth, 20),
         {
             text = 'Perception:',
-            bgColor = {0.2, 0.2, 0, 1}
+            bgColor = {0.2, 0.2, 0, 1},
+            align = 'center'
         }
     )
 
@@ -175,6 +179,24 @@ function love.load()
     -- set initial perception
     perceptionLabel:setText('Perception: ' .. perceptionSlider.currentValue)
 
+    emptyPanel = Panel(
+        Rect(0, 0, cpWidth, 200),
+        {
+            bgColor = {0.2, 0.2, 0, 1}
+        }
+    )
+    controlPanel:addChild(emptyPanel)
+
+    fpsLabel = Text(
+        Rect(0, 0, cpWidth, 20),
+        {
+            text = 'FPS: 0',
+            bgColor = {0.2, 0.2, 0, 1},
+            align = 'center'
+        }
+    )
+    controlPanel:addChild(fpsLabel)
+
     top:addChild(controlPanel)
 
     top:show()
@@ -195,6 +217,9 @@ end
 
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
+    --update fps
+    fpsLabel:setText('FPS: ' .. love.timer.getFPS())
+
     top:draw()
 
     for _, boid in ipairs(boids) do
