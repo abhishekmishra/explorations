@@ -4,7 +4,8 @@
 -- author: Abhishek Mishra
 
 local class = require('middleclass')
-local Vector = require('vector')
+local nl = require('ne0luv')
+local Vector = nl.Vector
 
 --- Boid class
 local Boid = class('Boid')
@@ -148,7 +149,22 @@ function Boid:show()
     --     return
     -- end
     love.graphics.setColor(1, 1, 1)
-    love.graphics.circle('fill', self.position.x, self.position.y, self.boidWidth-2)
+
+    --- draw boid as a circle in the direction of the velocity
+    love.graphics.push()
+    love.graphics.translate(self.position.x, self.position.y)
+    local theta = self.velocity:heading() - math.pi/2
+    love.graphics.rotate(theta)
+    --- three lines of the triangle, base width is half of the boid width
+    local baseWidth = self.boidWidth/2
+    -- base line
+    love.graphics.line(-baseWidth, -baseWidth, baseWidth, -baseWidth)
+    -- right line
+    love.graphics.line(baseWidth, -baseWidth, 0, self.boidWidth)
+    -- left line
+    love.graphics.line(-baseWidth, -baseWidth, 0, self.boidWidth)
+    love.graphics.pop()
+    -- love.graphics.circle('fill', self.position.x, self.position.y, self.boidWidth-2)
 end
 
 return Boid

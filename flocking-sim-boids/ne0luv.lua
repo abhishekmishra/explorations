@@ -58,6 +58,7 @@ function Screen:mousemoved(x, y, dx, dy, istouch)
 end
 
 modules["Screen"] = Screen
+
 -- Vector
 
 --- vector.lua - A simple vector class. Similar to the Vector implementation in
@@ -103,31 +104,31 @@ end
 
 --- copy the vector
 function Vector:copy()
-    modules["Vector"] = Vector(self.x, self.y, self.z)
+    return Vector(self.x, self.y, self.z)
 end
 
 --- add a vector to this vector using the lua operator overloading
 --@param v the vector to add
 function Vector:__add(v)
-    modules["Vector"] = Vector(self.x + v.x, self.y + v.y, self.z + v.z)
+    return Vector(self.x + v.x, self.y + v.y, self.z + v.z)
 end
 
 --- subtract a vector from this vector using the lua operator overloading
 --@param v the vector to subtract
 function Vector:__sub(v)
-    modules["Vector"] = Vector(self.x - v.x, self.y - v.y, self.z - v.z)
+    return Vector(self.x - v.x, self.y - v.y, self.z - v.z)
 end
 
 --- multiply this vector by a scalar using the lua operator overloading
 --@param s the scalar to multiply
 function Vector:__mul(s)
-    modules["Vector"] = Vector(self.x * s, self.y * s, self.z * s)
+    return Vector(self.x * s, self.y * s, self.z * s)
 end
 
 --- divide this vector by a scalar using the lua operator overloading
 --@param s the scalar to divide
 function Vector:__div(s)
-    modules["Vector"] = Vector(self.x / s, self.y / s, self.z / s)
+    return Vector(self.x / s, self.y / s, self.z / s)
 end
 
 --- get the magnitude of the vector
@@ -157,7 +158,7 @@ end
 --- cross product of this vector with another vector
 --@param v the other vector
 function Vector:cross(v)
-    modules["Vector"] = Vector(
+    return Vector(
         self.y * v.z - self.z * v.y,
         self.z * v.x - self.x * v.z,
         self.x * v.y - self.y * v.x
@@ -178,7 +179,7 @@ function Vector:normalize()
     end
 end
 
---- limit the magnitude of the vector, returns a new vector without modifying 
+--- limit the magnitude of the vector, returns a new vector without modifying
 -- the original
 --@param max the maximum magnitude
 --@return the limited vector (a new vector)
@@ -210,7 +211,7 @@ end
 
 --- vector unary minus operator overloading
 function Vector:__unm()
-    modules["Vector"] = Vector(-self.x, -self.y, -self.z)
+    return Vector(-self.x, -self.y, -self.z)
 end
 
 --- vector unary plus operator overloading
@@ -246,7 +247,7 @@ end
 --@return a random 2D vector
 function Vector.random2D()
     local angle = math.random() * math.pi * 2
-    modules["Vector"] = Vector(math.cos(angle), math.sin(angle))
+    return Vector(math.cos(angle), math.sin(angle))
 end
 
 --- create a random 3D vector
@@ -256,10 +257,16 @@ function Vector.random3D()
     local vz = math.random() * 2 - 1
     local vx = math.sqrt(1 - vz * vz) * math.cos(angle)
     local vy = math.sqrt(1 - vz * vz) * math.sin(angle)
-    modules["Vector"] = Vector(vx, vy, vz)
+    return Vector(vx, vy, vz)
+end
+
+--- get the heading of the vector
+function Vector:heading()
+    return math.atan(self.y, self.x)
 end
 
 modules["Vector"] = Vector
+
 -- Rect
 
 local Class = require('middleclass')
@@ -478,6 +485,7 @@ function Text:_draw()
 end
 
 modules["Text"] = Text
+
 -- Button
 
 --- button.lua - A simple button class
