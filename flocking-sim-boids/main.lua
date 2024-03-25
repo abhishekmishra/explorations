@@ -4,6 +4,7 @@
 -- date: 23/3/2024
 -- author: Abhishek Mishra
 
+local Class = require('middleclass')
 local Boid = require('boid')
 local nl = require('ne0luv')
 local Layout = nl.Layout
@@ -18,17 +19,155 @@ local boidPanel
 local controlPanel
 local cpWidth = 150
 
--- sliders
-local alignmentSlider
-local cohesionSlider
-local separationSlider
+-- A Control Panel Class which extends Layout
+local ControlPanel = Class('ControlPanel', Layout)
 
--- slider labels
-local alignmentLabel
-local cohesionLabel
-local separationLabel
-local fpsLabel
+function ControlPanel:initialize(w, h)
+    Layout.initialize(self, Rect(0, 0, w, h),
+        {
+            layout = 'column',
+            bgColor = { 0.1, 0.1, 0.5 },
+        }
+    )
 
+    -- sliders
+    self.alignmentSlider = nil
+    self.cohesionSlider = nil
+    self.separationSlider = nil
+
+    -- slider labels
+    local alignmentLabel
+    local cohesionLabel
+    local separationLabel
+    self.fpsLabel = nil
+
+    alignmentLabel = Text(
+        Rect(0, 0, cpWidth, 20),
+        {
+            text = 'Alignment:',
+            bgColor = { 0.2, 0.2, 0, 1 },
+            align = 'center'
+        }
+    )
+    self:addChild(alignmentLabel)
+
+    self.alignmentSlider = Slider(
+        Rect(0, 0, cpWidth, 20),
+        {
+            minValue = 0,
+            maxValue = 1.5,
+            currentValue = 0.5,
+            bgColor = { 0.2, 0.2, 0, 1 }
+        }
+    )
+
+    self.alignmentSlider:addChangeHandler(function(value)
+        -- trim value to 2 decimal places
+        value = math.floor(value * 100) / 100
+        alignmentLabel:setText('Alignment: ' .. value)
+    end)
+
+    self:addChild(self.alignmentSlider)
+    -- set initial Alignment
+    alignmentLabel:setText('Alignment: ' .. self.alignmentSlider.currentValue)
+
+
+    local emptyPanel = Panel(
+        Rect(0, 0, cpWidth, 20),
+        {
+            bgColor = { 0.2, 0.2, 0, 1 }
+        }
+    )
+    self:addChild(emptyPanel)
+
+    cohesionLabel = Text(
+        Rect(0, 0, cpWidth, 20),
+        {
+            text = 'Cohesion:',
+            bgColor = { 0.2, 0.2, 0, 1 },
+            align = 'center'
+        }
+    )
+
+    self:addChild(cohesionLabel)
+
+    self.cohesionSlider = Slider(
+        Rect(0, 0, cpWidth, 20),
+        {
+            minValue = 0,
+            maxValue = 1,
+            currentValue = 0.1,
+            bgColor = { 0.2, 0.2, 0, 1 }
+        }
+    )
+
+    self.cohesionSlider:addChangeHandler(function(value)
+        -- trim value to 2 decimal places
+        value = math.floor(value * 100) / 100
+        cohesionLabel:setText('Cohesion: ' .. value)
+    end)
+
+    self:addChild(self.cohesionSlider)
+    -- set initial Cohesion
+    cohesionLabel:setText('Cohesion: ' .. self.cohesionSlider.currentValue)
+
+    emptyPanel = Panel(
+        Rect(0, 0, cpWidth, 20),
+        {
+            bgColor = { 0.2, 0.2, 0, 1 }
+        }
+    )
+    self:addChild(emptyPanel)
+
+    separationLabel = Text(
+        Rect(0, 0, cpWidth, 20),
+        {
+            text = 'Separation:',
+            bgColor = { 0.2, 0.2, 0, 1 },
+            align = 'center'
+        }
+    )
+
+    self:addChild(separationLabel)
+
+    self.separationSlider = Slider(
+        Rect(0, 0, cpWidth, 20),
+        {
+            minValue = 0,
+            maxValue = 1,
+            currentValue = 0.4,
+            bgColor = { 0.2, 0.2, 0, 1 }
+        }
+    )
+
+    self.separationSlider:addChangeHandler(function(value)
+        -- trim value to 2 decimal places
+        value = math.floor(value * 100) / 100
+        separationLabel:setText('Separation: ' .. value)
+    end)
+
+    self:addChild(self.separationSlider)
+    -- set initial Separation
+    separationLabel:setText('Separation: ' .. self.separationSlider.currentValue)
+
+    emptyPanel = Panel(
+        Rect(0, 0, cpWidth, 200),
+        {
+            bgColor = { 0.2, 0.2, 0, 1 }
+        }
+    )
+    self:addChild(emptyPanel)
+
+    self.fpsLabel = Text(
+        Rect(0, 0, cpWidth, 20),
+        {
+            text = 'FPS: 0',
+            bgColor = { 0.2, 0.2, 0, 1 },
+            align = 'center'
+        }
+    )
+    self:addChild(self.fpsLabel)
+end
 
 -- random seed
 math.randomseed(os.time())
@@ -62,140 +201,7 @@ function love.load()
     )
     top:addChild(boidPanel)
 
-    controlPanel = Layout(
-        Rect(0, 0, cpWidth, ch),
-        {
-            layout = 'column',
-            bgColor = { 0.1, 0.1, 0.5 },
-        }
-    )
-
-    alignmentLabel = Text(
-        Rect(0, 0, cpWidth, 20),
-        {
-            text = 'Alignment:',
-            bgColor = { 0.2, 0.2, 0, 1 },
-            align = 'center'
-        }
-    )
-    controlPanel:addChild(alignmentLabel)
-
-    alignmentSlider = Slider(
-        Rect(0, 0, cpWidth, 20),
-        {
-            minValue = 0,
-            maxValue = 1.5,
-            currentValue = 0.5,
-            bgColor = { 0.2, 0.2, 0, 1 }
-        }
-    )
-
-    alignmentSlider:addChangeHandler(function(value)
-        -- trim value to 2 decimal places
-        value = math.floor(value * 100) / 100
-        alignmentLabel:setText('Alignment: ' .. value)
-    end)
-
-    controlPanel:addChild(alignmentSlider)
-    -- set initial Alignment
-    alignmentLabel:setText('Alignment: ' .. alignmentSlider.currentValue)
-
-
-    local emptyPanel = Panel(
-        Rect(0, 0, cpWidth, 20),
-        {
-            bgColor = { 0.2, 0.2, 0, 1 }
-        }
-    )
-    controlPanel:addChild(emptyPanel)
-
-    cohesionLabel = Text(
-        Rect(0, 0, cpWidth, 20),
-        {
-            text = 'Cohesion:',
-            bgColor = { 0.2, 0.2, 0, 1 },
-            align = 'center'
-        }
-    )
-
-    controlPanel:addChild(cohesionLabel)
-
-    cohesionSlider = Slider(
-        Rect(0, 0, cpWidth, 20),
-        {
-            minValue = 0,
-            maxValue = 1,
-            currentValue = 0.1,
-            bgColor = { 0.2, 0.2, 0, 1 }
-        }
-    )
-
-    cohesionSlider:addChangeHandler(function(value)
-        -- trim value to 2 decimal places
-        value = math.floor(value * 100) / 100
-        cohesionLabel:setText('Cohesion: ' .. value)
-    end)
-
-    controlPanel:addChild(cohesionSlider)
-    -- set initial Cohesion
-    cohesionLabel:setText('Cohesion: ' .. cohesionSlider.currentValue)
-
-    emptyPanel = Panel(
-        Rect(0, 0, cpWidth, 20),
-        {
-            bgColor = { 0.2, 0.2, 0, 1 }
-        }
-    )
-    controlPanel:addChild(emptyPanel)
-
-    separationLabel = Text(
-        Rect(0, 0, cpWidth, 20),
-        {
-            text = 'Separation:',
-            bgColor = { 0.2, 0.2, 0, 1 },
-            align = 'center'
-        }
-    )
-
-    controlPanel:addChild(separationLabel)
-
-    separationSlider = Slider(
-        Rect(0, 0, cpWidth, 20),
-        {
-            minValue = 0,
-            maxValue = 1,
-            currentValue = 0.4,
-            bgColor = { 0.2, 0.2, 0, 1 }
-        }
-    )
-
-    separationSlider:addChangeHandler(function(value)
-        -- trim value to 2 decimal places
-        value = math.floor(value * 100) / 100
-        separationLabel:setText('Separation: ' .. value)
-    end)
-
-    controlPanel:addChild(separationSlider)
-    -- set initial Separation
-    separationLabel:setText('Separation: ' .. separationSlider.currentValue)
-
-    emptyPanel = Panel(
-        Rect(0, 0, cpWidth, 200),
-        {
-            bgColor = { 0.2, 0.2, 0, 1 }
-        }
-    )
-    controlPanel:addChild(emptyPanel)
-
-    fpsLabel = Text(
-        Rect(0, 0, cpWidth, 20),
-        {
-            text = 'FPS: 0',
-            bgColor = { 0.2, 0.2, 0, 1 },
-            align = 'center'
-        }
-    )
-    controlPanel:addChild(fpsLabel)
+    controlPanel = ControlPanel(cpWidth, ch)
 
     top:addChild(controlPanel)
 
@@ -210,7 +216,7 @@ function love.update(dt)
 
     for _, boid in ipairs(boids) do
         boid:edges()
-        boid:flock(boids, alignmentSlider, cohesionSlider, separationSlider)
+        boid:flock(boids, controlPanel.alignmentSlider, controlPanel.cohesionSlider, controlPanel.separationSlider)
         boid:update()
     end
 end
@@ -218,7 +224,7 @@ end
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
     --update fps
-    fpsLabel:setText('FPS: ' .. love.timer.getFPS())
+    controlPanel.fpsLabel:setText('FPS: ' .. love.timer.getFPS())
 
     top:draw()
 
