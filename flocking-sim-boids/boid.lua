@@ -21,7 +21,7 @@ function Boid:initialize(panel, x, y)
     self.position = Vector(x, y)
     self.velocity = Vector.random2D()
     -- get random value in range 0.5 to 1.5
-    local m = math.random(5, 15)/10
+    local m = math.random(20, 40)/10
     self.velocity:setMag(m)
     self.acceleration = Vector(0, 0)
     self.maxForce = 0.2
@@ -55,7 +55,7 @@ function Boid:flock(boids, alignmentSlider, cohesionSlider, separationSlider)
     cohesion = cohesion * cohesionSlider.currentValue
     separation = separation * separationSlider.currentValue
 
-    self.acceleration = separation
+    self.acceleration = self.acceleration + separation
     self.acceleration = self.acceleration + alignment
     self.acceleration = self.acceleration + cohesion
 end
@@ -143,10 +143,10 @@ end
 --- show the boid on the screen
 function Boid:show()
     -- only draw the boid if it is within the panel
-    local inside = self.panel.rect:contains(self.position.x, self.position.y)
-    if not inside then
-        return
-    end
+    -- local inside = self.panel.rect:contains(self.position.x, self.position.y)
+    -- if not inside then
+    --     return
+    -- end
     love.graphics.setColor(1, 1, 1)
     love.graphics.circle('fill', self.position.x, self.position.y, self.boidWidth-2)
 end

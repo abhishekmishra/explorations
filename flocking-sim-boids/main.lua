@@ -37,7 +37,7 @@ local boids
 
 local function initBoids()
     boids = {}
-    for i = 1, 100 do
+    for i = 1, 300 do
         local b = Boid(boidPanel)
         table.insert(boids, b)
     end
@@ -84,7 +84,7 @@ function love.load()
         Rect(0, 0, cpWidth, 20),
         {
             minValue = 0,
-            maxValue = 10,
+            maxValue = 2,
             currentValue = 1.5,
             bgColor = { 0.2, 0.2, 0, 1 }
         }
@@ -122,7 +122,7 @@ function love.load()
         Rect(0, 0, cpWidth, 20),
         {
             minValue = 0,
-            maxValue = 10,
+            maxValue = 2,
             currentValue = 1,
             bgColor = { 0.2, 0.2, 0, 1 }
         }
@@ -159,7 +159,7 @@ function love.load()
         Rect(0, 0, cpWidth, 20),
         {
             minValue = 0,
-            maxValue = 100,
+            maxValue = 2,
             currentValue = 2,
             bgColor = { 0.2, 0.2, 0, 1 }
         }
