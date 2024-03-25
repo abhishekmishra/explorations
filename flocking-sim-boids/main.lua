@@ -49,7 +49,7 @@ function love.load()
     top = Layout(
         Rect(0, 0, cw, ch),
         {
-            bgColor = {0.1, 0.1, 0.1},
+            bgColor = { 0.1, 0.1, 0.1 },
             layout = 'row',
         }
     )
@@ -57,7 +57,7 @@ function love.load()
     boidPanel = Layout(
         Rect(0, 0, cw - cpWidth, ch),
         {
-            bgColor = {0.1, 0.5, 0.1},
+            bgColor = { 0.1, 0.5, 0.1 },
         }
     )
     top:addChild(boidPanel)
@@ -66,7 +66,7 @@ function love.load()
         Rect(0, 0, cpWidth, ch),
         {
             layout = 'column',
-            bgColor = {0.1, 0.1, 0.5},
+            bgColor = { 0.1, 0.1, 0.5 },
         }
     )
 
@@ -74,7 +74,7 @@ function love.load()
         Rect(0, 0, cpWidth, 20),
         {
             text = 'Alignment:',
-            bgColor = {0.2, 0.2, 0, 1},
+            bgColor = { 0.2, 0.2, 0, 1 },
             align = 'center'
         }
     )
@@ -84,13 +84,15 @@ function love.load()
         Rect(0, 0, cpWidth, 20),
         {
             minValue = 0,
-            maxValue = 2,
-            currentValue = 1.5,
+            maxValue = 1.5,
+            currentValue = 0.5,
             bgColor = { 0.2, 0.2, 0, 1 }
         }
     )
 
     alignmentSlider:addChangeHandler(function(value)
+        -- trim value to 2 decimal places
+        value = math.floor(value * 100) / 100
         alignmentLabel:setText('Alignment: ' .. value)
     end)
 
@@ -102,7 +104,7 @@ function love.load()
     local emptyPanel = Panel(
         Rect(0, 0, cpWidth, 20),
         {
-            bgColor = {0.2, 0.2, 0, 1}
+            bgColor = { 0.2, 0.2, 0, 1 }
         }
     )
     controlPanel:addChild(emptyPanel)
@@ -111,7 +113,7 @@ function love.load()
         Rect(0, 0, cpWidth, 20),
         {
             text = 'Cohesion:',
-            bgColor = {0.2, 0.2, 0, 1},
+            bgColor = { 0.2, 0.2, 0, 1 },
             align = 'center'
         }
     )
@@ -122,13 +124,15 @@ function love.load()
         Rect(0, 0, cpWidth, 20),
         {
             minValue = 0,
-            maxValue = 2,
-            currentValue = 1,
+            maxValue = 1,
+            currentValue = 0.1,
             bgColor = { 0.2, 0.2, 0, 1 }
         }
     )
 
     cohesionSlider:addChangeHandler(function(value)
+        -- trim value to 2 decimal places
+        value = math.floor(value * 100) / 100
         cohesionLabel:setText('Cohesion: ' .. value)
     end)
 
@@ -139,7 +143,7 @@ function love.load()
     emptyPanel = Panel(
         Rect(0, 0, cpWidth, 20),
         {
-            bgColor = {0.2, 0.2, 0, 1}
+            bgColor = { 0.2, 0.2, 0, 1 }
         }
     )
     controlPanel:addChild(emptyPanel)
@@ -148,7 +152,7 @@ function love.load()
         Rect(0, 0, cpWidth, 20),
         {
             text = 'Separation:',
-            bgColor = {0.2, 0.2, 0, 1},
+            bgColor = { 0.2, 0.2, 0, 1 },
             align = 'center'
         }
     )
@@ -159,13 +163,15 @@ function love.load()
         Rect(0, 0, cpWidth, 20),
         {
             minValue = 0,
-            maxValue = 2,
-            currentValue = 2,
+            maxValue = 1,
+            currentValue = 0.4,
             bgColor = { 0.2, 0.2, 0, 1 }
         }
     )
 
     separationSlider:addChangeHandler(function(value)
+        -- trim value to 2 decimal places
+        value = math.floor(value * 100) / 100
         separationLabel:setText('Separation: ' .. value)
     end)
 
@@ -176,7 +182,7 @@ function love.load()
     emptyPanel = Panel(
         Rect(0, 0, cpWidth, 200),
         {
-            bgColor = {0.2, 0.2, 0, 1}
+            bgColor = { 0.2, 0.2, 0, 1 }
         }
     )
     controlPanel:addChild(emptyPanel)
@@ -185,7 +191,7 @@ function love.load()
         Rect(0, 0, cpWidth, 20),
         {
             text = 'FPS: 0',
-            bgColor = {0.2, 0.2, 0, 1},
+            bgColor = { 0.2, 0.2, 0, 1 },
             align = 'center'
         }
     )
