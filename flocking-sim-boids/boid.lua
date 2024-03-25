@@ -13,10 +13,11 @@ local Boid = class('Boid')
 -- if no position is provided, it is random
 --@param x the x position of the boid
 --@param y the y position of the boid
-function Boid:initialize(x, y)
+function Boid:initialize(panel, x, y)
+    self.panel = panel
     -- position is random if not provided
-    x = x or math.random(0, love.graphics.getWidth())
-    y = y or math.random(0, love.graphics.getHeight())
+    x = x or math.random(self.panel:getX(), self.panel:getWidth())
+    y = y or math.random(self.panel:getY(), self.panel:getHeight())
     self.position = Vector(x, y)
     self.velocity = Vector.random2D()
     -- get random value in range 0.5 to 1.5
@@ -25,20 +26,22 @@ function Boid:initialize(x, y)
     self.acceleration = Vector(0, 0)
     self.maxForce = 4
     self.maxSpeed = 2
+    self.perceptionRadius = 100
+    self.boidWidth = 5
 end
 
 --- check if the boid is within the screen
 -- and wrap around if it goes out of bounds
 function Boid:edges()
-    if self.position.x > love.graphics.getWidth() then
-        self.position.x = 0
-    elseif self.position.x < 0 then
-        self.position.x = love.graphics.getWidth()
+    if self.position.x + self.boidWidth > self.panel:getWidth() then
+        self.position.x = self.panel:getX() + self.boidWidth
+    elseif self.position.x - self.boidWidth < self.panel:getX() then
+        self.position.x = self.panel:getWidth() - self.boidWidth
     end
-    if self.position.y > love.graphics.getHeight() then
-        self.position.y = 0
-    elseif self.position.y < 0 then
-        self.position.y = love.graphics.getHeight()
+    if self.position.y + self.boidWidth > self.panel:getHeight() then
+        self.position.y = self.panel:getY() + self.boidWidth
+    elseif self.position.y - self.boidWidth < self.panel:getY() then
+        self.position.y = self.panel:getHeight() - self.boidWidth
     end
 end
 
@@ -57,12 +60,11 @@ end
 -- @param boids the list of boids
 -- @return the alignment force
 function Boid:align(boids)
-    local perceptionRadius = 25
     local steering = Vector(0, 0)
     local total = 0
     for _, boid in ipairs(boids) do
         local distance = self.position:dist(boid.position)
-        if distance > 0 and distance < perceptionRadius then
+        if distance > 0 and distance < self.perceptionRadius then
             steering = steering + boid.velocity
             total = total + 1
         end
@@ -80,12 +82,11 @@ end
 -- @param boids the list of boids
 -- @return the cohesion force
 function Boid:cohesion(boids)
-    local perceptionRadius = 15
     local steering = Vector(0, 0)
     local total = 0
     for _, boid in ipairs(boids) do
         local distance = self.position:dist(boid.position)
-        if distance > 0 and distance < perceptionRadius then
+        if distance > 0 and distance < self.perceptionRadius then
             steering = steering + boid.position
             total = total + 1
         end
@@ -104,12 +105,11 @@ end
 -- @param boids the list of boids
 -- @return the separation force
 function Boid:separation(boids)
-    local perceptionRadius = 10
     local steering = Vector(0, 0)
     local total = 0
     for _, boid in ipairs(boids) do
         local distance = self.position:dist(boid.position)
-        if distance > 0 and distance < perceptionRadius then
+        if distance > 0 and distance < self.perceptionRadius then
             local diff = self.position - boid.position
             diff = diff / distance
             steering = steering + diff
@@ -127,16 +127,21 @@ end
 
 --- update the boid
 function Boid:update()
+    self.velocity:limit(self.maxSpeed)
     self.position = self.position + self.velocity
     self.velocity = self.velocity + self.acceleration
-    self.velocity:limit(self.maxSpeed)
     self.acceleration = self.acceleration * 0
 end
 
 --- show the boid on the screen
 function Boid:show()
+    -- only draw the boid if it is within the panel
+    local inside = self.panel.rect:contains(self.position.x, self.position.y)
+    if not inside then
+        return
+    end
     love.graphics.setColor(1, 1, 1)
-    love.graphics.circle('fill', self.position.x, self.position.y, 5)
+    love.graphics.circle('fill', self.position.x, self.position.y, self.boidWidth-2)
 end
 
 return Boid
