@@ -274,7 +274,6 @@ end
 
 -- Require the middleclass library
 local Class = require('middleclass')
-local vector = require('vector')
 
 
 -- Default values for the panel
