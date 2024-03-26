@@ -144,13 +144,15 @@ end
 --- show the boid on the screen
 function Boid:show()
     -- only draw the boid if it is within the panel
-    -- local inside = self.panel.rect:contains(self.position.x, self.position.y)
-    -- if not inside then
-    --     return
-    -- end
+    local inside = self.panel.rect:contains(self.position.x, self.position.y)
+    if not inside then
+        return
+    end
+
+    -- set the color of the boid
     love.graphics.setColor(1, 1, 1)
 
-    --- draw boid as a circle in the direction of the velocity
+    -- draw boid as a circle in the direction of the velocity
     love.graphics.push()
     love.graphics.translate(self.position.x, self.position.y)
     local theta = self.velocity:heading() - math.pi/2
@@ -164,6 +166,8 @@ function Boid:show()
     -- left line
     love.graphics.line(-baseWidth, -baseWidth, 0, self.boidWidth)
     love.graphics.pop()
+
+    -- draw the boid as a circle
     -- love.graphics.circle('fill', self.position.x, self.position.y, self.boidWidth-2)
 end
 
