@@ -7,58 +7,6 @@
 local modules = {}
 
 
--- Screen
-
----screen.lua: base class of all screens
---
--- date: 16/02/2024
--- author: Abhishek Mishra
-
-local class = require('middleclass')
-
-local Screen = class('Screen')
-
-function Screen:initialize(orchestrator)
-    self.orchestrator = orchestrator
-    self.displayText = "Screen"
-end
-
-function Screen:getWidth()
-    return love.graphics.getWidth()
-end
-
-function Screen:getHeight()
-    return love.graphics.getHeight()
-end
-
-function Screen:show()
-    -- code to show the screen
-end
-
-function Screen:hide()
-    -- code to hide the screen
-end
-
-function Screen:update(dt)
-    -- code to update the screen
-end
-
-function Screen:draw()
-    -- code to draw the screen
-end
-
-function Screen:mousepressed(x, y, button, istouch, presses)
-    -- Code to handle mouse press
-end
-
-function Screen:mousereleased(x, y, button, istouch, presses)
-end
-
-function Screen:mousemoved(x, y, dx, dy, istouch)
-end
-
-modules["Screen"] = Screen
-
 -- Vector
 
 --- vector.lua - A simple vector class. Similar to the Vector implementation in
@@ -267,56 +215,102 @@ end
 
 modules["Vector"] = Vector
 
--- Rect
+-- Button
 
-local Class = require('middleclass')
+--- button.lua - A simple button class
+--
+-- date: 17/02/2024
+-- author: Abhishek Mishra
+local class = require('middleclass')
+local Panel = require('panel')
 
+--- Button class
+local Button = class('Button', Panel)
 
-local Rect = Class('Rect')
+--- a counter to keep track of the number of buttons created
+Button.static.idCounter = 0
 
-function Rect:initialize(x, y, w, h)
-    self.pos = Vector(x, y)
-    self.dim = Vector(w, h)
+--- constructor
+--@param displayText the text to display on the button
+--@param onActivate the function to call when the button is activated
+function Button:initialize(dim, displayText, onActivate, colors)
+    Panel.initialize(self, dim)
+    Button.idCounter = Button.idCounter + 1
+    self.id = 'Button' .. Button.idCounter
+    self.displayText = displayText
+    self.onActivate = onActivate or function() end
+    self.text = love.graphics.newText(love.graphics.getFont(), self.displayText)
+    self.colors = colors or {
+        bg = { 0.5, 0.5, 0.5, 1 },
+        fg = { 1, 1, 1, 1 },
+        bgSelect = { 0.7, 0.7, 0.7, 1 },
+        fgSelect = { 0, 0, 0, 1 }
+    }
 end
 
-function Rect:contains(x, y)
-    return (x >= self.pos.x and x <= self.pos.x + self.dim.w
-        and y >= self.pos.y and y <= self.pos.y + self.dim.h)
+function Button:toggleSelect()
+    self.select = not self.select
 end
 
-function Rect:getWidth()
-    return self.dim.w
+function Button:isSelected()
+    return self.select
 end
 
-function Rect:getHeight()
-    return self.dim.h
+function Button:setSelected(selected)
+    if selected == nil then
+        selected = true
+    end
+    self.select = selected
 end
 
-function Rect:getX()
-    return self.pos.x
+--- run the onActivate function
+function Button:activate()
+    self.onActivate()
 end
 
-function Rect:getY()
-    return self.pos.y
+--- draw the button
+function Button:_draw()
+    local bgColor, fgColor
+    love.graphics.push()
+    if self:isSelected() then
+        bgColor = self.colors.bgSelect
+        fgColor = self.colors.fgSelect
+    else
+        bgColor = self.colors.bg
+        fgColor = self.colors.fg
+    end
+    love.graphics.setColor(bgColor)
+    love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
+    love.graphics.setColor(fgColor)
+    love.graphics.draw(self.text, self.x + 10, self.y + 10)
+    love.graphics.pop()
 end
 
-function Rect:setX(x)
-    self.pos.x = x
+function Button:_mouseout()
+    self:setSelected(false)
 end
 
-function Rect:setY(y)
-    self.pos.y = y
+function Button:_mousemoved(x, y, dx, dy, istouch)
+    if self:contains(x, y) then
+        self:setSelected(true)
+    else
+        self:setSelected(false)
+    end
 end
 
-function Rect:setWidth(w)
-    self.dim.w = w
+function Button:_mousepressed(x, y, button, istouch, presses)
+    if self:contains(x, y) then
+        self:activate()
+    end
 end
 
-function Rect:setHeight(h)
-    self.dim.h = h
+-- contains - check if the button contains the point x, y
+function Button:contains(x, y)
+    return x >= 0 and x <= self.width and
+        y >= 0 and y <= self.height
 end
 
-modules["Rect"] = Rect
+modules["Button"] = Button
 
 -- Panel
 
@@ -328,7 +322,7 @@ modules["Rect"] = Rect
 -- Require the middleclass library
 local Class = require('middleclass')
 local vector = require('vector')
-
+local Rect = require('rect')
 
 -- Default values for the panel
 local PANEL_DEFAULT_WIDTH = 100
@@ -439,150 +433,6 @@ end
 
 modules["Panel"] = Panel
 
--- Text
-
---- text.lua - A panel class that displays a single line of text
---
--- date: 17/02/2024
--- author: Abhishek Mishra
-
--- Require the middleclass library
-local Class = require('middleclass')
-
--- Require the Panel class
-
-
--- Define the Text class that extends the Panel class
-local Text = Class('Text', Panel)
-
--- Constructor for the Text class
-function Text:initialize(rect, config)
-    Panel.initialize(self, rect)
-    self.config = config or {}
-    self.fgColor = self.config.fgColor or { 1, 1, 1, 1 } -- Default text color is white
-    self.font = self.config.font or love.graphics.newFont(14) -- Default font size is 14
-    self.displayText = self.config.text or "" -- Default text is an empty string
-    self.align = self.config.align or "left" -- Default alignment is left
-    self._text = love.graphics.newText(self.font, self.displayText) -- Create the love2d text object
-end
-
--- Method to set the text
-function Text:setText(text)
-    self.displayText = text
-    self._text:set(text) -- Update the love2d text object
-end
-
--- Set the text alignment
-function Text:setAlignment(align)
-    self.align = align
-end
-
--- Override the draw method
-function Text:_draw()
-    love.graphics.setColor(self.fgColor)
-    love.graphics.setFont(self.font)
-    love.graphics.printf(self.displayText, self:getX(), self:getY(), self:getWidth(), self.align)
-end
-
-modules["Text"] = Text
-
--- Button
-
---- button.lua - A simple button class
---
--- date: 17/02/2024
--- author: Abhishek Mishra
-local class = require('middleclass')
-
-
---- Button class
-local Button = class('Button', Panel)
-
---- a counter to keep track of the number of buttons created
-Button.static.idCounter = 0
-
---- constructor
---@param displayText the text to display on the button
---@param onActivate the function to call when the button is activated
-function Button:initialize(dim, displayText, onActivate, colors)
-    Panel.initialize(self, dim)
-    Button.idCounter = Button.idCounter + 1
-    self.id = 'Button' .. Button.idCounter
-    self.displayText = displayText
-    self.onActivate = onActivate or function() end
-    self.text = love.graphics.newText(love.graphics.getFont(), self.displayText)
-    self.colors = colors or {
-        bg = { 0.5, 0.5, 0.5, 1 },
-        fg = { 1, 1, 1, 1 },
-        bgSelect = { 0.7, 0.7, 0.7, 1 },
-        fgSelect = { 0, 0, 0, 1 }
-    }
-end
-
-function Button:toggleSelect()
-    self.select = not self.select
-end
-
-function Button:isSelected()
-    return self.select
-end
-
-function Button:setSelected(selected)
-    if selected == nil then
-        selected = true
-    end
-    self.select = selected
-end
-
---- run the onActivate function
-function Button:activate()
-    self.onActivate()
-end
-
---- draw the button
-function Button:_draw()
-    local bgColor, fgColor
-    love.graphics.push()
-    if self:isSelected() then
-        bgColor = self.colors.bgSelect
-        fgColor = self.colors.fgSelect
-    else
-        bgColor = self.colors.bg
-        fgColor = self.colors.fg
-    end
-    love.graphics.setColor(bgColor)
-    love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
-    love.graphics.setColor(fgColor)
-    love.graphics.draw(self.text, self.x + 10, self.y + 10)
-    love.graphics.pop()
-end
-
-function Button:_mouseout()
-    self:setSelected(false)
-end
-
-function Button:_mousemoved(x, y, dx, dy, istouch)
-    if self:contains(x, y) then
-        self:setSelected(true)
-    else
-        self:setSelected(false)
-    end
-end
-
-function Button:_mousepressed(x, y, button, istouch, presses)
-    if self:contains(x, y) then
-        self:activate()
-    end
-end
-
--- contains - check if the button contains the point x, y
-function Button:contains(x, y)
-    return x >= 0 and x <= self.width and
-        y >= 0 and y <= self.height
-end
-
-modules["Button"] = Button
-
 -- Slider
 
 --- slider.lua - A slider control based on the panel class
@@ -594,7 +444,7 @@ modules["Button"] = Button
 local class = require('middleclass')
 
 -- Require the Panel class
-
+local Panel = require('panel')
 
 -- Define the Slider class that extends the Panel class
 local Slider = class('Slider', Panel)
@@ -714,6 +564,53 @@ end
 
 modules["Slider"] = Slider
 
+-- Text
+
+--- text.lua - A panel class that displays a single line of text
+--
+-- date: 17/02/2024
+-- author: Abhishek Mishra
+
+-- Require the middleclass library
+local Class = require('middleclass')
+
+-- Require the Panel class
+local Panel = require('panel')
+
+-- Define the Text class that extends the Panel class
+local Text = Class('Text', Panel)
+
+-- Constructor for the Text class
+function Text:initialize(rect, config)
+    Panel.initialize(self, rect)
+    self.config = config or {}
+    self.fgColor = self.config.fgColor or { 1, 1, 1, 1 } -- Default text color is white
+    self.font = self.config.font or love.graphics.newFont(14) -- Default font size is 14
+    self.displayText = self.config.text or "" -- Default text is an empty string
+    self.align = self.config.align or "left" -- Default alignment is left
+    self._text = love.graphics.newText(self.font, self.displayText) -- Create the love2d text object
+end
+
+-- Method to set the text
+function Text:setText(text)
+    self.displayText = text
+    self._text:set(text) -- Update the love2d text object
+end
+
+-- Set the text alignment
+function Text:setAlignment(align)
+    self.align = align
+end
+
+-- Override the draw method
+function Text:_draw()
+    love.graphics.setColor(self.fgColor)
+    love.graphics.setFont(self.font)
+    love.graphics.printf(self.displayText, self:getX(), self:getY(), self:getWidth(), self.align)
+end
+
+modules["Text"] = Text
+
 -- Layout
 
 --- layout_panel.lua - A class for a panel that lays out child components
@@ -724,7 +621,7 @@ modules["Slider"] = Slider
 local class = require('middleclass')
 
 -- Require the Panel class
-
+local Panel = require('panel')
 
 -- Define the Layout class that extends the Panel class
 local Layout = class('Layout', Panel)
@@ -890,4 +787,56 @@ function Layout:_mousemoved(x, y, dx, dy, istouch)
 end
 
 modules["Layout"] = Layout
+
+-- Rect
+
+
+local Class = require('middleclass')
+local Vector = require('vector')
+
+local Rect = Class('Rect')
+
+function Rect:initialize(x, y, w, h)
+    self.pos = Vector(x, y)
+    self.dim = Vector(w, h)
+end
+
+function Rect:contains(x, y)
+    return (x >= self.pos.x and x <= self.pos.x + self.dim.w
+        and y >= self.pos.y and y <= self.pos.y + self.dim.h)
+end
+
+function Rect:getWidth()
+    return self.dim.w
+end
+
+function Rect:getHeight()
+    return self.dim.h
+end
+
+function Rect:getX()
+    return self.pos.x
+end
+
+function Rect:getY()
+    return self.pos.y
+end
+
+function Rect:setX(x)
+    self.pos.x = x
+end
+
+function Rect:setY(y)
+    self.pos.y = y
+end
+
+function Rect:setWidth(w)
+    self.dim.w = w
+end
+
+function Rect:setHeight(h)
+    self.dim.h = h
+end
+
+modules["Rect"] = Rect
 return modules
