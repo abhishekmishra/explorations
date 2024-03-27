@@ -4,10 +4,9 @@
   date: 25/03/2024
   author: Abhishek Mishra
 ]]
-local modules = {}
+local ne0luv = {}
 
-
--- Vector
+local Class = require('middleclass')
 
 --- vector.lua - A simple vector class. Similar to the Vector implementation in
 -- the p5.js library.
@@ -18,11 +17,8 @@ local modules = {}
 -- date: 23/03/2024
 -- author: Abhishek Mishra
 -- license: MIT, see LICENSE for more details.
-
-local class = require('middleclass')
-
 --- Vector class
-local Vector = class('Vector')
+local Vector = Class('Vector')
 
 --- constructor
 --@param x the x component of the vector
@@ -40,14 +36,11 @@ function Vector:set(x, y, z)
     self.x = x
     self.y = y
     self.z = z
+end
 
-    -- width and height aliases
-    self.w = x
-    self.h = y
-
-    -- u and v aliases
-    self.u = x
-    self.v = y
+--- tostring operator overloading
+function Vector:__tostring()
+    return 'Vector(' .. self.x .. ', ' .. self.y .. ', ' .. self.z .. ')'
 end
 
 --- copy the vector
@@ -97,6 +90,24 @@ function Vector:magSq()
     return self.x * self.x + self.y * self.y + self.z * self.z
 end
 
+--- get the heading of the vector
+function Vector:heading()
+    return math.atan(self.y, self.x)
+end
+
+--- limit the magnitude of the vector, returns a new vector without modifying
+-- the original
+--@param max the maximum magnitude
+--@return the limited vector (a new vector)
+function Vector:limit(max)
+    local limited = self:copy()
+    if limited:magSq() > max * max then
+        limited:normalize()
+        limited = limited * max
+    end
+    return limited
+end
+
 --- dot product of this vector with another vector
 --@param v the other vector
 function Vector:dot(v)
@@ -127,28 +138,10 @@ function Vector:normalize()
     end
 end
 
---- limit the magnitude of the vector, returns a new vector without modifying
--- the original
---@param max the maximum magnitude
---@return the limited vector (a new vector)
-function Vector:limit(max)
-    local limited = self:copy()
-    if limited:magSq() > max * max then
-        limited:normalize()
-        limited = limited * max
-    end
-    return limited
-end
-
 --- equals operator overloading
 --@param v the other vector
 function Vector:__eq(v)
     return self.x == v.x and self.y == v.y and self.z == v.z
-end
-
---- tostring operator overloading
-function Vector:__tostring()
-    return 'Vector(' .. self.x .. ', ' .. self.y .. ', ' .. self.z .. ')'
 end
 
 --- vector not equals operator overloading
@@ -208,18 +201,6 @@ function Vector.random3D()
     return Vector(vx, vy, vz)
 end
 
---- get the heading of the vector
-function Vector:heading()
-    return math.atan(self.y, self.x)
-end
-
-
--- Rect
-
-
-local Class = require('middleclass')
-
-
 local Rect = Class('Rect')
 
 function Rect:initialize(x, y, w, h)
@@ -228,16 +209,16 @@ function Rect:initialize(x, y, w, h)
 end
 
 function Rect:contains(x, y)
-    return (x >= self.pos.x and x <= self.pos.x + self.dim.w
-        and y >= self.pos.y and y <= self.pos.y + self.dim.h)
+    return (x >= self.pos.x and x <= self.pos.x + self.dim.x
+        and y >= self.pos.y and y <= self.pos.y + self.dim.y)
 end
 
 function Rect:getWidth()
-    return self.dim.w
+    return self.dim.x
 end
 
 function Rect:getHeight()
-    return self.dim.h
+    return self.dim.y
 end
 
 function Rect:getX()
@@ -257,23 +238,12 @@ function Rect:setY(y)
 end
 
 function Rect:setWidth(w)
-    self.dim.w = w
+    self.dim.x = w
 end
 
 function Rect:setHeight(h)
-    self.dim.h = h
+    self.dim.y = h
 end
-
-
--- Panel
-
---- panel.lua - A panel class
---
--- date: 17/02/2024
--- author: Abhishek Mishra
-
--- Require the middleclass library
-local Class = require('middleclass')
 
 
 -- Default values for the panel
@@ -382,20 +352,10 @@ end
 function Panel:setY(y)
     self.rect:setY(y)
 end
-
-
--- Text
-
 --- text.lua - A panel class that displays a single line of text
 --
 -- date: 17/02/2024
 -- author: Abhishek Mishra
-
--- Require the middleclass library
-local Class = require('middleclass')
-
--- Require the Panel class
-
 
 -- Define the Text class that extends the Panel class
 local Text = Class('Text', Panel)
@@ -428,19 +388,13 @@ function Text:_draw()
     love.graphics.setFont(self.font)
     love.graphics.printf(self.displayText, self:getX(), self:getY(), self:getWidth(), self.align)
 end
-
-
--- Button
-
 --- button.lua - A simple button class
 --
 -- date: 17/02/2024
 -- author: Abhishek Mishra
-local class = require('middleclass')
-
 
 --- Button class
-local Button = class('Button', Panel)
+local Button = Class('Button', Panel)
 
 --- a counter to keep track of the number of buttons created
 Button.static.idCounter = 0
@@ -524,23 +478,8 @@ function Button:contains(x, y)
     return x >= 0 and x <= self.width and
         y >= 0 and y <= self.height
 end
-
-
--- Slider
-
---- slider.lua - A slider control based on the panel class
---
--- date: 17/04/2024
--- author: Abhishek Mishra
-
--- Require the middleclass library
-local class = require('middleclass')
-
--- Require the Panel class
-
-
 -- Define the Slider class that extends the Panel class
-local Slider = class('Slider', Panel)
+local Slider = Class('Slider', Panel)
 
 -- Constructor for the Slider class
 function Slider:initialize(rect, config)
@@ -654,22 +593,8 @@ end
 --     self.rect:setY(y)
 -- end
 
-
-
--- Layout
-
---- layout_panel.lua - A class for a panel that lays out child components
---                     in a row or column
--- date: 17/02/2024
--- author: Abhishek Mishra
-
-local class = require('middleclass')
-
--- Require the Panel class
-
-
 -- Define the Layout class that extends the Panel class
-local Layout = class('Layout', Panel)
+local Layout = Class('Layout', Panel)
 
 -- Constructor for the Layout class
 function Layout:initialize(rect, config)
@@ -831,11 +756,12 @@ function Layout:_mousemoved(x, y, dx, dy, istouch)
     end
 end
 
-modules["Vector"] = Vector
-modules["Rect"] = Rect
-modules["Panel"] = Panel
-modules["Text"] = Text
-modules["Button"] = Button
-modules["Slider"] = Slider
-modules["Layout"] = Layout
-return modules
+ne0luv["Vector"] = Vector
+ne0luv["Rect"] = Rect
+ne0luv["Panel"] = Panel
+ne0luv["Text"] = Text
+ne0luv["Button"] = Button
+ne0luv["Slider"] = Slider
+ne0luv["Layout"] = Layout
+
+return ne0luv
