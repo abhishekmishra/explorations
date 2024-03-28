@@ -19,6 +19,8 @@ local boidPanel
 local controlPanel
 local cpWidth = 150
 
+----- ControlPanel ------
+
 -- A Control Panel Class which extends Layout
 local ControlPanel = Class('ControlPanel', Layout)
 
@@ -30,6 +32,8 @@ function ControlPanel:initialize(w, h)
         }
     )
 
+    local itemH = 20
+
     -- sliders
     self.alignmentSlider = nil
     self.cohesionSlider = nil
@@ -39,8 +43,12 @@ function ControlPanel:initialize(w, h)
     local alignmentLabel
     local cohesionLabel
     local separationLabel
-    self.fpsLabel = nil
 
+    -- fps text display
+    self.fpsText = nil
+
+    ----------- Alignment Slider ------------
+    -- create and add alignment slider label
     alignmentLabel = Text(
         Rect(0, 0, cpWidth, 20),
         {
@@ -51,6 +59,7 @@ function ControlPanel:initialize(w, h)
     )
     self:addChild(alignmentLabel)
 
+    -- create and add alignment slider
     self.alignmentSlider = Slider(
         Rect(0, 0, cpWidth, 20),
         {
@@ -68,18 +77,16 @@ function ControlPanel:initialize(w, h)
     end)
 
     self:addChild(self.alignmentSlider)
-    -- set initial Alignment
+
+    -- set initial Alignment value
     alignmentLabel:setText('Alignment: ' .. self.alignmentSlider.currentValue)
 
+    -- add empty panel
+    self:separator(20)
 
-    local emptyPanel = Panel(
-        Rect(0, 0, cpWidth, 20),
-        {
-            bgColor = { 0.2, 0.2, 0, 1 }
-        }
-    )
-    self:addChild(emptyPanel)
+    ----------- Cohesion Slider ------------
 
+    -- create and add cohesion slider label
     cohesionLabel = Text(
         Rect(0, 0, cpWidth, 20),
         {
@@ -111,13 +118,10 @@ function ControlPanel:initialize(w, h)
     -- set initial Cohesion
     cohesionLabel:setText('Cohesion: ' .. self.cohesionSlider.currentValue)
 
-    emptyPanel = Panel(
-        Rect(0, 0, cpWidth, 20),
-        {
-            bgColor = { 0.2, 0.2, 0, 1 }
-        }
-    )
-    self:addChild(emptyPanel)
+    -- separator
+    self:separator(20)
+
+    ----------- Separation Slider ------------
 
     separationLabel = Text(
         Rect(0, 0, cpWidth, 20),
@@ -150,24 +154,38 @@ function ControlPanel:initialize(w, h)
     -- set initial Separation
     separationLabel:setText('Separation: ' .. self.separationSlider.currentValue)
 
-    emptyPanel = Panel(
-        Rect(0, 0, cpWidth, 200),
+    -- separator
+    -- total height for 3 sliders, 3 labels, and 2 separators, each itemH
+    -- in height. Add one more itemH for the fps text display.
+    local totalHeight = itemH * (3 + 3 + 2 + 1);
+    self:separator(ch - totalHeight)
+
+    self.fpsText = Text(
+        Rect(0, 0, cpWidth, 20),
+        {
+            text = 'FPS: 0',
+            bgColor = { 0.2, 0.2, 0, 1 },
+            fgColor = { 1, 0, 0, 1},
+            align = 'center'
+        }
+    )
+    self:addChild(self.fpsText)
+end
+
+--- Create and add a separator to the control panel, with the 
+-- specified height.
+-- @param height The height of the separator
+function ControlPanel:separator(height)
+    local emptyPanel = Panel(
+        Rect(0, 0, cpWidth, height),
         {
             bgColor = { 0.2, 0.2, 0, 1 }
         }
     )
     self:addChild(emptyPanel)
-
-    self.fpsLabel = Text(
-        Rect(0, 0, cpWidth, 20),
-        {
-            text = 'FPS: 0',
-            bgColor = { 0.2, 0.2, 0, 1 },
-            align = 'center'
-        }
-    )
-    self:addChild(self.fpsLabel)
 end
+
+------- Main Program -------
 
 -- random seed
 math.randomseed(os.time())
@@ -224,7 +242,7 @@ end
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
     --update fps
-    controlPanel.fpsLabel:setText('FPS: ' .. love.timer.getFPS())
+    controlPanel.fpsText:setText('FPS: ' .. love.timer.getFPS())
 
     top:draw()
 
