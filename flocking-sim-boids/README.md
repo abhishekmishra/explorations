@@ -29,9 +29,11 @@ evaluating each of the above three rules separately. The values of *separation*,
 final acceleration of the individual boid. This leads remarkably different
 flocking behaviours from the boids.
 
-The following video shows some of the possibilities of the simulation.
+The following gif shows some of the possibilities of the simulation.
+(Apologies for the potato quality of the gif. My gif creation skills are
+poor as you can see.)
 
-[Flocking Simulation of Boids](FlockingSimulationBoids-28032024.gif)
+![Flocking Simulation of Boids](FlockingSimulationBoids-28032024.gif)
 
 [1]: https://www.youtube.com/@TheCodingTrain
 [2]: https://www.youtube.com/watch?v=mhjuuHl6qHM&pp=ygUSY29kaW5nIHRyYWluIGJvaWRz
