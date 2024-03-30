@@ -33,6 +33,7 @@ $(BUILD_DIR)/%.html: %.md
 	$(PANDOC_CMD) $< $(PANDOC_OPTS_HTML) -o $@
 	mv conf.lua $(BUILD_DIR)/
 	cp main.lua $(BUILD_DIR)/
+	cp ne0luv.lua $(BUILD_DIR)/
 
 $(BUILD_DIR)/%.pdf: %.md
 	$(PANDOC_CMD) $< $(PANDOC_OPTS_PDF) -o $@
