@@ -32,7 +32,7 @@ function love.conf(t)
 end
 ```
 
-```lua { code_file="main.lua" }
+<!-- ```lua { code_file="main.lua" }
 --- main.lua: QuadTree Simulation in LÖVE
 -- date: 30/3/2024
 -- author: Abhishek Mishra
@@ -55,4 +55,4 @@ function love.keypressed(key)
         love.event.quit()
     end
 end
-```
+``` -->
