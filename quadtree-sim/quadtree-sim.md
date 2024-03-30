@@ -2,6 +2,12 @@
 title: QuadTree Simulation
 ---
 
+[QuadTree Coding Train - Part I][1]
+[QuadTree Wikipedia][2]
+
+[1]: https://www.youtube.com/watch?v=OJxEcs0w_kE
+[2]: https://en.wikipedia.org/wiki/Quadtree
+
 ```lua { code_file="conf.lua" }
 --- conf.lua: Config for the love2d game.
 --
