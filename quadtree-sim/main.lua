@@ -13,17 +13,23 @@ local Rectangle = q.Rectangle
 -- global variable to hold the QuadTree
 local qt
 local mouseDragging = false
+local queryRect = Rectangle(100, 100, 50, 50)
 
 --- love.load: Called once at the start of the simulation
 function love.load()
     local boundary = Rectangle(200, 200, 200, 200)
     qt = QuadTree(boundary, 4)
 
-    -- for i = 1, 100 do
-    --     local p = Point(math.random(0, love.graphics.getWidth()),
-    --         math.random(0, love.graphics.getHeight()))
-    --     qt:insert(p)
-    -- end
+    for i = 1, 300 do
+        local p = Point(math.random(0, love.graphics.getWidth()),
+            math.random(0, love.graphics.getHeight()))
+        qt:insert(p)
+    end
+    for i = 1, 100 do
+        local p = Point(i * love.graphics.getWidth() / 100,
+            i * love.graphics.getHeight() / 100)
+        qt:insert(p)
+    end
 end
 
 --- love.update: Called every frame, updates the simulation
@@ -47,7 +53,19 @@ function love.draw()
     love.graphics.setColor(1, 1, 1)
 
     -- draw the QuadTree
-    qt:draw()
+    qt:draw(true)
+
+    -- draw the query rectangle
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.rectangle('line', queryRect.x - queryRect.w,
+        queryRect.y - queryRect.h, queryRect.w * 2, queryRect.h * 2)
+
+    -- query the QuadTree with the query rectangle
+    local points = qt:query(queryRect)
+    love.graphics.setColor(0, 1, 0)
+    for _, p in ipairs(points) do
+        love.graphics.points(p.x, p.y)
+    end
 end
 
 -- escape to exit
@@ -60,6 +78,11 @@ end
 function love.mousepressed(x, y, button)
     if button == 1 then
         mouseDragging = true
+    end
+    -- if right mouse button is pressed then updated query rectangle to mouse position
+    if button == 2 then
+        queryRect.x = x
+        queryRect.y = y
     end
 end
 

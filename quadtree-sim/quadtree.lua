@@ -29,6 +29,17 @@ function Rectangle:contains(point)
         point.y >= self.y - self.h and point.y < self.y + self.h
 end
 
+--- Intersect the rectangle with another rectangle
+--
+-- @param range: The other rectangle to intersect with
+-- @return: True if the rectangles intersect, false otherwise
+function Rectangle:intersects(range)
+    return not (range.x - range.w > self.x + self.w or
+        range.x + range.w < self.x - self.w or
+        range.y - range.h > self.y + self.h or
+        range.y + range.h < self.y - self.h)
+end
+
 -- QuadTree Class
 local QuadTree = Class('QuadTree')
 
@@ -80,6 +91,44 @@ function QuadTree:insert(point)
         self.southeast:insert(point)
         self.southwest:insert(point)
     end
+end
+
+--- Query the QuadTree for points within a range
+--
+-- @param range: The range to query
+-- @return: A list of points within the range
+function QuadTree:query(range)
+    local found = {}
+
+    if not self.boundary:intersects(range) then
+        return found
+    end
+
+    for _, p in ipairs(self.points) do
+        if range:contains(p) then
+            table.insert(found, p)
+        end
+    end
+
+    if self.divided then
+        for _, p in ipairs(self.northeast:query(range)) do
+            table.insert(found, p)
+        end
+
+        for _, p in ipairs(self.northwest:query(range)) do
+            table.insert(found, p)
+        end
+
+        for _, p in ipairs(self.southeast:query(range)) do
+            table.insert(found, p)
+        end
+
+        for _, p in ipairs(self.southwest:query(range)) do
+            table.insert(found, p)
+        end
+    end
+
+    return found
 end
 
 -- Draw the QuadTree
