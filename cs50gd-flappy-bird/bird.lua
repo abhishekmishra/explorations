@@ -6,6 +6,9 @@
 
 local Class = require 'middleclass'
 
+-- Set the gravity to an arbitrary value of 20
+local GRAVITY = 20
+
 --- The Bird class
 local Bird = Class('Bird')
 
@@ -21,6 +24,18 @@ function Bird:initialize()
     -- Locate the bird at the center of the screen
     self.x = VIRTUAL_WIDTH / 2 - (self.width / 2)
     self.y = VIRTUAL_HEIGHT / 2 - (self.height / 2)
+
+    -- Set the velocity of the bird to 0
+    self.dy = 0
+end
+
+--- Update the bird
+function Bird:update(dt)
+    -- update the velocity (dy) using the gravity
+    self.dy = self.dy + GRAVITY * dt
+
+    -- add the velocity to position to move the bird
+    self.y = self.y + self.dy
 end
 
 --- Draw the bird

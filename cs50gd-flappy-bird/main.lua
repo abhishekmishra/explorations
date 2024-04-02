@@ -70,6 +70,9 @@ function love.update(dt)
     -- update the ground scroll
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
         % VIRTUAL_WIDTH
+
+    -- update the bird
+    bird:update(dt)
 end
 
 --- love.draw: Called every frame, draws the simulation
