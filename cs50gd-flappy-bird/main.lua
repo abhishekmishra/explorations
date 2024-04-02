@@ -7,6 +7,9 @@
 -- and let the library scale the window at runtime to a window resolution.
 local push = require 'push'
 
+-- The Bird class
+local Bird = require 'bird'
+
 -- Now let us setup the window resolution (which can be changed later)
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
@@ -30,6 +33,9 @@ local ground = love.graphics.newImage('ground.png')
 local backgroundScroll = 0
 local groundScroll = 0
 
+-- The bird object
+local bird
+
 --- love.load: Called once at the start of the simulation
 function love.load()
     -- We set the filtering to nearest neighbour to avoid blurring
@@ -44,6 +50,9 @@ function love.load()
         resizable = true,
         vsync = true
     })
+
+    -- Create the bird object
+    bird = Bird()
 end
 
 --- love.resize: Called when the window is resized
@@ -73,6 +82,9 @@ function love.draw()
 
     -- Draw the ground
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
+
+    -- Draw the bird
+    bird:draw()
 
     -- End rendering at virtual resolution
     push:finish()
