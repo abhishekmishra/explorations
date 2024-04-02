@@ -17,6 +17,8 @@ local Pipe = Class('Pipe')
 
 -- The Pipe constructor
 function Pipe:initialize(orientation, y)
+    self.orientation = orientation
+    
     -- The x position of the pipe, just outside the right edge of the screen
     self.x = VIRTUAL_WIDTH
 

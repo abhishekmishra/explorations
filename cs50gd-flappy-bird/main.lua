@@ -40,7 +40,7 @@ local groundScroll = 0
 local bird
 
 -- The pipes table
-local pipes = {}
+local pipePairs = {}
 
 -- The spawn timer
 local spawnTimer = 0
@@ -89,7 +89,7 @@ function love.update(dt)
 
     -- spawn a new pipe if the timer is greater than 2 seconds
     if spawnTimer > 2 then
-        table.insert(pipes, Pipe())
+        table.insert(pipePairs, Pipe())
         spawnTimer = 0
     end
 
@@ -97,12 +97,12 @@ function love.update(dt)
     bird:update(dt)
 
     -- update the pipes
-    for k, pipe in pairs(pipes) do
+    for k, pipe in pairs(pipePairs) do
         pipe:update(dt)
 
         -- if the pipe is no longer visible, remove it
         if pipe.x < -pipe.width then
-            table.remove(pipes, k)
+            table.remove(pipePairs, k)
         end
     end
 
@@ -120,7 +120,7 @@ function love.draw()
 
     -- Pipes should be drawn in between the background and the ground
     -- such that they appear to be in the middle of the background
-    for _, pipe in pairs(pipes) do
+    for _, pipe in pairs(pipePairs) do
         pipe:draw()
     end
 
