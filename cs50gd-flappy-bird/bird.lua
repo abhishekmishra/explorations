@@ -9,6 +9,9 @@ local Class = require 'middleclass'
 -- Set the gravity to an arbitrary value of 20
 local GRAVITY = 20
 
+-- Jump velocity of the bird
+local JUMP_VELOCITY = -5
+
 --- The Bird class
 local Bird = Class('Bird')
 
@@ -36,6 +39,11 @@ function Bird:update(dt)
 
     -- add the velocity to position to move the bird
     self.y = self.y + self.dy
+
+    -- if the space key is pressed, set the velocity to a negative value
+    if love.keyboard.wasPressed('space') then
+        self.dy = JUMP_VELOCITY
+    end
 end
 
 --- Draw the bird

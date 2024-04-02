@@ -53,6 +53,10 @@ function love.load()
 
     -- Create the bird object
     bird = Bird()
+
+    -- Define a global table to store the keys pressed in the love.keyboard
+    -- namespace
+    love.keyboard.keysPressed = {}
 end
 
 --- love.resize: Called when the window is resized
@@ -73,6 +77,9 @@ function love.update(dt)
 
     -- update the bird
     bird:update(dt)
+
+    -- reset the keys pressed
+    love.keyboard.keysPressed = {}
 end
 
 --- love.draw: Called every frame, draws the simulation
@@ -93,8 +100,19 @@ function love.draw()
     push:finish()
 end
 
+--- love.keyboard.wasPressed: Global function to check if a key was pressed
+-- (checks in the keysPressed table)
+-- @param key The key to check
+-- @return true if the key was pressed, false otherwise
+function love.keyboard.wasPressed(key)
+    return love.keyboard.keysPressed[key]
+end
+
 -- escape to exit
 function love.keypressed(key)
+    -- update the keys pressed table with this key
+    love.keyboard.keysPressed[key] = true
+
     if key == "escape" then
         love.event.quit()
     end
