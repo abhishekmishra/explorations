@@ -10,6 +10,9 @@ local push = require 'push'
 -- The Bird class
 local Bird = require 'bird'
 
+-- The Pipe class
+local Pipe = require 'pipe'
+
 -- Now let us setup the window resolution (which can be changed later)
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
@@ -35,6 +38,12 @@ local groundScroll = 0
 
 -- The bird object
 local bird
+
+-- The pipes table
+local pipes = {}
+
+-- The spawn timer
+local spawnTimer = 0
 
 --- love.load: Called once at the start of the simulation
 function love.load()
@@ -75,8 +84,27 @@ function love.update(dt)
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
         % VIRTUAL_WIDTH
 
+    -- update the spawn timer
+    spawnTimer = spawnTimer + dt
+
+    -- spawn a new pipe if the timer is greater than 2 seconds
+    if spawnTimer > 2 then
+        table.insert(pipes, Pipe())
+        spawnTimer = 0
+    end
+
     -- update the bird
     bird:update(dt)
+
+    -- update the pipes
+    for k, pipe in pairs(pipes) do
+        pipe:update(dt)
+
+        -- if the pipe is no longer visible, remove it
+        if pipe.x < -pipe.width then
+            table.remove(pipes, k)
+        end
+    end
 
     -- reset the keys pressed
     love.keyboard.keysPressed = {}
@@ -89,6 +117,12 @@ function love.draw()
 
     -- Draw the background, now with the background scroll
     love.graphics.draw(background, -backgroundScroll, 0)
+
+    -- Pipes should be drawn in between the background and the ground
+    -- such that they appear to be in the middle of the background
+    for _, pipe in pairs(pipes) do
+        pipe:draw()
+    end
 
     -- Draw the ground
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
