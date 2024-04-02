@@ -15,9 +15,20 @@ WINDOW_HEIGHT = 720
 VIRTUAL_WIDTH = 512
 VIRTUAL_HEIGHT = 288
 
+-- The background and ground scroll speed in pixels per second
+local BACKGROUND_SCROLL_SPEED = 30
+local GROUND_SCROLL_SPEED = 60
+
+-- background loop back pixel width
+local BACKGROUND_LOOPING_POINT = 413
+
 -- Load the ground and background images
 local background = love.graphics.newImage('background.png')
 local ground = love.graphics.newImage('ground.png')
+
+-- Keep track of the background scroll and ground scroll
+local backgroundScroll = 0
+local groundScroll = 0
 
 --- love.load: Called once at the start of the simulation
 function love.load()
@@ -43,6 +54,13 @@ end
 
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
+    -- update the background scroll
+    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt)
+        % BACKGROUND_LOOPING_POINT
+
+    -- update the ground scroll
+    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
+        % VIRTUAL_WIDTH
 end
 
 --- love.draw: Called every frame, draws the simulation
@@ -50,11 +68,11 @@ function love.draw()
     -- Start rendering at virtual resolution
     push:start()
 
-    -- Draw the background
-    love.graphics.draw(background, 0, 0)
+    -- Draw the background, now with the background scroll
+    love.graphics.draw(background, -backgroundScroll, 0)
 
     -- Draw the ground
-    love.graphics.draw(ground, 0, VIRTUAL_HEIGHT - 16)
+    love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
 
     -- End rendering at virtual resolution
     push:finish()
