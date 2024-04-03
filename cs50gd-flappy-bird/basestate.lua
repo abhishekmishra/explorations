@@ -8,13 +8,14 @@ local Class = require 'middleclass'
 local BaseState = Class('BaseState')
 
 -- The constructor
-function BaseState:initialize()
-    -- empty constructor
+function BaseState:initialize(config)
+    self.config = config or {}
 end
 
 -- Enter the state
 function BaseState:enter(params)
-    -- empty enter function
+    self.enterParams = params
+    self.Machine = self.enterParams.Machine
 end
 
 -- Exit the state

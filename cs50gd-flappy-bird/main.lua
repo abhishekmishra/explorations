@@ -7,11 +7,11 @@
 -- and let the library scale the window at runtime to a window resolution.
 local push = require 'push'
 
--- The Bird class
-local Bird = require 'bird'
-
--- The Pipe class
-local PipePair = require 'pipepair'
+-- State Machine and states
+local StateMachine = require 'statemachine'
+local BaseState = require 'basestate'
+local TitleScreenState = require 'titlescreenstate'
+local PlayState = require 'playstate'
 
 -- Now let us setup the window resolution (which can be changed later)
 WINDOW_WIDTH = 1280
@@ -25,8 +25,9 @@ VIRTUAL_HEIGHT = 288
 local BACKGROUND_SCROLL_SPEED = 30
 local GROUND_SCROLL_SPEED = 60
 
--- background loop back pixel width
+-- background and ground loop back pixel width
 local BACKGROUND_LOOPING_POINT = 413
+local GROUND_LOOPING_POINT = 514
 
 -- Load the ground and background images
 local background = love.graphics.newImage('background.png')
@@ -36,21 +37,8 @@ local ground = love.graphics.newImage('ground.png')
 local backgroundScroll = 0
 local groundScroll = 0
 
--- The bird object
-local bird
-
--- The pipe pairs table
-local pipePairs = {}
-
--- The spawn timer
-local spawnTimer = 0
-
--- record the last y position of the last pipe pair
--- start it with a random value
-local lastY = -PIPE_HEIGHT + math.random(80) + 20
-
--- are we scrolling the game?
-local scrolling = true
+-- The State Machine
+local stateMachine
 
 --- love.load: Called once at the start of the simulation
 function love.load()
@@ -67,12 +55,28 @@ function love.load()
         vsync = true
     })
 
-    -- Create the bird object
-    bird = Bird()
-
     -- Define a global table to store the keys pressed in the love.keyboard
     -- namespace
     love.keyboard.keysPressed = {}
+
+    local gameConfig = {
+        ['smallFont'] = love.graphics.newFont('font.ttf', 8),
+        ['mediumFont'] = love.graphics.newFont('flappy.ttf', 14),
+        ['flappyFont'] = love.graphics.newFont('flappy.ttf', 28),
+        ['hugeFont'] = love.graphics.newFont('flappy.ttf', 56)
+    }
+
+    -- set the current font to the flappy font
+    love.graphics.setFont(gameConfig['flappyFont'])
+
+    -- The state machine
+    stateMachine = StateMachine {
+        ['title'] = function() return TitleScreenState(gameConfig) end,
+        ['play'] = function() return PlayState(gameConfig) end
+    }
+
+    -- Set the initial state
+    stateMachine:change('title')
 end
 
 --- love.resize: Called when the window is resized
@@ -83,54 +87,17 @@ end
 
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
-    if scrolling then
-        -- update the background scroll
-        backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt)
-            % BACKGROUND_LOOPING_POINT
+    -- update the background scroll
+    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt)
+        % BACKGROUND_LOOPING_POINT
 
-        -- update the ground scroll
-        groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
-            % VIRTUAL_WIDTH
+    -- update the ground scroll
+    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
+        % GROUND_LOOPING_POINT
 
-        -- update the spawn timer
-        spawnTimer = spawnTimer + dt
+    -- update the state machine
+    stateMachine:update(dt)
 
-        -- spawn a new pipe if the timer is greater than 2 seconds
-        if spawnTimer > 2 then
-            -- clamp the y position of the pipe pair to be within the
-            -- top 10 and bottom 90 pixels of the screen
-            -- such that both the pipes in the pair are visible in any
-            -- configuration
-            local y = math.max(-PIPE_HEIGHT + 10,
-                math.min(lastY + math.random(-20, 20),
-                    VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
-            lastY = y
-
-            table.insert(pipePairs, PipePair(y))
-            spawnTimer = 0
-        end
-
-        -- update the bird
-        bird:update(dt)
-
-        -- update the pipes, and also check for collision
-        for _, pipePair in pairs(pipePairs) do
-            pipePair:update(dt)
-
-            -- collision check
-            if bird:collides(pipePair.pipes['upper']) or
-                bird:collides(pipePair.pipes['lower']) then
-                scrolling = false
-            end
-        end
-
-        -- remove the pipes that are past the left edge of the screen
-        for k, pipePair in pairs(pipePairs) do
-            if pipePair.remove then
-                table.remove(pipePairs, k)
-            end
-        end
-    end
     -- reset the keys pressed
     love.keyboard.keysPressed = {}
 end
@@ -143,17 +110,11 @@ function love.draw()
     -- Draw the background, now with the background scroll
     love.graphics.draw(background, -backgroundScroll, 0)
 
-    -- Pipes should be drawn in between the background and the ground
-    -- such that they appear to be in the middle of the background
-    for _, pipePair in pairs(pipePairs) do
-        pipePair:draw()
-    end
+    -- Draw the current state
+    stateMachine:draw()
 
     -- Draw the ground
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
-
-    -- Draw the bird
-    bird:draw()
 
     -- End rendering at virtual resolution
     push:finish()
