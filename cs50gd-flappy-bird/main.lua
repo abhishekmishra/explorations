@@ -9,9 +9,9 @@ local push = require 'push'
 
 -- State Machine and states
 local StateMachine = require 'statemachine'
-local BaseState = require 'basestate'
 local TitleScreenState = require 'titlescreenstate'
 local PlayState = require 'playstate'
+local ScoreState = require 'scorestate'
 
 -- Now let us setup the window resolution (which can be changed later)
 WINDOW_WIDTH = 1280
@@ -72,7 +72,8 @@ function love.load()
     -- The state machine
     stateMachine = StateMachine {
         ['title'] = function() return TitleScreenState(gameConfig) end,
-        ['play'] = function() return PlayState(gameConfig) end
+        ['play'] = function() return PlayState(gameConfig) end,
+        ['score'] = function() return ScoreState(gameConfig) end
     }
 
     -- Set the initial state

@@ -27,6 +27,9 @@ function PipePair:initialize(y)
 
     -- flag to indicate if the pipe pair is past the screen, and can be removed
     self.remove = false
+
+    -- flag to indicate if the pipe pair has been scored
+    self.scored = false
 end
 
 -- Update the pipe pair

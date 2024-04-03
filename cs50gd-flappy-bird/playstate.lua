@@ -33,6 +33,9 @@ function PlayState:initialize(config)
     -- The spawn timer
     self.spawnTimer = 0
 
+    -- the score
+    self.score = 0
+
     -- record the last y position of the last pipe pair
     -- start it with a random value
     self.lastY = -PIPE_HEIGHT + math.random(80) + 20
@@ -65,6 +68,13 @@ function PlayState:update(dt)
 
     -- update the pipe pairs
     for k, pipePair in pairs(self.pipePairs) do
+        -- score a point if the bird has crossed the pipe pair
+        -- but only if it is not already scored
+        if not pipePair.scored and self.bird.x > pipePair.x + PIPE_WIDTH then
+            self.score = self.score + 1
+            pipePair.scored = true
+        end
+
         pipePair:update(dt)
     end
 
@@ -79,13 +89,17 @@ function PlayState:update(dt)
     for _, pipePair in pairs(self.pipePairs) do
         if self.bird:collides(pipePair.pipes['upper']) or
             self.bird:collides(pipePair.pipes['lower']) then
-            self.enterParams.Machine:change('title')
+            self.enterParams.Machine:change('score', {
+                score = self.score
+            })
         end
     end
 
     -- check for collision with the ground
     if self.bird.y + self.bird.height >= VIRTUAL_HEIGHT - GROUND_HEIGHT then
-        self.enterParams.Machine:change('title')
+        self.enterParams.Machine:change('score', {
+            score = self.score
+        })
     end
 end
 
@@ -95,6 +109,10 @@ function PlayState:draw()
     for _, pipePair in pairs(self.pipePairs) do
         pipePair:draw()
     end
+
+    -- Draw the score
+    love.graphics.setFont(self.config.flappyFont)
+    love.graphics.print('Score: ' .. tostring(self.score), 8, 8)
 
     -- Draw the bird
     self.bird:draw()
