@@ -25,7 +25,7 @@ function PlayState:initialize(config)
 
     -- empty constructor
     -- The bird object
-    self.bird = Bird()
+    self.bird = Bird(self.config.sounds)
 
     -- The pipe pairs table
     self.pipePairs = {}
@@ -73,6 +73,9 @@ function PlayState:update(dt)
         if not pipePair.scored and self.bird.x > pipePair.x + PIPE_WIDTH then
             self.score = self.score + 1
             pipePair.scored = true
+
+            -- play the score sound
+            self.config.sounds['score']:play()
         end
 
         pipePair:update(dt)
@@ -89,6 +92,10 @@ function PlayState:update(dt)
     for _, pipePair in pairs(self.pipePairs) do
         if self.bird:collides(pipePair.pipes['upper']) or
             self.bird:collides(pipePair.pipes['lower']) then
+            -- play the explosion and hurt sounds
+            self.config.sounds['explosion']:play()
+            self.config.sounds['hurt']:play()
+
             self.enterParams.Machine:change('score', {
                 score = self.score
             })
@@ -97,6 +104,10 @@ function PlayState:update(dt)
 
     -- check for collision with the ground
     if self.bird.y + self.bird.height >= VIRTUAL_HEIGHT - GROUND_HEIGHT then
+        -- play the explosion and hurt sounds
+        self.config.sounds['explosion']:play()
+        self.config.sounds['hurt']:play()
+
         self.enterParams.Machine:change('score', {
             score = self.score
         })

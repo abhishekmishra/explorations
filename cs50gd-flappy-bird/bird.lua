@@ -16,7 +16,10 @@ local JUMP_VELOCITY = -5
 local Bird = Class('Bird')
 
 --- The Bird constructor
-function Bird:initialize()
+function Bird:initialize(sounds)
+    -- The sounds table
+    self.sounds = sounds
+
     -- Load the bird image
     self.image = love.graphics.newImage('bird.png')
 
@@ -43,6 +46,8 @@ function Bird:update(dt)
     -- if the space key is pressed, set the velocity to a negative value
     if love.keyboard.wasPressed('space') then
         self.dy = JUMP_VELOCITY
+        -- play the jump sound
+        self.sounds['jump']:play()
     end
 end
 
