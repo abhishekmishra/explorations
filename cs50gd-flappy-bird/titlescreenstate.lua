@@ -21,7 +21,7 @@ function TitleScreenState:update(dt)
     -- transition to the play state if the space/enter key is pressed
     if love.keyboard.wasPressed('space')
         or love.keyboard.wasPressed('return') then
-        self.Machine:change('play')
+        self.Machine:change('countdown')
     end
 end
 

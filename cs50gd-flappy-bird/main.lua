@@ -10,6 +10,7 @@ local push = require 'push'
 -- State Machine and states
 local StateMachine = require 'statemachine'
 local TitleScreenState = require 'titlescreenstate'
+local CountdownState = require 'countdownstate'
 local PlayState = require 'playstate'
 local ScoreState = require 'scorestate'
 
@@ -72,6 +73,7 @@ function love.load()
     -- The state machine
     stateMachine = StateMachine {
         ['title'] = function() return TitleScreenState(gameConfig) end,
+        ['countdown'] = function() return CountdownState(gameConfig) end,
         ['play'] = function() return PlayState(gameConfig) end,
         ['score'] = function() return ScoreState(gameConfig) end
     }
