@@ -11,7 +11,7 @@ local push = require 'push'
 local Bird = require 'bird'
 
 -- The Pipe class
-local Pipe = require 'pipe'
+local PipePair = require 'pipepair'
 
 -- Now let us setup the window resolution (which can be changed later)
 WINDOW_WIDTH = 1280
@@ -39,11 +39,15 @@ local groundScroll = 0
 -- The bird object
 local bird
 
--- The pipes table
+-- The pipe pairs table
 local pipePairs = {}
 
 -- The spawn timer
 local spawnTimer = 0
+
+-- record the last y position of the last pipe pair
+-- start it with a random value
+local lastY = -PIPE_HEIGHT + math.random(80) + 20
 
 --- love.load: Called once at the start of the simulation
 function love.load()
@@ -89,7 +93,16 @@ function love.update(dt)
 
     -- spawn a new pipe if the timer is greater than 2 seconds
     if spawnTimer > 2 then
-        table.insert(pipePairs, Pipe())
+        -- clamp the y position of the pipe pair to be within the
+        -- top 10 and bottom 90 pixels of the screen
+        -- such that both the pipes in the pair are visible in any
+        -- configuration
+        local y = math.max(-PIPE_HEIGHT + 10,
+            math.min(lastY + math.random(-20, 20),
+                VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
+        lastY = y
+
+        table.insert(pipePairs, PipePair(y))
         spawnTimer = 0
     end
 
@@ -97,11 +110,13 @@ function love.update(dt)
     bird:update(dt)
 
     -- update the pipes
-    for k, pipe in pairs(pipePairs) do
-        pipe:update(dt)
+    for _, pipePair in pairs(pipePairs) do
+        pipePair:update(dt)
+    end
 
-        -- if the pipe is no longer visible, remove it
-        if pipe.x < -pipe.width then
+    -- remove the pipes that are past the left edge of the screen
+    for k, pipePair in pairs(pipePairs) do
+        if pipePair.remove then
             table.remove(pipePairs, k)
         end
     end
@@ -120,8 +135,8 @@ function love.draw()
 
     -- Pipes should be drawn in between the background and the ground
     -- such that they appear to be in the middle of the background
-    for _, pipe in pairs(pipePairs) do
-        pipe:draw()
+    for _, pipePair in pairs(pipePairs) do
+        pipePair:draw()
     end
 
     -- Draw the ground

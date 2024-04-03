@@ -19,9 +19,32 @@ function PipePair:initialize(y)
 
     -- y is the position of the top pipe
     self.y = y
-    
+
     self.pipes = {
-        Pipe(y),
-        Pipe(y + PIPE_HEIGHT + GAP_HEIGHT)
+        ['upper'] = Pipe('top', y),
+        ['lower'] = Pipe('bottom', y + PIPE_HEIGHT + GAP_HEIGHT)
     }
+
+    -- flag to indicate if the pipe pair is past the screen, and can be removed
+    self.remove = false
 end
+
+-- Update the pipe pair
+function PipePair:update(dt)
+    if self.x > -PIPE_WIDTH then
+        self.x = self.x - PIPE_SPEED * dt
+        self.pipes['upper'].x = self.x
+        self.pipes['lower'].x = self.x
+    else
+        self.remove = true
+    end
+end
+
+-- Draw the pipe pair
+function PipePair:draw()
+    for _, pipe in pairs(self.pipes) do
+        pipe:draw()
+    end
+end
+
+return PipePair
