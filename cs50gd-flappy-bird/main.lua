@@ -41,6 +41,8 @@ local groundScroll = 0
 -- The State Machine
 local stateMachine
 
+local gameConfig
+
 --- love.load: Called once at the start of the simulation
 function love.load()
     -- We set the filtering to nearest neighbour to avoid blurring
@@ -60,7 +62,10 @@ function love.load()
     -- namespace
     love.keyboard.keysPressed = {}
 
-    local gameConfig = {
+    -- global table to store the mouse buttons pressed
+    love.mouse.buttonsPressed = {}
+
+    gameConfig = {
         ['smallFont'] = love.graphics.newFont('font.ttf', 8),
         ['mediumFont'] = love.graphics.newFont('flappy.ttf', 14),
         ['flappyFont'] = love.graphics.newFont('flappy.ttf', 28),
@@ -76,6 +81,9 @@ function love.load()
         -- https://freesound.org/people/xsgianni/sounds/388079/
         ['music'] = love.audio.newSource('marios_way.mp3', 'static')
     }
+
+    -- initialize game scrolling to true
+    gameConfig['scrolling'] = true
 
     -- play the background music
     gameConfig.sounds['music']:setLooping(true)
@@ -104,19 +112,22 @@ end
 
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
-    -- update the background scroll
-    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt)
-        % BACKGROUND_LOOPING_POINT
+    if gameConfig.scrolling then
+        -- update the background scroll
+        backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt)
+            % BACKGROUND_LOOPING_POINT
 
-    -- update the ground scroll
-    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
-        % GROUND_LOOPING_POINT
+        -- update the ground scroll
+        groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
+            % GROUND_LOOPING_POINT
+    end
 
     -- update the state machine
     stateMachine:update(dt)
 
-    -- reset the keys pressed
+    -- reset the keys and mouse buttons pressed
     love.keyboard.keysPressed = {}
+    love.mouse.buttonsPressed = {}
 end
 
 --- love.draw: Called every frame, draws the simulation
@@ -143,6 +154,23 @@ end
 -- @return true if the key was pressed, false otherwise
 function love.keyboard.wasPressed(key)
     return love.keyboard.keysPressed[key]
+end
+
+--- love.mouse.wasPressed: Global function to check if a mouse button was pressed
+-- (checks in the buttonsPressed table)
+-- @param button The button to check
+-- @return true if the button was pressed, false otherwise
+function love.mouse.wasPressed(button)
+    return love.mouse.buttonsPressed[button]
+end
+
+--- love.mousepressed: Called when a mouse button is pressed
+-- @param x The x coordinate of the mouse
+-- @param y The y coordinate of the mouse
+-- @param button The button pressed
+function love.mousepressed(x, y, button)
+    -- update the buttons pressed table with this button
+    love.mouse.buttonsPressed[button] = true
 end
 
 -- escape to exit

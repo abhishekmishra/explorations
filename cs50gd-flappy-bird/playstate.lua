@@ -129,4 +129,22 @@ function PlayState:draw()
     self.bird:draw()
 end
 
+--- Enter the play state
+function PlayState:enter(params)
+    -- superclass enter
+    BaseState.enter(self, params)
+
+    -- enable scrolling
+    self.config.scrolling = true
+end
+
+--- Exit the play state
+function PlayState:exit()
+    -- superclass exit
+    BaseState.exit(self)
+
+    -- disable scrolling
+    self.config.scrolling = false
+end
+
 return PlayState

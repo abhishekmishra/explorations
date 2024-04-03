@@ -44,7 +44,7 @@ function Bird:update(dt)
     self.y = self.y + self.dy
 
     -- if the space key is pressed, set the velocity to a negative value
-    if love.keyboard.wasPressed('space') then
+    if love.keyboard.wasPressed('space') or love.mouse.wasPressed(1) then
         self.dy = JUMP_VELOCITY
         -- play the jump sound
         self.sounds['jump']:play()
