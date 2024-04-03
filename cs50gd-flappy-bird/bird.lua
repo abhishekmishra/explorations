@@ -51,4 +51,26 @@ function Bird:draw()
     love.graphics.draw(self.image, self.x, self.y)
 end
 
+--- Collision detection for the bird with the pipe
+--
+-- @param pipe The pipe object
+-- @return boolean
+function Bird:collides(pipe)
+    -- offset to make the collision box smaller
+    local OFFSET = 2
+
+    -- check if the bird is within the pipe on the x-axis,
+    -- adjusting for the offset
+    if self.x + self.width - OFFSET >= pipe.x
+        and self.x + OFFSET <= pipe.x + pipe.width then
+        -- check if the bird is within the pipe on the y-axis,
+        -- adjusting for the offset
+        if self.y + self.height - OFFSET >= pipe.y
+            and self.y + OFFSET <= pipe.y + pipe.height then
+            return true
+        end
+    end
+    return false
+end
+
 return Bird

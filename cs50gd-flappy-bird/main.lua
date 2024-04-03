@@ -49,6 +49,9 @@ local spawnTimer = 0
 -- start it with a random value
 local lastY = -PIPE_HEIGHT + math.random(80) + 20
 
+-- are we scrolling the game?
+local scrolling = true
+
 --- love.load: Called once at the start of the simulation
 function love.load()
     -- We set the filtering to nearest neighbour to avoid blurring
@@ -80,47 +83,54 @@ end
 
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
-    -- update the background scroll
-    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt)
-        % BACKGROUND_LOOPING_POINT
+    if scrolling then
+        -- update the background scroll
+        backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt)
+            % BACKGROUND_LOOPING_POINT
 
-    -- update the ground scroll
-    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
-        % VIRTUAL_WIDTH
+        -- update the ground scroll
+        groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
+            % VIRTUAL_WIDTH
 
-    -- update the spawn timer
-    spawnTimer = spawnTimer + dt
+        -- update the spawn timer
+        spawnTimer = spawnTimer + dt
 
-    -- spawn a new pipe if the timer is greater than 2 seconds
-    if spawnTimer > 2 then
-        -- clamp the y position of the pipe pair to be within the
-        -- top 10 and bottom 90 pixels of the screen
-        -- such that both the pipes in the pair are visible in any
-        -- configuration
-        local y = math.max(-PIPE_HEIGHT + 10,
-            math.min(lastY + math.random(-20, 20),
-                VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
-        lastY = y
+        -- spawn a new pipe if the timer is greater than 2 seconds
+        if spawnTimer > 2 then
+            -- clamp the y position of the pipe pair to be within the
+            -- top 10 and bottom 90 pixels of the screen
+            -- such that both the pipes in the pair are visible in any
+            -- configuration
+            local y = math.max(-PIPE_HEIGHT + 10,
+                math.min(lastY + math.random(-20, 20),
+                    VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
+            lastY = y
 
-        table.insert(pipePairs, PipePair(y))
-        spawnTimer = 0
-    end
+            table.insert(pipePairs, PipePair(y))
+            spawnTimer = 0
+        end
 
-    -- update the bird
-    bird:update(dt)
+        -- update the bird
+        bird:update(dt)
 
-    -- update the pipes
-    for _, pipePair in pairs(pipePairs) do
-        pipePair:update(dt)
-    end
+        -- update the pipes, and also check for collision
+        for _, pipePair in pairs(pipePairs) do
+            pipePair:update(dt)
 
-    -- remove the pipes that are past the left edge of the screen
-    for k, pipePair in pairs(pipePairs) do
-        if pipePair.remove then
-            table.remove(pipePairs, k)
+            -- collision check
+            if bird:collides(pipePair.pipes['upper']) or
+                bird:collides(pipePair.pipes['lower']) then
+                scrolling = false
+            end
+        end
+
+        -- remove the pipes that are past the left edge of the screen
+        for k, pipePair in pairs(pipePairs) do
+            if pipePair.remove then
+                table.remove(pipePairs, k)
+            end
         end
     end
-
     -- reset the keys pressed
     love.keyboard.keysPressed = {}
 end
