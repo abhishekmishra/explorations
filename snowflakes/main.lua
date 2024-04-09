@@ -62,8 +62,8 @@ function love.draw()
     love.graphics.print("Background Score - \"The Lucid Dream\" by https://opengameart.org/users/caliderium", 10, love.graphics.getHeight() - 20)
 
     -- draw text at the bottom-right of the screen to show FPS
-    love.graphics.setColor(0.5, 0.4, 0.4)
-    love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - 50, love.graphics.getHeight() - 20)
+    -- love.graphics.setColor(0.5, 0.4, 0.4)
+    -- love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - 50, love.graphics.getHeight() - 20)
 end
 
 -- escape to exit
