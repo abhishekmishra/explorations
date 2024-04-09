@@ -71,6 +71,14 @@ function SnowFlake:setParticleSystem()
     -- Random movement in all directions.
     self.psystem:setLinearAcceleration(-20, -10, 20, 50)
 
+    -- set radial acceleration to -10, 10
+    -- Random acceleration towards/away the center.
+    self.psystem:setRadialAcceleration(-10, 10)
+
+    -- set spin to -2, 2
+    -- Random spin.
+    self.psystem:setSpin(-2, 2)
+
     -- set colors to white
     -- Fade to transparency.
     self.psystem:setColors(1, 1, 1, 1, 1, 1, 1, 0)
