@@ -2,64 +2,61 @@
 -- date: 09/04/2024
 -- author: Abhishek Mishra
 
--- Load the sprite sheet
--- The sprite sheet contains 6 tiles in a row and 3 tiles in a column
--- Each tile is 9x9 pixels
--- The sprite sheet is available at
--- https://opengameart.org/content/pixel-art-snowflakes
--- made by https://opengameart.org/users/alxl
-local spriteSheet = love.graphics.newImage("pixel_snowflakes.png")
+local SnowFlake = require 'snowflake'
 
--- Define the size of each tile
-local tileWidth, tileHeight = 9, 9
+-- table to hold all the snowflakes
+local snowflakes
 
--- Define the number of tiles per row and column
-local tilesPerRow, tilesPerColumn = 6, 3
+-- font for credits
+local creditsFont
 
--- Create a table to hold the quads
-local quads = {}
+-- number of snowflakes to create
+local NUM_SNOWFLAKES = 3000
 
-for y = 0, tilesPerColumn - 1 do
-    for x = 0, tilesPerRow - 1 do
-        -- Calculate the position of the tile in the sprite sheet
-        local quad = love.graphics.newQuad(x * tileWidth, y * tileHeight,
-            tileWidth, tileHeight, spriteSheet:getDimensions())
-        table.insert(quads, quad)
-    end
+--- createSnowflake: Create a new snowflake
+-- @return SnowFlake: A new snowflake object
+local function createSnowflake()
+    return SnowFlake:new(
+        math.random(0, love.graphics.getWidth()),
+        math.random(-love.graphics.getHeight(),
+            love.graphics.getHeight() / 10),
+        math.random(1, 3))
 end
-
--- Now you can draw a specific tile like this:
--- love.graphics.draw(spriteSheet, quads[tileIndex])
 
 --- love.load: Called once at the start of the simulation
 function love.load()
+    -- create the snowflakes for the simulation
+    snowflakes = {}
+    for i = 1, NUM_SNOWFLAKES do
+        table.insert(snowflakes, createSnowflake())
+    end
+
+    creditsFont = love.graphics.newFont(12)
 end
 
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
+    for _, snowflake in ipairs(snowflakes) do
+        snowflake:update(dt)
+    end
 end
 
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
-    -- Draw the sprite sheet
-    love.graphics.draw(spriteSheet, quads[1], 0, 0)
-    love.graphics.draw(spriteSheet, quads[2], 10, 0)
-    love.graphics.draw(spriteSheet, quads[3], 20, 0)
-    love.graphics.draw(spriteSheet, quads[4], 30, 0)
-    love.graphics.draw(spriteSheet, quads[5], 40, 0)
-    love.graphics.draw(spriteSheet, quads[6], 50, 0)
-    love.graphics.draw(spriteSheet, quads[7], 0, 10)
-    love.graphics.draw(spriteSheet, quads[8], 10, 10)
-    love.graphics.draw(spriteSheet, quads[9], 20, 10)
-    love.graphics.draw(spriteSheet, quads[10], 30, 10)
-    love.graphics.draw(spriteSheet, quads[11], 40, 10)
-    love.graphics.draw(spriteSheet, quads[12], 50, 10)
-    love.graphics.draw(spriteSheet, quads[13], 0, 20)
-    love.graphics.draw(spriteSheet, quads[14], 10, 20)
-    love.graphics.draw(spriteSheet, quads[15], 20, 20)
-    love.graphics.draw(spriteSheet, quads[16], 30, 20)
-    love.graphics.draw(spriteSheet, quads[17], 40, 20)
-    love.graphics.draw(spriteSheet, quads[18], 50, 20)
+    love.graphics.setColor(0.8, 0.9, 1)
+    for _, snowflake in ipairs(snowflakes) do
+        snowflake:draw()
+    end
+
+    -- draw text at the bottom of the screen to show credits
+    love.graphics.setColor(0.5, 0.4, 0.4)
+    -- set credits font
+    love.graphics.setFont(creditsFont)
+    love.graphics.print("Snowflakes Simulation in LÖVE by ne0l4t3r4l", 10, love.graphics.getHeight() - 35)
+    love.graphics.print("Pixel-art snowflakes by https://opengameart.org/users/alxl", 10, love.graphics.getHeight() - 20)
+
+    -- draw text at the bottom-right of the screen to show FPS
+    love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - 50, love.graphics.getHeight() - 20)
 end
 
 -- escape to exit

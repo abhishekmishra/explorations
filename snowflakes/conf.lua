@@ -12,8 +12,11 @@ function love.conf(t)
     t.window.title = "Snowflakes Simulation"
 
     -- set the window size
-    t.window.width = canvasWidth
-    t.window.height = canvasHeight
+    -- t.window.width = canvasWidth
+    -- t.window.height = canvasHeight
+
+    -- run fullscreen
+    t.window.fullscreen = true
 
     -- disable unused modules for performance
     t.modules.joystick = false
