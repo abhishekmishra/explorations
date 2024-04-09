@@ -124,3 +124,6 @@ www/
 *.swp
 # temp files for emacs
 *~
+
+.luaenv/
+.loveluaenv/
