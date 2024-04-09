@@ -28,6 +28,13 @@ end
 
 --- restart: Restart the simulation
 local function restart()
+    -- stop all existing snowflakes
+    if snowflakes then
+        for _, snowflake in ipairs(snowflakes) do
+            snowflake:stop()
+        end
+    end
+
     snowflakes = {}
     for i = 1, NUM_SNOWFLAKES do
         table.insert(snowflakes, createSnowflake())

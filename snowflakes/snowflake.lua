@@ -121,4 +121,9 @@ function SnowFlake:beyondScreen(height)
     return self.y > height
 end
 
+--- SnowFlake:stop: Stop the particle system
+function SnowFlake:stop()
+    self.psystem:stop()
+end
+
 return SnowFlake
