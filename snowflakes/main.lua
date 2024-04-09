@@ -32,6 +32,11 @@ function love.load()
     end
 
     creditsFont = love.graphics.newFont(12)
+
+    -- load music and play
+    local music = love.audio.newSource("A Lucid Dream.ogg", "stream")
+    music:setLooping(true)
+    love.audio.play(music)
 end
 
 --- love.update: Called every frame, updates the simulation
@@ -49,13 +54,15 @@ function love.draw()
     end
 
     -- draw text at the bottom of the screen to show credits
-    love.graphics.setColor(0.5, 0.4, 0.4)
+    love.graphics.setColor(0.7, 0.5, 0.5)
     -- set credits font
     love.graphics.setFont(creditsFont)
-    love.graphics.print("Snowflakes Simulation in LÖVE by ne0l4t3r4l", 10, love.graphics.getHeight() - 35)
-    love.graphics.print("Pixel-art snowflakes by https://opengameart.org/users/alxl", 10, love.graphics.getHeight() - 20)
+    love.graphics.print("Snowflakes Simulation in LÖVE by ne0l4t3r4l", 10, love.graphics.getHeight() - 50)
+    love.graphics.print("Pixel-art snowflakes by https://opengameart.org/users/alxl", 10, love.graphics.getHeight() - 35)
+    love.graphics.print("Background Score - \"The Lucid Dream\" by https://opengameart.org/users/caliderium", 10, love.graphics.getHeight() - 20)
 
     -- draw text at the bottom-right of the screen to show FPS
+    love.graphics.setColor(0.5, 0.4, 0.4)
     love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - 50, love.graphics.getHeight() - 20)
 end
 
