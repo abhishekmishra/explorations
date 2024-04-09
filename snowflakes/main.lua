@@ -16,6 +16,12 @@ local music = love.audio.newSource("A Lucid Dream.ogg", "stream")
 -- number of snowflakes to create
 local NUM_SNOWFLAKES = 5000
 
+-- release rate per second
+local RELEASE_RATE = 500
+
+-- total released
+local totalReleased = 0
+
 --- createSnowflake: Create a new snowflake
 -- @return SnowFlake: A new snowflake object
 local function createSnowflake()
@@ -35,10 +41,9 @@ local function restart()
         end
     end
 
+    -- create a new table to hold snowflakes
     snowflakes = {}
-    for i = 1, NUM_SNOWFLAKES do
-        table.insert(snowflakes, createSnowflake())
-    end
+    totalReleased = 0
 
     -- if there is already music playing, stop it
     love.audio.stop()
@@ -55,6 +60,16 @@ end
 
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
+    if totalReleased < NUM_SNOWFLAKES then
+        local toRelease = math.floor(RELEASE_RATE * dt)
+
+        -- create new snowflakes
+        for i = 1, toRelease do
+            table.insert(snowflakes, createSnowflake())
+            totalReleased = totalReleased + 1
+        end
+    end
+
     for _, snowflake in ipairs(snowflakes) do
         snowflake:update(dt)
     end
@@ -71,9 +86,11 @@ function love.draw()
     love.graphics.setColor(0.7, 0.5, 0.5, 0.8)
     -- set credits font
     love.graphics.setFont(creditsFont)
-    love.graphics.print("Snowflakes Simulation in LÖVE by ne0l4t3r4l (https://neolateral.in)", 10, love.graphics.getHeight() - 50)
+    love.graphics.print("Snowflakes Simulation in LÖVE by ne0l4t3r4l (https://neolateral.in)", 10,
+        love.graphics.getHeight() - 50)
     love.graphics.print("Pixel-art snowflakes by https://opengameart.org/users/alxl", 10, love.graphics.getHeight() - 35)
-    love.graphics.print("Background Score - \"The Lucid Dream\" by https://opengameart.org/users/caliderium", 10, love.graphics.getHeight() - 20)
+    love.graphics.print("Background Score - \"The Lucid Dream\" by https://opengameart.org/users/caliderium", 10,
+        love.graphics.getHeight() - 20)
 
     -- draw text at the bottom-right of the screen to show FPS
     -- love.graphics.setColor(0.5, 0.4, 0.4)
