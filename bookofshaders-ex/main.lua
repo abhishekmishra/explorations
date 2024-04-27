@@ -82,8 +82,10 @@ local programs = {
     --     "shader/ch07-circle02-animation.glsl"),
     -- shaderProg("Ch 7: Simple Distance Field",
     -- "shader/ch07-distfield0.glsl"),
-    shaderProg("Ch 7: Distance Field Like in the Book",
-    "shader/ch07-distfield1-fourcenters.glsl"),
+    -- shaderProg("Ch 7: Distance Field Like in the Book",
+    -- "shader/ch07-distfield1-fourcenters.glsl"),
+    shaderProg("Ch 7: Distance Field Moving Like a Wave",
+    "shader/ch07-distfield2-wave.glsl"),
 }
 
 local shaderId
