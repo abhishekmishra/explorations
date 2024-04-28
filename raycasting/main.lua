@@ -22,25 +22,27 @@ local particle
 local xOffset = 0
 local yOffset = 10000
 
+local cw = love.graphics.getWidth()
+local ch = love.graphics.getHeight()
+
 local function createWalls()
     walls = {}
 
     -- create some random boundaries
     for _ = 1, 5 do
-        local x1 = math.random(0, 400)
-        local y1 = math.random(0, 400)
-        local x2 = math.random(0, 400)
-        local y2 = math.random(0, 400)
+        local x1 = math.random(0, cw)
+        local y1 = math.random(0, ch)
+        local x2 = math.random(0, cw)
+        local y2 = math.random(0, ch)
         table.insert(walls, Boundary(x1, y1, x2, y2))
     end
 
     -- add walls which form a box the size of the canvas
-    table.insert(walls, Boundary(0, 0, love.graphics.getWidth(), 0))
-    table.insert(walls, Boundary(love.graphics.getWidth(), 0,
-        love.graphics.getWidth(), love.graphics.getHeight()))
-    table.insert(walls, Boundary(love.graphics.getWidth(),
-        love.graphics.getHeight(), 0, love.graphics.getHeight()))
-    table.insert(walls, Boundary(0, love.graphics.getHeight(), 0, 0))
+    table.insert(walls, Boundary(0, 0, cw, 0))
+    table.insert(walls, Boundary(cw, 0,
+        cw, ch))
+    table.insert(walls, Boundary(cw, ch, 0, ch))
+    table.insert(walls, Boundary(0, ch, 0, 0))
 end
 
 --- love.load: Called once at the start of the simulation
@@ -49,15 +51,15 @@ function love.load()
     createWalls()
 
     -- create a particle
-    particle = Particle(nl.Vector(200, 200))
+    particle = Particle(nl.Vector(cw/2, ch/2))
 end
 
 --- love.update: Called every frame, updates the simulation
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.update(dt)
     -- move the particle with noise
-    local x = love.math.noise(xOffset) * love.graphics.getWidth()
-    local y = love.math.noise(yOffset) * love.graphics.getHeight()
+    local x = love.math.noise(xOffset) * cw
+    local y = love.math.noise(yOffset) * ch
     particle:move(x, y)
 
     -- update the offsets
