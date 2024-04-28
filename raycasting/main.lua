@@ -7,11 +7,12 @@ local nl = require('ne0luv')
 -- require the Boundary and Ray class
 local Boundary = require('boundary')
 local Ray = require('ray')
+local Particle = require('particle')
 
 -- walls
 local walls
 
-local ray
+local particle
 
 --- love.load: Called once at the start of the simulation
 function love.load()
@@ -29,13 +30,18 @@ function love.load()
     --     table.insert(walls, Boundary(x1, y1, x2, y2))
     -- end
 
-    -- create a ray
-    ray = Ray(nl.Vector(100, 200), 0)
+    -- create a particle
+    particle = Particle(nl.Vector(200, 200))
 end
 
 --- love.update: Called every frame, updates the simulation
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.update(dt)
+    -- move the particle to the mouse position
+    particle:move(love.mouse.getX(), love.mouse.getY())
+
+    -- cast the rays from the particle
+    particle:look(walls)
 end
 
 --- love.draw: Called every frame, draws the simulation
@@ -46,17 +52,17 @@ function love.draw()
         wall:draw()
     end
 
-    -- draw the ray
-    ray:draw()
+    -- draw the particle
+    particle:draw()
 
-    -- cast the ray against the walls
-    for _, wall in ipairs(walls) do
-        local pt = ray:cast(wall)
-        if pt then
-            love.graphics.setColor(255, 0, 0)
-            love.graphics.circle('fill', pt.x, pt.y, 5)
-        end
-    end
+    -- -- cast the ray against the walls
+    -- for _, wall in ipairs(walls) do
+    --     local pt = ray:cast(wall)
+    --     if pt then
+    --         love.graphics.setColor(255, 0, 0)
+    --         love.graphics.circle('fill', pt.x, pt.y, 5)
+    --     end
+    -- end
 end
 
 -- escape to exit
@@ -67,8 +73,8 @@ function love.keypressed(key)
     end
 end
 
--- mouse movement to change ray angle
----@diagnostic disable-next-line: duplicate-set-field
-function love.mousemoved(x, y, dx, dy)
-    ray:lookAt(x, y)
-end
+-- -- mouse movement to change ray angle
+-- ---@diagnostic disable-next-line: duplicate-set-field
+-- function love.mousemoved(x, y, dx, dy)
+--     ray:lookAt(x, y)
+-- end

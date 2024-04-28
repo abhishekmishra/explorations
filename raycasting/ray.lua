@@ -25,6 +25,8 @@ function Ray:draw()
 
     -- set the line color
     love.graphics.setColor(255, 255, 128)
+    -- set the line width
+    love.graphics.setLineWidth(0.1)
     love.graphics.translate(self.pos.x, self.pos.y)
     love.graphics.line(0, 0, self.dir.x * 10, self.dir.y * 10)
 
