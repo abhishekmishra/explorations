@@ -48,6 +48,15 @@ function love.draw()
 
     -- draw the ray
     ray:draw()
+
+    -- cast the ray against the walls
+    for _, wall in ipairs(walls) do
+        local pt = ray:cast(wall)
+        if pt then
+            love.graphics.setColor(255, 0, 0)
+            love.graphics.circle('fill', pt.x, pt.y, 5)
+        end
+    end
 end
 
 -- escape to exit
@@ -56,4 +65,10 @@ function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
     end
+end
+
+-- mouse movement to change ray angle
+---@diagnostic disable-next-line: duplicate-set-field
+function love.mousemoved(x, y, dx, dy)
+    ray:lookAt(x, y)
 end
