@@ -17,7 +17,7 @@ function Particle:initialize(pos)
     self.pos = pos
     -- rays emanating from the particle
     self.rays = {}
-    for i = 0, 360, 10 do
+    for i = 0, 360, 1 do
         table.insert(self.rays, Ray(pos, math.rad(i)))
     end
 
@@ -66,6 +66,10 @@ function Particle:draw()
     love.graphics.circle('fill', self.pos.x, self.pos.y, 4)
 
     -- draw lines to the points
+    -- line width
+    love.graphics.setLineWidth(0.1)
+    -- line colour with some transparency
+    love.graphics.setColor(255, 255, 255, 100)
     for _, pt in ipairs(self.points) do
         love.graphics.line(self.pos.x, self.pos.y, pt.x, pt.y)
     end
