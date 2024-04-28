@@ -38,6 +38,14 @@ function love.load()
         table.insert(walls, Boundary(x1, y1, x2, y2))
     end
 
+    -- add walls which form a box the size of the canvas
+    table.insert(walls, Boundary(0, 0, love.graphics.getWidth(), 0))
+    table.insert(walls, Boundary(love.graphics.getWidth(), 0,
+        love.graphics.getWidth(), love.graphics.getHeight()))
+    table.insert(walls, Boundary(love.graphics.getWidth(),
+        love.graphics.getHeight(), 0, love.graphics.getHeight()))
+    table.insert(walls, Boundary(0, love.graphics.getHeight(), 0, 0))
+
     -- create a particle
     particle = Particle(nl.Vector(200, 200))
 end
