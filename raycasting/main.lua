@@ -2,11 +2,16 @@
 -- date: 28/4/2024
 -- author: Abhishek Mishra
 
--- require the Boundary class
+-- require the ne0luv library
+local nl = require('ne0luv')
+-- require the Boundary and Ray class
 local Boundary = require('boundary')
+local Ray = require('ray')
 
 -- walls
 local walls
+
+local ray
 
 --- love.load: Called once at the start of the simulation
 function love.load()
@@ -23,6 +28,9 @@ function love.load()
     --     local y2 = math.random(0, 400)
     --     table.insert(walls, Boundary(x1, y1, x2, y2))
     -- end
+
+    -- create a ray
+    ray = Ray(nl.Vector(100, 200), 0)
 end
 
 --- love.update: Called every frame, updates the simulation
@@ -37,6 +45,9 @@ function love.draw()
     for _, wall in ipairs(walls) do
         wall:draw()
     end
+
+    -- draw the ray
+    ray:draw()
 end
 
 -- escape to exit
