@@ -15,7 +15,12 @@ local Particle = require('particle')
 -- walls
 local walls
 
+-- particle
 local particle
+
+-- particle offsets to move with noise
+local xOffset = 0
+local yOffset = 10000
 
 --- love.load: Called once at the start of the simulation
 function love.load()
@@ -40,8 +45,14 @@ end
 --- love.update: Called every frame, updates the simulation
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.update(dt)
-    -- move the particle to the mouse position
-    particle:move(love.mouse.getX(), love.mouse.getY())
+    -- move the particle with noise
+    local x = love.math.noise(xOffset) * love.graphics.getWidth()
+    local y = love.math.noise(yOffset) * love.graphics.getHeight()
+    particle:move(x, y)
+
+    -- update the offsets
+    xOffset = xOffset + 0.01
+    yOffset = yOffset + 0.01
 
     -- cast the rays from the particle
     particle:look(walls)
