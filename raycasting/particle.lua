@@ -60,7 +60,7 @@ end
 --- Draw the particle
 function Particle:draw()
     -- set the fill color
-    love.graphics.setColor(255, 255, 255)
+    love.graphics.setColor(1, 1, 1)
 
     -- draw the particle
     love.graphics.circle('fill', self.pos.x, self.pos.y, 4)
@@ -69,7 +69,7 @@ function Particle:draw()
     -- line width
     love.graphics.setLineWidth(0.1)
     -- line colour with some transparency
-    love.graphics.setColor(255, 255, 255, 100)
+    love.graphics.setColor(1, 1, 1, 0.3)
     for _, pt in ipairs(self.points) do
         love.graphics.line(self.pos.x, self.pos.y, pt.x, pt.y)
     end
