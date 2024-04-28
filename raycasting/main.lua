@@ -22,15 +22,11 @@ local particle
 local xOffset = 0
 local yOffset = 10000
 
---- love.load: Called once at the start of the simulation
-function love.load()
+local function createWalls()
     walls = {}
 
-    -- create on vertical wall for now
-    -- table.insert(walls, Boundary(300, 100, 300, 300))
-
     -- create some random boundaries
-    for i = 1, 5 do
+    for _ = 1, 5 do
         local x1 = math.random(0, 400)
         local y1 = math.random(0, 400)
         local x2 = math.random(0, 400)
@@ -45,6 +41,12 @@ function love.load()
     table.insert(walls, Boundary(love.graphics.getWidth(),
         love.graphics.getHeight(), 0, love.graphics.getHeight()))
     table.insert(walls, Boundary(0, love.graphics.getHeight(), 0, 0))
+end
+
+--- love.load: Called once at the start of the simulation
+function love.load()
+    -- create the walls
+    createWalls()
 
     -- create a particle
     particle = Particle(nl.Vector(200, 200))
@@ -76,15 +78,6 @@ function love.draw()
 
     -- draw the particle
     particle:draw()
-
-    -- -- cast the ray against the walls
-    -- for _, wall in ipairs(walls) do
-    --     local pt = ray:cast(wall)
-    --     if pt then
-    --         love.graphics.setColor(255, 0, 0)
-    --         love.graphics.circle('fill', pt.x, pt.y, 5)
-    --     end
-    -- end
 end
 
 -- escape to exit
@@ -93,10 +86,8 @@ function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
     end
+    -- key is 'r' to create new walls
+    if key == "r" then
+        createWalls()
+    end
 end
-
--- -- mouse movement to change ray angle
--- ---@diagnostic disable-next-line: duplicate-set-field
--- function love.mousemoved(x, y, dx, dy)
---     ray:lookAt(x, y)
--- end
