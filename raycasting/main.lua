@@ -2,6 +2,9 @@
 -- date: 28/4/2024
 -- author: Abhishek Mishra
 
+-- set the random seed to the current time
+math.randomseed(os.time())
+
 -- require the ne0luv library
 local nl = require('ne0luv')
 -- require the Boundary and Ray class
@@ -19,16 +22,16 @@ function love.load()
     walls = {}
 
     -- create on vertical wall for now
-    table.insert(walls, Boundary(300, 100, 300, 300))
+    -- table.insert(walls, Boundary(300, 100, 300, 300))
 
     -- create some random boundaries
-    -- for i = 1, 5 do
-    --     local x1 = math.random(0, 400)
-    --     local y1 = math.random(0, 400)
-    --     local x2 = math.random(0, 400)
-    --     local y2 = math.random(0, 400)
-    --     table.insert(walls, Boundary(x1, y1, x2, y2))
-    -- end
+    for i = 1, 5 do
+        local x1 = math.random(0, 400)
+        local y1 = math.random(0, 400)
+        local x2 = math.random(0, 400)
+        local y2 = math.random(0, 400)
+        table.insert(walls, Boundary(x1, y1, x2, y2))
+    end
 
     -- create a particle
     particle = Particle(nl.Vector(200, 200))
