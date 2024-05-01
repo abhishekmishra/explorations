@@ -13,9 +13,11 @@ math.randomseed(os.time())
 
 -- require the ne0luv library
 local nl = require('ne0luv')
+local RaycastingSystem = require('raycastingsystem')
 local RaycastingPanel = require('raycastingpanel')
 
 local layout
+local raycastingSystem
 
 --- love.load: Called once at the start of the simulation
 function love.load()
@@ -27,7 +29,8 @@ function love.load()
     layout = nl.Layout(nl.Rect(0, 0, cw, ch))
 
     -- create the raycasting panel
-    local raycastingPanel = RaycastingPanel(0, 0, cw/2, ch)
+    raycastingSystem = RaycastingSystem(cw / 2, ch)
+    local raycastingPanel = RaycastingPanel(raycastingSystem, 0, 0, cw / 2, ch)
 
     -- add the raycasting panel to the layout
     layout:addChild(raycastingPanel)
@@ -38,6 +41,9 @@ end
 function love.update(dt)
     -- update the layout
     layout:update(dt)
+
+    -- update the raycasting system
+    raycastingSystem:update(dt)
 end
 
 --- love.draw: Called every frame, draws the simulation
@@ -52,6 +58,10 @@ end
 function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
+    end
+
+    if key == "r" then
+        raycastingSystem:createWalls()
     end
 
     -- pass the key to the layout
