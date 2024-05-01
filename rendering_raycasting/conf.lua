@@ -5,11 +5,11 @@
 
 -- canvas size
 local canvasWidth = 800
-local canvasHeight = 800
+local canvasHeight = 400
 
 function love.conf(t)
     -- set the window title
-    t.window.title = "Raycasting Simulation"
+    t.window.title = "Rendering Raycasting Simulation"
 
     -- set the window size
     t.window.width = canvasWidth
