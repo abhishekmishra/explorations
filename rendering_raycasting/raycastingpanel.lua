@@ -80,7 +80,7 @@ function RaycastingPanel:draw()
     self.particle:draw()
 end
 
-function RaycastingPanel:_keypressed(key)
+function RaycastingPanel:keypressed(key)
     if key == "r" then
         self:createWalls()
     end
