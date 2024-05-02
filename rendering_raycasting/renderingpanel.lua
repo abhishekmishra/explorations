@@ -31,12 +31,13 @@ function RenderingPanel:draw()
     local w = self:getWidth() / #scene
 
     -- find the maximum distance in the scene
-    local maxDistance = 0
-    for _, d in ipairs(scene) do
-        if d > maxDistance then
-            maxDistance = d
-        end
-    end
+    -- diagonal distance of the canvas
+    local maxDistance = math.sqrt(self:getWidth()^2 + self:getHeight()^2)/2
+    -- for _, d in ipairs(scene) do
+    --     if d > maxDistance then
+    --         maxDistance = d
+    --     end
+    -- end
 
     love.graphics.push()
 
