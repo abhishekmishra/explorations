@@ -28,7 +28,7 @@ function RaycastingSystem:initialize(w, h)
     self.yOffset = 10000
 
     -- auto move flag
-    self.autoMove = true
+    self.autoMove = false
 end
 
 function RaycastingSystem:createWalls()
@@ -57,19 +57,42 @@ function RaycastingSystem:update(dt)
         -- move the particle with noise
         local x = love.math.noise(self.xOffset) * self.cw
         local y = love.math.noise(self.yOffset) * self.ch
-        self.particle:move(x, y)
+        self.particle:moveTo(x, y)
+
+        -- update the offsets
+        self.xOffset = self.xOffset + 0.01
+        self.yOffset = self.yOffset + 0.01
     else
-        -- move with mouse
-        local mx, my = love.mouse.getPosition()
-        self.particle:move(mx, my)
+        -- -- move with mouse
+        -- local mx, my = love.mouse.getPosition()
+        -- self.particle:moveTo(mx, my)
+
+        -- if key w is pressed, move the particle up
+        if love.keyboard.isDown('w') then
+            self.particle:move(1)
+        end
+
+        -- if key s is pressed, move the particle down
+        if love.keyboard.isDown('s') then
+            self.particle:move(-1)
+        end
+
+        -- if key a is pressed, rotate the particle
+        if love.keyboard.isDown('a') then
+            self:rotate(-0.01)
+        end
+
+        -- if key d is pressed, rotate the particle
+        if love.keyboard.isDown('d') then
+            self:rotate(0.01)
+        end
     end
-
-    -- update the offsets
-    self.xOffset = self.xOffset + 0.01
-    self.yOffset = self.yOffset + 0.01
-
     -- cast the rays from the particle
     self.particle:look(self.walls)
+end
+
+function RaycastingSystem:rotate(angle)
+    self.particle:rotate(angle)
 end
 
 return RaycastingSystem

@@ -17,13 +17,27 @@ local Particle = Class('Particle')
 function Particle:initialize(pos)
     -- position of the particle
     self.pos = pos
+
+    -- particle heading
+    self.heading = -math.pi / 2
+
     -- rays emanating from the particle
     self.rays = {}
-    for i = 1, NUM_RAYS, 1 do
-        table.insert(self.rays, Ray(pos, math.rad(i)))
+    for i = -NUM_RAYS/2, NUM_RAYS/2 do
+        table.insert(self.rays, Ray(pos, math.rad(i) + self.heading))
     end
 
     self.points = {}
+end
+
+--- Particle:rotate - Rotate the particle by the given angle
+-- @param angle (number) - angle to rotate the particle by
+function Particle:rotate(angle)
+    self.heading = self.heading + angle
+    for idx, ray in ipairs(self.rays) do
+        local i = idx - NUM_RAYS/2 - 1
+        ray:setAngle(math.rad(i) + self.heading)
+    end
 end
 
 --- Look at the given wall
@@ -57,9 +71,31 @@ end
 --- Move the particle to the given position
 -- @param x (number) - x-coordinate of the position
 -- @param y (number) - y-coordinate of the position
-function Particle:move(x, y)
+function Particle:moveTo(x, y)
     self.pos.x = x
     self.pos.y = y
+    -- set ray positions
+    for _, ray in ipairs(self.rays) do
+        ray.pos = self.pos
+    end
+end
+
+--- Get the particle position
+-- @return x, y (number, number) - x and y coordinates of the particle
+function Particle:getPos()
+    return self.pos.x, self.pos.y
+end
+
+--- Move the particle in the direction of its heading
+-- @param amount (number) - amount to move the particle by
+function Particle:move(amount)
+    self.velocity = nl.Vector(math.cos(self.heading), math.sin(self.heading))
+    self.velocity:setMag(amount)
+    self.pos = self.pos + self.velocity
+    -- set ray positions
+    for _, ray in ipairs(self.rays) do
+        ray.pos = self.pos
+    end
 end
 
 --- Draw the particle

@@ -33,6 +33,13 @@ function Ray:draw()
     love.graphics.pop()
 end
 
+--- Set the angle of the ray
+-- @param angle (number) - angle of the ray
+function Ray:setAngle(angle)
+    self.dir.x = math.cos(angle)
+    self.dir.y = math.sin(angle)
+end
+
 --- Look at the given point
 -- @param x (number) - x-coordinate of the point
 -- @param y (number) - y-coordinate of the point
