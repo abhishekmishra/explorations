@@ -7,6 +7,8 @@ local Class = require('middleclass')
 local nl = require('ne0luv')
 local Ray = require('ray')
 
+local NUM_RAYS = 90
+
 --- Particle class
 local Particle = Class('Particle')
 
@@ -17,7 +19,7 @@ function Particle:initialize(pos)
     self.pos = pos
     -- rays emanating from the particle
     self.rays = {}
-    for i = 1, 360, 1 do
+    for i = 1, NUM_RAYS, 1 do
         table.insert(self.rays, Ray(pos, math.rad(i)))
     end
 
