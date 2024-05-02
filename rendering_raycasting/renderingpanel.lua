@@ -40,13 +40,21 @@ function RenderingPanel:draw()
 
     love.graphics.push()
 
+    love.graphics.translate(self:getX(), self:getY())
+
     -- for each distance in the scene draw a vertical rectangle, with the
     -- colour of the rectangle based on the distance. the further the distance
     -- the darker the colour
     for i, d in ipairs(scene) do
+        -- calculate the colour based on the distance
         local c = 1.0 - utils.mapRange(d, 0, maxDistance, 0, 1.0)
+
+        -- calculate the height of the rectangle based on the distance
+        local rectHeight = utils.mapRange(d, 0, maxDistance, self:getHeight(), 0)
+
+        -- set the colour and draw the rectangle
         love.graphics.setColor(c, c, c)
-        love.graphics.rectangle('fill', self:getX() + i * w, self:getY() + self:getHeight() / 2 - d / 2, w, d)
+        love.graphics.rectangle('fill', i * w, self:getHeight()/2 - rectHeight/2, w, rectHeight)
     end
 
     love.graphics.pop()
