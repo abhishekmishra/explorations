@@ -48,7 +48,7 @@ function RenderingPanel:draw()
     -- the darker the colour
     for i, d in ipairs(scene) do
         -- calculate the colour based on the distance
-        local c = 1.0 - utils.mapRange(d, 0, maxDistance, 0, 1.0)
+        local c = utils.mapRange(d, 0, maxDistance, 1.0, 0)
 
         -- calculate the height of the rectangle based on the distance
         local rectHeight = utils.mapRange(d, 0, maxDistance, self:getHeight(), 0)

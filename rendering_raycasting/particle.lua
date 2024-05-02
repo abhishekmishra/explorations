@@ -7,7 +7,7 @@ local Class = require('middleclass')
 local nl = require('ne0luv')
 local Ray = require('ray')
 
-local NUM_RAYS = 60
+local NUM_RAYS = 45
 
 --- Particle class
 local Particle = Class('Particle')
