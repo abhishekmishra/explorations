@@ -69,6 +69,10 @@ function love.keypressed(key)
         raycastingSystem:createWalls()
     end
 
+    if key == "space" then
+        raycastingSystem.autoMove = not raycastingSystem.autoMove
+    end
+
     -- pass the key to the layout
     layout:keypressed(key)
 end

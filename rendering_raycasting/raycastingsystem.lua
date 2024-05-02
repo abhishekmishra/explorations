@@ -26,6 +26,9 @@ function RaycastingSystem:initialize(w, h)
     -- particle offsets to move with noise
     self.xOffset = 0
     self.yOffset = 10000
+
+    -- auto move flag
+    self.autoMove = true
 end
 
 function RaycastingSystem:createWalls()
@@ -50,10 +53,16 @@ function RaycastingSystem:createWalls()
 end
 
 function RaycastingSystem:update(dt)
-    -- move the particle with noise
-    local x = love.math.noise(self.xOffset) * self.cw
-    local y = love.math.noise(self.yOffset) * self.ch
-    self.particle:move(x, y)
+    if self.autoMove then
+        -- move the particle with noise
+        local x = love.math.noise(self.xOffset) * self.cw
+        local y = love.math.noise(self.yOffset) * self.ch
+        self.particle:move(x, y)
+    else
+        -- move with mouse
+        local mx, my = love.mouse.getPosition()
+        self.particle:move(mx, my)
+    end
 
     -- update the offsets
     self.xOffset = self.xOffset + 0.01
