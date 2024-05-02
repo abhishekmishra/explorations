@@ -15,6 +15,7 @@ math.randomseed(os.time())
 local nl = require('ne0luv')
 local RaycastingSystem = require('raycastingsystem')
 local RaycastingPanel = require('raycastingpanel')
+local RenderingPanel = require('renderingpanel')
 
 local layout
 local raycastingSystem
@@ -26,14 +27,18 @@ function love.load()
     local ch = love.graphics.getHeight()
 
     -- create a layout panel
-    layout = nl.Layout(nl.Rect(0, 0, cw, ch))
+    layout = nl.Layout(nl.Rect(0, 0, cw, ch), {
+        layout = 'row',
+    })
 
     -- create the raycasting panel
     raycastingSystem = RaycastingSystem(cw / 2, ch)
     local raycastingPanel = RaycastingPanel(raycastingSystem, 0, 0, cw / 2, ch)
+    local renderingPanel = RenderingPanel(raycastingSystem, 0, 0, cw / 2, ch)
 
     -- add the raycasting panel to the layout
     layout:addChild(raycastingPanel)
+    layout:addChild(renderingPanel)
 end
 
 --- love.update: Called every frame, updates the simulation

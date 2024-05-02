@@ -28,6 +28,7 @@ end
 -- @param walls (table) - walls to look at
 function Particle:look(walls)
     self.points = {}
+    self.scene = {}
     for _, ray in ipairs(self.rays) do
         local closest = nil
         local record = math.huge
@@ -46,6 +47,8 @@ function Particle:look(walls)
         if closest then
             table.insert(self.points, closest)
         end
+
+        table.insert(self.scene, record)
     end
 end
 
