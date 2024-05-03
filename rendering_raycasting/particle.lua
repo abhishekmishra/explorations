@@ -50,6 +50,9 @@ function Particle:look(walls)
             local pt = ray:cast(wall)
             if pt then
                 local d = nl.Vector.dist(self.pos, pt)
+                -- use a projection of the distance to the heading
+                -- of the particle to get the correct distance
+                d = d * math.cos(ray.dir:heading() - self.heading)
                 if d < record then
                     record = d
                     closest = pt
