@@ -7,7 +7,7 @@ local Class = require('middleclass')
 local nl = require('ne0luv')
 local Ray = require('ray')
 
-local NUM_RAYS = 45
+local DEFAULT_FOV = 45
 
 --- Particle class
 local Particle = Class('Particle')
@@ -21,12 +21,10 @@ function Particle:initialize(pos)
     -- particle heading
     self.heading = -math.pi / 2
 
-    -- rays emanating from the particle
-    self.rays = {}
-    for i = -NUM_RAYS/2, NUM_RAYS/2 do
-        table.insert(self.rays, Ray(pos, math.rad(i) + self.heading))
-    end
+    -- set the fov of the particle
+    self:setFOV(DEFAULT_FOV)
 
+    -- empty points table
     self.points = {}
 end
 
@@ -35,7 +33,7 @@ end
 function Particle:rotate(angle)
     self.heading = self.heading + angle
     for idx, ray in ipairs(self.rays) do
-        local i = idx - NUM_RAYS/2 - 1
+        local i = idx - self.fov/2 - 1
         ray:setAngle(math.rad(i) + self.heading)
     end
 end
@@ -95,6 +93,18 @@ function Particle:move(amount)
     -- set ray positions
     for _, ray in ipairs(self.rays) do
         ray.pos = self.pos
+    end
+end
+
+--- Set the fov of the particle
+-- @param fov (number) - field of view of the particle
+function Particle:setFOV(fov)
+    self.fov = fov
+
+    -- rays emanating from the particle
+    self.rays = {}
+    for i = -self.fov/2, self.fov/2 do
+        table.insert(self.rays, Ray(self.pos, math.rad(i) + self.heading))
     end
 end
 
