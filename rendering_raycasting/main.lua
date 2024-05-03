@@ -17,7 +17,7 @@ local RaycastingSystem = require('raycastingsystem')
 local RaycastingPanel = require('raycastingpanel')
 local RenderingPanel = require('renderingpanel')
 
-local layout
+local layout, sliderPanel
 local raycastingSystem
 
 --- love.load: Called once at the start of the simulation
@@ -31,10 +31,24 @@ function love.load()
         layout = 'row',
     })
 
-    -- create the raycasting panel
+    -- create the raycasting panel and the rendering panel
+    -- which use the same raycasting system
     raycastingSystem = RaycastingSystem(cw / 2, ch)
     local raycastingPanel = RaycastingPanel(raycastingSystem, 0, 0, cw / 2, ch)
     local renderingPanel = RenderingPanel(raycastingSystem, 0, 0, cw / 2, ch)
+
+    -- add a slider panel to control the FOV of the particle
+    -- at the bottom right of the canvas
+    sliderPanel = nl.Slider(nl.Rect(cw/2, ch - 20, cw/2, 20), {
+        minValue = 1,
+        maxValue = 180,
+        currentValue = 45,
+    })
+
+    -- add a callback to the slider to change the FOV of the particle
+    sliderPanel:addChangeHandler(function(value)
+        raycastingSystem.particle:setFOV(value)
+    end)
 
     -- add the raycasting panel to the layout
     layout:addChild(raycastingPanel)
@@ -47,6 +61,9 @@ function love.update(dt)
     -- update the layout
     layout:update(dt)
 
+    -- update the slider
+    sliderPanel:update(dt)
+
     -- update the raycasting system
     raycastingSystem:update(dt)
 end
@@ -56,6 +73,9 @@ end
 function love.draw()
     -- draw the layout
     layout:draw()
+
+    -- draw the slider
+    sliderPanel:draw()
 end
 
 -- escape to exit
@@ -75,4 +95,28 @@ function love.keypressed(key)
 
     -- pass the key to the layout
     layout:keypressed(key)
+end
+
+-- mouse pressed
+---@diagnostic disable-next-line: duplicate-set-field
+function love.mousepressed(x, y, button)
+    -- pass the mouse press to the layout
+    layout:mousepressed(x, y, button)
+    sliderPanel:mousepressed(x, y, button)
+end
+
+-- mouse released
+---@diagnostic disable-next-line: duplicate-set-field
+function love.mousereleased(x, y, button)
+    -- pass the mouse release to the layout
+    layout:mousereleased(x, y, button)
+    sliderPanel:mousereleased(x, y, button)
+end
+
+-- mouse moved
+---@diagnostic disable-next-line: duplicate-set-field
+function love.mousemoved(x, y, dx, dy)
+    -- pass the mouse move to the layout
+    layout:mousemoved(x, y, dx, dy)
+    sliderPanel:mousemoved(x, y, dx, dy)
 end
