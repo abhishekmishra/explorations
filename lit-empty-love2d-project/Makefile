@@ -12,6 +12,9 @@ build:
 	pwsh -Command "if (-not (Test-Path dist)) { New-Item -ItemType Directory -Path dist }"
 	pwsh -Command "../.luaenv/bin/activate.ps1 ; cd dist ; ${LITPD_HOME}\litpd.ps1 ../README.md -o README.html --to=html --standalone --toc; cd .. "
 
+	# Remove *.tmp files from dist directory
+	pwsh -Command "Remove-Item -Path dist\*.tmp -Force -ErrorAction SilentlyContinue"
+
 clean:
 	@echo "Cleaning up"
 	# remove dist directory, ignore errors
