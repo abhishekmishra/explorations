@@ -3,10 +3,10 @@
 -- author: Abhishek Mishra
 
 -- All imports and module scope variables go here.
+local utils = require("utils")
 
 -- canvas dimensions
 local cw, ch
-
 
 
 --- love.load: Called once at the start of the simulation
@@ -38,8 +38,25 @@ function love.draw()
     local segments = 2 * math.pi / angle_delta
     -- generate the vertices for the circle
     local vertices = {}
+    local xoff, yoff = 0, 0
+    -- the vertices generated each time are no exactly on a circle
+    -- but are calculated in such a way that the radius is a random value
+    -- from a perlin/simplex noise space.
+    -- To make sure that the last vertex connects to the first vertex
+    -- in an orderly fashion, as in does not connect too far away from the first
+    -- vertex, we choose the random simplex noise value in a 2-d simplex noise
+    -- space by going over the space in a circular fashion.
     for i = 1, segments do
-        local radius = math.random(50, 100)
+        -- set the xoff, yoff using the angle
+        xoff = math.cos(i * angle_delta) + 1
+        yoff = math.sin(i * angle_delta) + 1
+        
+        -- get the perlin noise from xoff, yoff using love.math.noise
+        -- and map it to the range of 50, 200 using utils.mapRange
+        -- this will be the radius of the circle at this point
+        -- in the circle.
+        local radius = utils.mapRange(love.math.noise(xoff, yoff), 0, 1, 50, 200)
+
         local x = radius * math.cos(i * angle_delta)
         local y = radius * math.sin(i * angle_delta)
         table.insert(vertices, x)
