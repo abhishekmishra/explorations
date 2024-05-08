@@ -34,12 +34,12 @@ function love.draw()
     -- using the love.graphics.polygon function
     love.graphics.push()
     love.graphics.translate(cw/2, ch/2)
-    local radius = 100
     local angle_delta = 0.1
     local segments = 2 * math.pi / angle_delta
     -- generate the vertices for the circle
     local vertices = {}
     for i = 1, segments do
+        local radius = math.random(50, 100)
         local x = radius * math.cos(i * angle_delta)
         local y = radius * math.sin(i * angle_delta)
         table.insert(vertices, x)
