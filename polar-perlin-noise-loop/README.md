@@ -31,6 +31,7 @@ program.
 
 ```lua {code_id="loveload"}
 --- love.load: Called once at the start of the simulation
+---@diagnostic disable-next-line: duplicate-set-field
 function love.load()
 end
 
@@ -40,6 +41,7 @@ end
 
 ```lua {code_id="loveupdate"}
 --- love.update: Called every frame, updates the simulation
+---@diagnostic disable-next-line: duplicate-set-field
 function love.update(dt)
 end
 
@@ -49,13 +51,8 @@ end
 
 ```lua {code_id="lovedraw"}
 --- love.draw: Called every frame, draws the simulation
+---@diagnostic disable-next-line: duplicate-set-field
 function love.draw()
-    local text = "Polar Perlin Noise Loops Simulation"
-    local tw = love.graphics.getFont():getWidth(text)
-    -- write empty simulation in the middle of the screen
-    love.graphics.print(text,
-        love.graphics.getWidth() / 2 - tw / 2,
-        love.graphics.getHeight() / 2 - 12)
 end
 
 ```
