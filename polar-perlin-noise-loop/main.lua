@@ -4,15 +4,30 @@
 
 -- All imports and module scope variables go here.
 local utils = require("utils")
+local nl = require('ne0luv')
 
 -- canvas dimensions
 local cw, ch
-
+local noiseMax = 0.5
+local noiseSlider
 
 --- love.load: Called once at the start of the simulation
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.load()
     cw, ch = love.graphics.getDimensions()
+    -- create slider on bottom right corner
+    noiseSlider = nl.Slider(
+        nl.Rect(cw - 200, ch - 50, 200, 50),
+        {
+            minValue = 0,
+            maxValue = 10,
+            currentValue = 0.5,
+        }
+    )
+
+    noiseSlider:addChangeHandler(function(value)
+        noiseMax = value
+    end)
 end
 
 
@@ -20,6 +35,7 @@ end
 --- love.update: Called every frame, updates the simulation
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.update(dt)
+    noiseSlider:update()
 end
 
 
@@ -39,7 +55,6 @@ function love.draw()
     -- generate the vertices for the circle
     local vertices = {}
     local xoff, yoff = 0, 0
-    local noiseMax = 0.5
     -- the vertices generated each time are no exactly on a circle
     -- but are calculated in such a way that the radius is a random value
     -- from a perlin/simplex noise space.
@@ -66,6 +81,9 @@ function love.draw()
     -- draw the circle
     love.graphics.polygon("line", vertices)
     love.graphics.pop()
+
+    -- draw the slider
+    noiseSlider:draw()
 end
 
 
@@ -77,3 +95,14 @@ function love.keypressed(key)
     end
 end
 
+function love.mousepressed(x, y, button)
+    noiseSlider:mousepressed(x, y, button)
+end
+
+function love.mousereleased(x, y, button)
+    noiseSlider:mousereleased(x, y, button)
+end
+
+function love.mousemoved(x, y, dx, dy, istouch)
+    noiseSlider:mousemoved(x, y, dx, dy, istouch)
+end
