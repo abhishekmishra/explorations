@@ -1,18 +1,34 @@
 # Polar Perlin Noise Loops Simulation
 
-Written as a literate program using:
+_Note: Although the title says `Perlin Noise`, we use `Simplex Noise` as this
+is readily available in the package `love.math.noise`._
 
-1. **litpd**
-2. **Love2d**
+This is a [literate program][7] that implements the simulation described in the
+tutorial [Coding Challenge #136.1: Polar Perlin Noise Loops][1] at
+[The Coding Train][2] youtube channel.
 
-The program generates code in two important files.
+In this simulation we develop an interesting visualization of circular shapes
+drawn in a distorted fashion using multi-dimensional [Perlin Noise][3].
 
-1. *conf.lua*: This is the program run before love2d window is started. The
-   window related configurations are set here to reduce flickering.
-2. *main.lua*: This is the entry point for the love2d game. All the code for the
-   simulation/game should go here.
+The simulation is implemented in [Love2d][6] unlike the video above where
+Dan Shiffman writes the program in javascript using the [p5.js library][8]
 
-The program contains some starter boilerplate code for the two files.
+[1]: https://www.youtube.com/watch?v=ZI1dmHv3MeM
+[2]: https://www.youtube.com/@TheCodingTrain
+[3]: http://TODO perlin noise wikipedia link
+
+
+## Literate Programming using `litpd`
+
+This program is written using my own literate programmin tool named [litpd][4].
+`litpd` is a command-line tool that takes a [markdown document in pandoc 
+format][5], and creates two outputs. The first output is a human readable
+document in a format like html/pdf. The second output is the source code files
+for building and running the program.
+
+[4]: https://github.com/abhishekmishra/litpd
+[5]: http://TODO pandoc markdown link
+
 
 ## Building and Running the Program
 
