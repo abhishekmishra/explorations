@@ -1,5 +1,6 @@
 {
     "Lua.diagnostics.globals": [
         "love"
-    ]
+    ],
+    "liveServer.settings.port": 5502
 }
