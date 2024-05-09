@@ -34,11 +34,12 @@ function love.draw()
     -- using the love.graphics.polygon function
     love.graphics.push()
     love.graphics.translate(cw/2, ch/2)
-    local angle_delta = 0.1
+    local angle_delta = 0.01
     local segments = 2 * math.pi / angle_delta
     -- generate the vertices for the circle
     local vertices = {}
     local xoff, yoff = 0, 0
+    local noiseMax = 0.5
     -- the vertices generated each time are no exactly on a circle
     -- but are calculated in such a way that the radius is a random value
     -- from a perlin/simplex noise space.
@@ -48,9 +49,9 @@ function love.draw()
     -- space by going over the space in a circular fashion.
     for i = 1, segments do
         -- set the xoff, yoff using the angle
-        xoff = math.cos(i * angle_delta) + 1
-        yoff = math.sin(i * angle_delta) + 1
-        
+        xoff = utils.mapRange(math.cos(i * angle_delta) + 1, -1, 1, 0, noiseMax)
+        yoff = utils.mapRange(math.sin(i * angle_delta) + 1, -1, 1, 0, noiseMax)
+
         -- get the perlin noise from xoff, yoff using love.math.noise
         -- and map it to the range of 50, 200 using utils.mapRange
         -- this will be the radius of the circle at this point
