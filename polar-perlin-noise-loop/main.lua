@@ -10,6 +10,7 @@ local nl = require('ne0luv')
 local cw, ch
 local noiseMax = 0.5
 local noiseSlider
+local phase = 0
 
 --- love.load: Called once at the start of the simulation
 ---@diagnostic disable-next-line: duplicate-set-field
@@ -64,7 +65,7 @@ function love.draw()
     -- space by going over the space in a circular fashion.
     for i = 1, segments do
         -- set the xoff, yoff using the angle
-        xoff = utils.mapRange(math.cos(i * angle_delta) + 1, -1, 1, 0, noiseMax)
+        xoff = utils.mapRange(math.cos(i * angle_delta + phase) + 1, -1, 1, 0, noiseMax)
         yoff = utils.mapRange(math.sin(i * angle_delta) + 1, -1, 1, 0, noiseMax)
 
         -- get the perlin noise from xoff, yoff using love.math.noise
@@ -84,6 +85,9 @@ function love.draw()
 
     -- draw the slider
     noiseSlider:draw()
+
+    -- increment the phase
+    phase = phase + 0.05
 end
 
 
