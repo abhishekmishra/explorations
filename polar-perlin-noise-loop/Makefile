@@ -15,5 +15,5 @@ build:
 
 clean:
 	@echo "Cleaning up"
-	rm main.lua
-	rm conf.lua
+	rm -f main.lua
+	rm -f conf.lua

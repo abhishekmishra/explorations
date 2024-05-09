@@ -13,6 +13,8 @@ local noiseSlider
 local phase = 0
 local zoff = 0
 
+
+
 --- love.load: Called once at the start of the simulation
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.load()
@@ -97,20 +99,26 @@ end
 
 
 -- escape to exit
+---@diagnostic disable-next-line: duplicate-set-field
 function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
     end
 end
 
+
+---@diagnostic disable-next-line: duplicate-set-field
 function love.mousepressed(x, y, button)
     noiseSlider:mousepressed(x, y, button)
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 function love.mousereleased(x, y, button)
     noiseSlider:mousereleased(x, y, button)
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 function love.mousemoved(x, y, dx, dy, istouch)
     noiseSlider:mousemoved(x, y, dx, dy, istouch)
 end
+
