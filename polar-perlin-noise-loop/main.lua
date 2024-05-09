@@ -11,6 +11,7 @@ local cw, ch
 local noiseMax = 0.5
 local noiseSlider
 local phase = 0
+local zoff = 0
 
 --- love.load: Called once at the start of the simulation
 ---@diagnostic disable-next-line: duplicate-set-field
@@ -72,7 +73,7 @@ function love.draw()
         -- and map it to the range of 50, 200 using utils.mapRange
         -- this will be the radius of the circle at this point
         -- in the circle.
-        local radius = utils.mapRange(love.math.noise(xoff, yoff), 0, 1, 50, 200)
+        local radius = utils.mapRange(love.math.noise(xoff, yoff, zoff), 0, 1, 50, 200)
 
         local x = radius * math.cos(i * angle_delta)
         local y = radius * math.sin(i * angle_delta)
@@ -88,6 +89,9 @@ function love.draw()
 
     -- increment the phase
     phase = phase + 0.05
+
+    -- increment the zoff
+    zoff = zoff + 0.05
 end
 
 
