@@ -37,21 +37,81 @@ program.
 
 # `main.lua`
 
-## Module Imports & Variables
+The entrypoint of a `love2d` game is a `main.lua` file. We will write the bulk
+of the program (excluding a few configuration items) in this file.
 
-```lua {code_id="moduleglobal"}
--- All imports and module scope variables go here.
+The `main.lua` program has the following parts. Each of the parts of the program
+are developed in the later sections. (The `litpd` tool will weave it all
+together into a single file.)
+
+* *Header*: contains some standard bookkeeping remarks at the top of the file.
+* *Imports*: All the dependencies of the program are imported in this section.
+* *Globals*: There are several global constants and variables use in the
+  program, these are listed in this section. Some of them are assigned initial
+  values.
+* *Love2d Methods*: The bulk of the program is implemented in the love2d 
+  entry-points viz. `love.load` to initialize the program, `love.load` to update
+  the state of the program every frame, and `love.draw` to draw the state of
+  the program every frame. There are some other functions defined in the `love`
+  namespace which will handle user input from keyboard and mouse.
+
+```lua {code_file="main.lua"}
+@<header@>
+
+@<imports@>
+
+@<globals@>
+
+@<loveload@>
+
+@<loveupdate@>
+
+@<lovedraw@>
+
+@<lovekeypressed@>
+
+@<lovemouse@>
+```
+
+
+## Header, Imports & Global Variables
+
+### File Header
+
+```lua {code_id="header"}
+--- main.lua: <Empty> Simulation in LÖVE
+-- date: 4/3/2024
+-- author: Abhishek Mishra
+
+```
+
+### Module Imports
+
+```lua {code_id="imports"}
 local utils = require("utils")
 local nl = require('ne0luv')
 
+```
+
+```lua {code_id="globals"}
+-- All module scope variables/constants go here.
+
 -- canvas dimensions
 local cw, ch
-local noiseMax = 0.5
-local noiseSlider
-local phase = 0
-local zoff = 0
 
+-- maximum noise
+local noiseMax = 0.5
+
+-- maximum noise slider control
+local noiseSlider
+
+-- phase of the angle to select from circular path in perlin noise space
+local phase = 0
+
+-- value of 3rd-dimension while selecting from 3-d perlin noise space
+local zoff = 0
 ```
+
 
 ## `love.load` - Initialization
 
@@ -176,25 +236,6 @@ function love.mousemoved(x, y, dx, dy, istouch)
 end
 ```
 
-
-
-```lua {code_file="main.lua"}
---- main.lua: <Empty> Simulation in LÖVE
--- date: 4/3/2024
--- author: Abhishek Mishra
-
-@<moduleglobal@>
-
-@<loveload@>
-
-@<loveupdate@>
-
-@<lovedraw@>
-
-@<lovekeypressed@>
-
-@<lovemouse@>
-```
 
 # `conf.lua`
 

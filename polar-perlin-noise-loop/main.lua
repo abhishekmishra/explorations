@@ -2,17 +2,29 @@
 -- date: 4/3/2024
 -- author: Abhishek Mishra
 
--- All imports and module scope variables go here.
+
+
 local utils = require("utils")
 local nl = require('ne0luv')
 
+
+
+-- All module scope variables/constants go here.
+
 -- canvas dimensions
 local cw, ch
-local noiseMax = 0.5
-local noiseSlider
-local phase = 0
-local zoff = 0
 
+-- maximum noise
+local noiseMax = 0.5
+
+-- maximum noise slider control
+local noiseSlider
+
+-- phase of the angle to select from circular path in perlin noise space
+local phase = 0
+
+-- value of 3rd-dimension while selecting from 3-d perlin noise space
+local zoff = 0
 
 
 --- love.load: Called once at the start of the simulation
