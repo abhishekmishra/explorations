@@ -79,23 +79,33 @@ together into a single file.)
 ### File Header
 
 ```lua {code_id="header"}
---- main.lua: <Empty> Simulation in LÖVE
--- date: 4/3/2024
+--- main.lua: Polar Perlin Noise Loops Simulation in LÖVE
+-- date: 09/05/2024
 -- author: Abhishek Mishra
-
 ```
 
 ### Module Imports
 
+The program uses the following modules:
+1. `utils.mapRange`: We re-use an implementation of the p5.js [`map`][9]
+   function written for another simulation. The code is available in the
+   `utils.lua` file which was copied over from another project.
+2. `ne0luv`: This is a library of some commonly-used utilites that I've
+   developed for use in my Love2d simulations. In the current program I've only
+   used a slider control to change some of the parameters of the noise
+   generation. To read more about `ne0luv` see its project page at [ne0luv][10]
+
+[9]: https://TODO
+[10]: https://TODO
+
 ```lua {code_id="imports"}
 local utils = require("utils")
 local nl = require('ne0luv')
-
 ```
 
-```lua {code_id="globals"}
--- All module scope variables/constants go here.
+### Global Variables
 
+```lua {code_id="globals"}
 -- canvas dimensions
 local cw, ch
 
