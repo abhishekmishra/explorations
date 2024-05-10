@@ -26,7 +26,7 @@ Dan Shiffman writes the program in javascript using the [p5.js library][8]
 ## Literate Programming using `litpd`
 
 This program is written using my own literate programmin tool named [litpd][4].
-`litpd` is a command-line tool that takes a [markdown document in pandoc 
+`litpd` is a command-line tool that takes a [markdown document in pandoc
 format][5], and creates two outputs. The first output is a human readable
 document in a format like html/pdf. The second output is the source code files
 for building and running the program.
@@ -35,12 +35,31 @@ for building and running the program.
 [5]: https://pandoc.org/MANUAL.html#pandocs-markdown
 
 
-## Building and Running the Program
+## Build/Run the Program
 
 See the `Makefile` in the current directory to see how to build and run the
 program.
 
-# `main.lua`
+# The Program
+
+- *Central Idea*: The central idea of the program is to draw a distorted circle
+  as a series of line segments.
+- *Shape Distortion*: The distortion is created in a natural and continuous
+  manner by using **Perlin/Simplex Noise**.
+- *Path in Noise Space*: If we move in a loop through a 2D noise space we can
+  create a sequence of noise values which will return to the starting value at
+  the end of the loop. This property is utilized to ensure that when distorting
+  the circle, there is no jagged transition.
+- *2d Slices of 3d Noise*: If we extend our noise space to three dimensions then
+  at each frame we can take a different 2d slice of 3d space by utilizing a
+  slightly different z-index. This will ensure a smooth but random animation
+  in the visualization.
+
+The over-arching idea of the simulation is the creative usage of
+**Perlin/Simplex Noise** to transform polygons into beautiful shapes and animate
+them at each frame.
+
+## Program Structure
 
 The entrypoint of a `love2d` game is a `main.lua` file. We will write the bulk
 of the program (excluding a few configuration items) in this file.
@@ -78,10 +97,7 @@ together into a single file.)
 @<lovemouse@>
 ```
 
-
-## Header, Imports & Global Variables
-
-### File Header
+## File Header
 
 ```lua {code_id="header"}
 --- main.lua: Polar Perlin Noise Loops Simulation in LÖVE
@@ -89,7 +105,7 @@ together into a single file.)
 -- author: Abhishek Mishra
 ```
 
-### Module Imports
+## Module Imports
 
 The program uses the following modules:
 1. `utils.mapRange`: We re-use an implementation of the p5.js [`map`][9]
@@ -108,7 +124,7 @@ local utils = require("utils")
 local nl = require('ne0luv')
 ```
 
-### Global Variables
+## Global Variables
 
 In this section of the program we define a few global variables used across the
 program. Strictly speaking these are NOT lua global variables. However they are
@@ -152,14 +168,12 @@ local phase = 0
 local zoff = 0
 ```
 
-
-## `love.load` - Initialization
+## Initialization
 
 The `love.load` function is called by love2d once when the game/simulation
 starts. We initialize the simulation by querying the dimensions of the canvas,
 and setting up the slider control for selecting the maximum value of the noise
 range.
-
 
 ```lua {code_id="loveload"}
 --- love.load: Called once at the start of the simulation
@@ -180,7 +194,7 @@ This is straight-forward and self-explanatory.
     cw, ch = love.graphics.getDimensions()
 ```
 
-### Setup the ne0luv Slider
+### Setup Noise Slider
 
 We setup the Slider control at the bottom right of the canvas. And we plug
 the change handler with the control such that the `noiseMax` value is updated
@@ -231,6 +245,8 @@ noiseSlider:draw()
 
 ## `love.update` - Update the Simulation
 
+There's only the one UI Control - the noise slider to update in this method.
+
 ```lua {code_id="loveupdate"}
 --- love.update: Called every frame, updates the simulation
 ---@diagnostic disable-next-line: duplicate-set-field
@@ -240,63 +256,153 @@ end
 
 ```
 
-## `love.draw` - Draw the Simulation
+## Draw the Simulation
+
+- The bulk of the program is implemented in this function.
+- As we have discussed at the beginning of the section, the central idea is to
+  draw a distorted circle.
+- The circle is drawn at the center of the canvas.
+- The circle is drawn as a sequence of line segments. The more the line segments
+  the smoother the curve of the circle.
+- The line segments are drawn using the `love.graphics.polygon` API.
+- We define a variable called `angle_delta`. Then we divide 360 degrees by this
+  number and get the number of segements to draw. The larger the value of
+  `angle_delta` the fewer the number of segments.
+- For each line segment we calculate an end-vertex which is slightly shifted
+  from the ideal position on the curve of the circle. This shift creates an
+  appearance of the distorted circle.
+- To get the shifted vertices we use a sequence of noise values from the
+  `love.math.noise` API which in turn implements simplex noise.
+- We select noise values from a 3d noise space, where the z-index of the noise
+  selection changes every frame. This gives rise to a continuous change to the
+  distorted circle which make the simulation animated.
+
+### Structure of Draw Function
+
+The `love.draw` function is called by love2d every frame. We define a new
+coordinate system translated to the center of the screen. Then we setup the
+circle parameters, and generate the distorted line segments for the circle, and
+draw it. Finally we pop the graphics coordinate transform and update our
+animation variables.
 
 ```lua {code_id="lovedraw"}
 --- love.draw: Called every frame, draws the simulation
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.draw()
-    -- draw a circle by drawing line segments
-    -- at every segment turn by a small angle
-    -- before drawing the next one.
-    -- use this to draw a circle like a polygon
-    -- using the love.graphics.polygon function
-    love.graphics.push()
-    love.graphics.translate(cw/2, ch/2)
-    local angle_delta = 0.01
-    local segments = 2 * math.pi / angle_delta
-    -- generate the vertices for the circle
-    local vertices = {}
-    local xoff, yoff = 0, 0
-    -- the vertices generated each time are no exactly on a circle
-    -- but are calculated in such a way that the radius is a random value
-    -- from a perlin/simplex noise space.
-    -- To make sure that the last vertex connects to the first vertex
-    -- in an orderly fashion, as in does not connect too far away from the first
-    -- vertex, we choose the random simplex noise value in a 2-d simplex noise
-    -- space by going over the space in a circular fashion.
-    for i = 1, segments do
-        -- set the xoff, yoff using the angle
-        xoff = utils.mapRange(math.cos(i * angle_delta + phase) + 1, -1, 1, 0, noiseMax)
-        yoff = utils.mapRange(math.sin(i * angle_delta) + 1, -1, 1, 0, noiseMax)
 
-        -- get the perlin noise from xoff, yoff using love.math.noise
-        -- and map it to the range of 50, 200 using utils.mapRange
-        -- this will be the radius of the circle at this point
-        -- in the circle.
-        local radius = utils.mapRange(love.math.noise(xoff, yoff, zoff), 0, 1, 50, 200)
+    @<graphicssetup@>
 
-        local x = radius * math.cos(i * angle_delta)
-        local y = radius * math.sin(i * angle_delta)
-        table.insert(vertices, x)
-        table.insert(vertices, y)
-    end
-    -- draw the circle
-    love.graphics.polygon("line", vertices)
-    love.graphics.pop()
+    @<circleparams@>
+
+    @<circledefinition@>
+
+    @<circledraw@>
+
+    @<graphicspop@>
 
     @<drawslider@>
 
-    -- increment the phase
-    phase = phase + 0.05
+    @<animationupdate@>
 
-    -- increment the zoff
-    zoff = zoff + 0.05
 end
 
 ```
 
-## `love.keypressed` - Handle Keyboard Events
+### Graphics Setup
+
+- Push a new coordinate transformation onto the transformation stack.
+- Translate the coordinate system to the center of the canvas.
+
+```lua {code_id="graphicssetup"}
+love.graphics.push()
+love.graphics.translate(cw/2, ch/2)
+```
+
+### Circle Parameters
+
+- In this section of the program we define the initial values of the parameters
+  for the circle.
+- We define the number of line segments to use by dividing `2*pi` by the value
+  of `angle_delta` which is in turn defined as a suitably small value.
+- We define an empty table of vertices called `vertices` which will be passed to
+  the `love.graphics.polygon` function to draw the circle.
+- We define `xoff` and `yoff` variables with initial value of 0. These variables
+  provide the first two indexes into our lookup into 3d noise space.
+
+```lua {code_id="circleparams"}
+local angle_delta = 0.01
+local segments = 2 * math.pi / angle_delta
+local vertices = {}
+local xoff, yoff = 0, 0
+```
+
+### Circle Definition
+
+- In this part of the function we generate the vertices for the line segments.
+- We get the values for `xoff` and `yoff` values.
+    - `xoff` is calculated as the cosine of the angle of the segment vertex,
+      plus the `phase`. Since the `phase` value is incremented every frame we
+      get a slightly different value for the `xoff` every frame.
+    - The resultant cosine is mapped to a range of [1, `noiseMax`]. Therefore as
+      the user changes the slider, the value of noise can be restricted to a
+      smaller range or its range can be increased. The greater the range of
+      `xoff`, the greater the distortion.
+    - The `yoff` is calculated using the sine function but without any
+      application of `phase`.
+- The `xoff` and `yoff` value alongwith the time dependent `zoff` values are
+  used to lookup in the noise space. The resultant value is mapped to a range of
+  [50, 200]. This is the value of `radius` of the circle for that iteration.
+- Since the value of `radius` is slightly different for every segment of the
+  circle we get a distorted circle.
+- The `radius` value is used to calculate the `x` and `y` values of the vertex
+  endpoint of the current segment using the cosine and sine functions.
+- Finally the `x` and `y` values are appended to the `vertices` list.
+
+```lua {code_id="circledefinition"}
+for i = 1, segments do
+    xoff = utils.mapRange(math.cos(i * angle_delta + phase) + 1, -1, 1, 0, noiseMax)
+    yoff = utils.mapRange(math.sin(i * angle_delta) + 1, -1, 1, 0, noiseMax)
+
+    local radius = utils.mapRange(love.math.noise(xoff, yoff, zoff), 0, 1, 50, 200)
+
+    local x = radius * math.cos(i * angle_delta)
+    local y = radius * math.sin(i * angle_delta)
+    table.insert(vertices, x)
+    table.insert(vertices, y)
+end
+```
+
+### Draw Circle
+
+Drawing the circle is a single call to the `love.graphics.polygon` function.
+
+```lua {code_id="circledraw"}
+love.graphics.polygon("line", vertices)
+```
+
+### Pop Coordinate System
+
+We pop the coordinate system at the end of the graphics operations.
+
+```lua {code_id="graphicspop"}
+love.graphics.pop()
+```
+
+### Animation Update
+
+We update the values which animate our drawing. The `phase` value is incremented
+by a small amount, and the `zoff` is incremented by a small amount.
+
+```lua {code_id="animationupdate"}
+phase = phase + 0.05
+zoff = zoff + 0.05
+```
+
+
+## Handle Keyboard Events
+
+We define the `love.keypressed` function to handle the `escape` key and quit
+the application if it is pressed.
 
 ```lua {code_id="lovekeypressed"}
 -- escape to exit
