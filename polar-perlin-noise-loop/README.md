@@ -414,7 +414,7 @@ function love.keypressed(key)
 end
 ```
 
-## 'love.mouse<event>` - Handle Mouse Events
+## Handle Mouse Events
 
 The love2d mouse handlers are implmented to call the corresponding methods of
 the noise slider control object.
