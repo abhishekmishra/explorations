@@ -416,6 +416,9 @@ end
 
 ## 'love.mouse<event>` - Handle Mouse Events
 
+The love2d mouse handlers are implmented to call the corresponding methods of
+the noise slider control object.
+
 ```lua {code_id="lovemouse"}
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.mousepressed(x, y, button)
@@ -433,8 +436,11 @@ function love.mousemoved(x, y, dx, dy, istouch)
 end
 ```
 
+# Configuration
 
-# `conf.lua`
+The `conf.lua` file is called at the startup of love2d to setup some parameters
+before the window is drawn. We define the canvas size and window title here.
+We also turn off some unused modules to make the program faster.
 
 ```lua { code_file="conf.lua" }
 --- conf.lua: Config for the love2d game.
@@ -443,8 +449,8 @@ end
 -- author: Abhishek Mishra
 
 -- canvas size
-local canvasWidth = 400
-local canvasHeight = 400
+local canvasWidth = 800
+local canvasHeight = 800
 
 function love.conf(t)
     -- set the window title
@@ -458,11 +464,6 @@ function love.conf(t)
     t.modules.joystick = false
     t.modules.physics = false
     t.modules.touch = false
-
-    -- enable console
-    -- TODO: turning on console crashes Love2D on Windows,
-    -- so it's disabled for now
-    -- t.console = true
 end
 
 ```

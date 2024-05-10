@@ -4,8 +4,8 @@
 -- author: Abhishek Mishra
 
 -- canvas size
-local canvasWidth = 400
-local canvasHeight = 400
+local canvasWidth = 800
+local canvasHeight = 800
 
 function love.conf(t)
     -- set the window title
@@ -19,10 +19,5 @@ function love.conf(t)
     t.modules.joystick = false
     t.modules.physics = false
     t.modules.touch = false
-
-    -- enable console
-    -- TODO: turning on console crashes Love2D on Windows,
-    -- so it's disabled for now
-    -- t.console = true
 end
 
