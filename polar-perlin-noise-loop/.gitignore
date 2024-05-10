@@ -1,1 +1,7 @@
 README.html
+
+*.tmp
+
+tex2pdf*
+
+*.pdf
