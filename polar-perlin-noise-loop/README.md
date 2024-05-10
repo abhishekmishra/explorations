@@ -21,6 +21,9 @@ Dan Shiffman writes the program in javascript using the [p5.js library][8]
 [1]: https://www.youtube.com/watch?v=ZI1dmHv3MeM
 [2]: https://www.youtube.com/@TheCodingTrain
 [3]: https://en.wikipedia.org/wiki/Perlin_noise
+[6]: https://love2d.org/
+[7]: https://en.wikipedia.org/wiki/Literate_programming
+[8]: https://p5js.org/
 
 
 ## Literate Programming using `litpd`
