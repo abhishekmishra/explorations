@@ -15,7 +15,7 @@ Dan Shiffman writes the program in javascript using the [p5.js library][8]
 
 [1]: https://www.youtube.com/watch?v=ZI1dmHv3MeM
 [2]: https://www.youtube.com/@TheCodingTrain
-[3]: http://TODO perlin noise wikipedia link
+[3]: https://en.wikipedia.org/wiki/Perlin_noise
 
 
 ## Literate Programming using `litpd`
@@ -27,7 +27,7 @@ document in a format like html/pdf. The second output is the source code files
 for building and running the program.
 
 [4]: https://github.com/abhishekmishra/litpd
-[5]: http://TODO pandoc markdown link
+[5]: https://pandoc.org/MANUAL.html#pandocs-markdown
 
 
 ## Building and Running the Program
@@ -95,8 +95,8 @@ The program uses the following modules:
    used a slider control to change some of the parameters of the noise
    generation. To read more about `ne0luv` see its project page at [ne0luv][10]
 
-[9]: https://TODO
-[10]: https://TODO
+[9]: https://p5js.org/reference/#/p5/map
+[10]: https://github.com/abhishekmishra/ne0luv
 
 ```lua {code_id="imports"}
 local utils = require("utils")
@@ -104,6 +104,30 @@ local nl = require('ne0luv')
 ```
 
 ### Global Variables
+
+In this section of the program we define a few global variables used across the
+program. Strictly speaking these are NOT lua global variables. However they are
+defined at the module/file scope for the `main.lua` file, which means that they
+are available across all the methods in the file. See [PIL: Local Variables
+and Scope][11] for a full discussion on the topic of lua local variables.
+
+[11]: https://www.lua.org/pil/4.2.html
+
+The file local variables are:
+1. *`cw, ch`*: The dimensions of the love2d canvas.
+2. *`noiseMax`*: The maximum input values for the x and y dimensions used when
+   selecting noise from 3d noise space.
+3. *`noiseSlider`*: The Slider UI control displayed on the screen to control
+   the `noiseMax` value.
+4. *`phase`*: We are selecting noise in the noise space in a circular path to
+   give us a closed loop. If we always start from the same place in every frame
+   we will end up with the same sequence of noise values. However if we add a
+   changing `phase` value every frame, we get the same path but shifted by a few
+   values. This gives a smooth animation to the output drawing.
+5. *`zoff`*: Since we are selecting noise from a 3d space we need a z-index.
+   This `zoff` value can be changed every frame to change the slice of 2d noise
+   that we get from the 3d space. This provides a jarring effect to the
+   output drawing.
 
 ```lua {code_id="globals"}
 -- canvas dimensions
