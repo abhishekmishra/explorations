@@ -150,11 +150,43 @@ local zoff = 0
 
 ## `love.load` - Initialization
 
+The `love.load` function is called by love2d once when the game/simulation
+starts. We initialize the simulation by querying the dimensions of the canvas,
+and setting up the slider control for selecting the maximum value of the noise
+range.
+
+
 ```lua {code_id="loveload"}
 --- love.load: Called once at the start of the simulation
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.load()
+    @<querydim@>
+    @<initslider@>
+end
+
+```
+
+### Querying the canvas dimensions
+
+This is straight-forward and self-explanatory.
+
+```lua {code_id="querydim"}
+    -- query the dimensions of the canvas and store in cw, ch global vars.
     cw, ch = love.graphics.getDimensions()
+```
+
+### Setup the ne0luv Slider
+
+We setup the Slider control at the bottom right of the canvas. And we plug
+the change handler with the control such that the `noiseMax` value is updated
+when the Slider changes.
+
+Note that the Slider control's lifecycle methods will have to be called at
+appropriate love2d lifecycle functions viz. the `update`, `draw` and input event
+functions.
+
+
+```lua {code_id="initslider"}
     -- create slider on bottom right corner
     noiseSlider = nl.Slider(
         nl.Rect(cw - 200, ch - 50, 200, 50),
@@ -168,8 +200,28 @@ function love.load()
     noiseSlider:addChangeHandler(function(value)
         noiseMax = value
     end)
-end
+```
 
+#### Connect the lifecycle methods for Slider
+
+```lua {code_id="updateslider"}
+noiseSlider:update(dt)
+```
+
+```lua {code_id="mousepressedslider"}
+noiseSlider:mousepressed(x, y, button)
+```
+
+```lua {code_id="mousereleasedslider"}
+noiseSlider:mousereleased(x, y, button)
+```
+
+```lua {code_id="mousemovedslider"}
+noiseSlider:mousemoved(x, y, dx, dy, istouch)
+```
+
+```lua {code_id="drawslider"}
+noiseSlider:draw()
 ```
 
 ## `love.update` - Update the Simulation
@@ -178,7 +230,7 @@ end
 --- love.update: Called every frame, updates the simulation
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.update(dt)
-    noiseSlider:update()
+    @<updateslider@>
 end
 
 ```
@@ -228,8 +280,7 @@ function love.draw()
     love.graphics.polygon("line", vertices)
     love.graphics.pop()
 
-    -- draw the slider
-    noiseSlider:draw()
+    @<drawslider@>
 
     -- increment the phase
     phase = phase + 0.05
@@ -257,17 +308,17 @@ end
 ```lua {code_id="lovemouse"}
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.mousepressed(x, y, button)
-    noiseSlider:mousepressed(x, y, button)
+    @<mousepressedslider@>
 end
 
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.mousereleased(x, y, button)
-    noiseSlider:mousereleased(x, y, button)
+    @<mousereleasedslider@>
 end
 
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.mousemoved(x, y, dx, dy, istouch)
-    noiseSlider:mousemoved(x, y, dx, dy, istouch)
+    @<mousemovedslider@>
 end
 ```
 

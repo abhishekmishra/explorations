@@ -26,8 +26,10 @@ local zoff = 0
 --- love.load: Called once at the start of the simulation
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.load()
+        -- query the dimensions of the canvas and store in cw, ch global vars.
     cw, ch = love.graphics.getDimensions()
-    -- create slider on bottom right corner
+
+        -- create slider on bottom right corner
     noiseSlider = nl.Slider(
         nl.Rect(cw - 200, ch - 50, 200, 50),
         {
@@ -40,6 +42,7 @@ function love.load()
     noiseSlider:addChangeHandler(function(value)
         noiseMax = value
     end)
+
 end
 
 
@@ -47,7 +50,8 @@ end
 --- love.update: Called every frame, updates the simulation
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.update(dt)
-    noiseSlider:update()
+    noiseSlider:update(dt)
+
 end
 
 
@@ -94,8 +98,8 @@ function love.draw()
     love.graphics.polygon("line", vertices)
     love.graphics.pop()
 
-    -- draw the slider
     noiseSlider:draw()
+
 
     -- increment the phase
     phase = phase + 0.05
@@ -118,15 +122,18 @@ end
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.mousepressed(x, y, button)
     noiseSlider:mousepressed(x, y, button)
+
 end
 
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.mousereleased(x, y, button)
     noiseSlider:mousereleased(x, y, button)
+
 end
 
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.mousemoved(x, y, dx, dy, istouch)
     noiseSlider:mousemoved(x, y, dx, dy, istouch)
+
 end
 
