@@ -2,7 +2,11 @@
 title: Polar Perlin Noise Loops Simulation
 date: 05/05/2024
 author: Abhishek Mishra
+category: simulation
+keywords: noise, perlinnoise, simplexnoise, love2d, codingtrain, codingchallenge, lua
+summary: Exploration of perlin noise in polar coordinates to distort circles
 ---
+
 # Polar Perlin Noise Loops Simulation
 
 _Note: Although the title says `Perlin Noise`, we use `Simplex Noise` as this
