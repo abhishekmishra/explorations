@@ -1,3 +1,8 @@
+---
+title: Polar Perlin Noise Loops Simulation
+date: 05/05/2024
+author: Abhishek Mishra
+---
 # Polar Perlin Noise Loops Simulation
 
 _Note: Although the title says `Perlin Noise`, we use `Simplex Noise` as this
