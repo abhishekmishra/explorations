@@ -114,6 +114,7 @@ and Scope][11] for a full discussion on the topic of lua local variables.
 [11]: https://www.lua.org/pil/4.2.html
 
 The file local variables are:
+
 1. *`cw, ch`*: The dimensions of the love2d canvas.
 2. *`noiseMax`*: The maximum input values for the x and y dimensions used when
    selecting noise from 3d noise space.

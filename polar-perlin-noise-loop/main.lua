@@ -1,15 +1,11 @@
---- main.lua: <Empty> Simulation in LÖVE
--- date: 4/3/2024
+--- main.lua: Polar Perlin Noise Loops Simulation in LÖVE
+-- date: 09/05/2024
 -- author: Abhishek Mishra
-
 
 
 local utils = require("utils")
 local nl = require('ne0luv')
 
-
-
--- All module scope variables/constants go here.
 
 -- canvas dimensions
 local cw, ch
