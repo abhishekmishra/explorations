@@ -108,6 +108,7 @@ together into a single file.)
 ## Module Imports
 
 The program uses the following modules:
+
 1. `utils.mapRange`: We re-use an implementation of the p5.js [`map`][9]
    function written for another simulation. The code is available in the
    `utils.lua` file which was copied over from another project.
