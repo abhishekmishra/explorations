@@ -13,6 +13,8 @@ build:
 	# Remove *.tmp files
 	pwsh -Command "Remove-Item -Path *.tmp -Force -ErrorAction SilentlyContinue"
 
+	${LITPD_HOME}\stylua main.lua
+
 pdf: clean
 	pwsh -Command "../.luaenv/bin/activate.ps1 ; ${LITPD_HOME}\litpd.ps1 README.md -o polar-noise-loops.pdf --to=pdf"
 
