@@ -18,6 +18,9 @@ build:
 pdf: clean
 	pwsh -Command "../.luaenv/bin/activate.ps1 ; ${LITPD_HOME}\litpd.ps1 README.md -o polar-noise-loops.pdf --to=pdf"
 
+md: clean
+	pwsh -Command "../.luaenv/bin/activate.ps1 ; ${LITPD_HOME}\litpd.ps1 README.md -o polar-noise-loops.md --to=markdown"
+
 clean:
 	@echo "Cleaning up"
 	rm -f main.lua
