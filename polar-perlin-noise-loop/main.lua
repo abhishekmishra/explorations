@@ -29,7 +29,7 @@ function love.load()
     -- create slider on bottom right corner
     noiseSlider = nl.Slider(nl.Rect(cw - 200, ch - 50, 200, 50), {
         minValue = 0,
-        maxValue = 10,
+        maxValue = 100,
         currentValue = 0.5,
     })
 
@@ -50,7 +50,7 @@ function love.draw()
     love.graphics.push()
     love.graphics.translate(cw / 2, ch / 2)
 
-    local angle_delta = 0.01
+    local angle_delta = 0.001
     local segments = 2 * math.pi / angle_delta
     local vertices = {}
     local xoff, yoff = 0, 0
@@ -59,7 +59,7 @@ function love.draw()
         xoff = utils.mapRange(math.cos(i * angle_delta + phase) + 1, -1, 1, 0, noiseMax)
         yoff = utils.mapRange(math.sin(i * angle_delta) + 1, -1, 1, 0, noiseMax)
 
-        local radius = utils.mapRange(love.math.noise(xoff, yoff, zoff), 0, 1, 50, 200)
+        local radius = utils.mapRange(love.math.noise(xoff, yoff, zoff), 0, 1, cw / 8, cw / 2)
 
         local x = radius * math.cos(i * angle_delta)
         local y = radius * math.sin(i * angle_delta)
