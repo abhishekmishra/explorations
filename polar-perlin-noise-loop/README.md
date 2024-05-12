@@ -32,7 +32,7 @@ Dan Shiffman writes the program in javascript using the [p5.js library][8]
 
 ## Literate Programming using `litpd`
 
-This program is written using my own literate programmin tool named [litpd][4].
+This program is written using my own literate programming tool named [litpd][4].
 `litpd` is a command-line tool that takes a [markdown document in pandoc
 format][5], and creates two outputs. The first output is a human readable
 document in a format like html/pdf. The second output is the source code files
@@ -49,15 +49,15 @@ program.
 
 # The Program
 
-- *Central Idea*: The central idea of the program is to draw a distorted circle
+- *Central Idea:* The central idea of the program is to draw a distorted circle
   as a series of line segments.
-- *Shape Distortion*: The distortion is created in a natural and continuous
+- *Shape Distortion:* The distortion is created in a natural and continuous
   manner by using **Perlin/Simplex Noise**.
-- *Path in Noise Space*: If we move in a loop through a 2D noise space we can
+- *Path in Noise Space:* If we move in a loop through a 2D noise space we can
   create a sequence of noise values which will return to the starting value at
   the end of the loop. This property is utilized to ensure that when distorting
   the circle, there is no jagged transition.
-- *2d Slices of 3d Noise*: If we extend our noise space to three dimensions then
+- *2d Slices of 3d Noise:* If we extend our noise space to three dimensions then
   at each frame we can take a different 2d slice of 3d space by utilizing a
   slightly different z-index. This will ensure a smooth but random animation
   in the visualization.
@@ -75,12 +75,12 @@ The `main.lua` program has the following parts. Each of the parts of the program
 are developed in the later sections. (The `litpd` tool will weave it all
 together into a single file.)
 
-* *Header*: contains some standard bookkeeping remarks at the top of the file.
-* *Imports*: All the dependencies of the program are imported in this section.
-* *Globals*: There are several global constants and variables use in the
+* *Header:* contains some standard bookkeeping remarks at the top of the file.
+* *Imports:* All the dependencies of the program are imported in this section.
+* *Globals:* There are several global constants and variables use in the
   program, these are listed in this section. Some of them are assigned initial
   values.
-* *Love2d Methods*: The bulk of the program is implemented in the love2d 
+* *Love2d Methods:* The bulk of the program is implemented in the love2d 
   entry-points viz. `love.load` to initialize the program, `love.load` to update
   the state of the program every frame, and `love.draw` to draw the state of
   the program every frame. There are some other functions defined in the `love`
@@ -144,17 +144,17 @@ and Scope][11] for a full discussion on the topic of lua local variables.
 
 The file local variables are:
 
-1. *`cw, ch`*: The dimensions of the love2d canvas.
-2. *`noiseMax`*: The maximum input values for the x and y dimensions used when
+1. *`cw, ch`:* The dimensions of the love2d canvas.
+2. *`noiseMax`:* The maximum input values for the x and y dimensions used when
    selecting noise from 3d noise space.
-3. *`noiseSlider`*: The Slider UI control displayed on the screen to control
+3. *`noiseSlider`:* The Slider UI control displayed on the screen to control
    the `noiseMax` value.
-4. *`phase`*: We are selecting noise in the noise space in a circular path to
+4. *`phase`:* We are selecting noise in the noise space in a circular path to
    give us a closed loop. If we always start from the same place in every frame
    we will end up with the same sequence of noise values. However if we add a
    changing `phase` value every frame, we get the same path but shifted by a few
    values. This gives a smooth animation to the output drawing.
-5. *`zoff`*: Since we are selecting noise from a 3d space we need a z-index.
+5. *`zoff`:* Since we are selecting noise from a 3d space we need a z-index.
    This `zoff` value can be changed every frame to change the slice of 2d noise
    that we get from the 3d space. This provides a jarring effect to the
    output drawing.
