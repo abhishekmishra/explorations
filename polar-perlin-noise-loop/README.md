@@ -7,6 +7,12 @@ keywords: noise, perlinnoise, simplexnoise, love2d, codingtrain, codingchallenge
 summary: Exploration of perlin noise in polar coordinates to distort circles
 ---
 
+|Version     |Date      |Comments                       |
+|------------|----------|-------------------------------|
+|0.1         |05/05/2024|Initial version                |
+|0.2         |12/05/2024|Added demo gif, spelling and style edits|
+
+
 # Polar Perlin Noise Loops Simulation
 
 _Note: Although the title says `Perlin Noise`, we use `Simplex Noise` as this
@@ -20,7 +26,14 @@ In this simulation we develop an interesting visualization of circular shapes
 drawn in a distorted fashion using multi-dimensional [Perlin Noise][3].
 
 The simulation is implemented in [Love2d][6] unlike the video above where
-Dan Shiffman writes the program in javascript using the [p5.js library][8]
+Dan Shiffman writes the program in javascript using the [p5.js library][8].
+
+Here's a demo of this program in action...
+
+![Polar Perlin Noise Simulation Screenshot](PolarPerlinNoiseSimulation12052024.gif)
+
+The source code for this program is on github at 
+[https://github.com/abhishekmishra/explorations/tree/main/polar-perlin-noise-loop](https://github.com/abhishekmishra/explorations/tree/main/polar-perlin-noise-loop).
 
 [1]: https://www.youtube.com/watch?v=ZI1dmHv3MeM
 [2]: https://www.youtube.com/@TheCodingTrain
