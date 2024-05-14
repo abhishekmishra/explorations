@@ -5,7 +5,7 @@
 See the `Makefile` in the current directory to see how to build and run the
 program.
 
-# `main.lua`
+# Matrix Rain Program
 
 ## Module Imports & Variables
 
@@ -13,7 +13,7 @@ program.
 -- All imports and module scope variables go here.
 ```
 
-## `love.load` - Initialization
+## Initialization
 
 ```lua {code_id="loveload"}
 --- love.load: Called once at the start of the simulation
@@ -22,7 +22,7 @@ end
 
 ```
 
-## `love.update` - Update the Simulation
+## Update the Simulation
 
 ```lua {code_id="loveupdate"}
 --- love.update: Called every frame, updates the simulation
@@ -31,7 +31,7 @@ end
 
 ```
 
-## `love.draw` - Draw the Simulation
+## Draw the Simulation
 
 ```lua {code_id="lovedraw"}
 --- love.draw: Called every frame, draws the simulation
@@ -40,7 +40,7 @@ end
 
 ```
 
-## `love.keypressed` - Handle Keyboard Events
+## Handle Keyboard Events
 
 ```lua {code_id="lovekeypressed"}
 -- escape to exit
