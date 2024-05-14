@@ -10,7 +10,16 @@ program.
 ## Module Imports & Variables
 
 ```lua {code_id="moduleglobal"}
--- All imports and module scope variables go here.
+
+local cw, ch
+local numColumns = 40
+local numRows = 20
+local charW, charH
+local chars
+local columnRange
+
+local moveRate = 2
+local timeSinceLastMove = 0
 ```
 
 ## Initialization
@@ -18,6 +27,29 @@ program.
 ```lua {code_id="loveload"}
 --- love.load: Called once at the start of the simulation
 function love.load()
+    cw, ch = love.graphics.getDimensions()
+    charW = cw / numColumns
+    charH = ch / numRows
+    chars = {}
+
+    for i = 1, numRows do
+        chars[i] = {}
+        for j = 1, numColumns do
+            chars[i][j] = {
+                char = string.char(65 + i)
+            }
+        end
+    end
+
+    columnRange = {}
+    for i = 1, numColumns do
+        local colStart = math.random(1, numRows)
+        local colEnd = math.random(colStart, numRows)
+        columnRange[i] = {
+            colStart = colStart,
+            colEnd = colEnd
+        }
+    end
 end
 
 ```
@@ -27,6 +59,40 @@ end
 ```lua {code_id="loveupdate"}
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
+    -- move the characters in the columns downwards by the moveRate
+    -- the moveRate is the number of characters to move down in one second
+
+    timeSinceLastMove = timeSinceLastMove + dt
+    if timeSinceLastMove > 1 / moveRate then
+        timeSinceLastMove = 0
+        -- store the last row in a temporary variable
+        local temp = {}
+        for j = 1, numColumns do
+            temp[j] = chars[numRows][j]
+        end
+        -- move all rows forward, except the last which wraps back to the first
+        for i = numRows, 2, -1 do
+            for j = 1, numColumns do
+                chars[i][j] = chars[i - 1][j]
+            end
+        end
+        -- for row 1, copy the values from temp
+        for j = 1, numColumns do
+            chars[1][j] = temp[j]
+        end
+
+        -- move the column ranges down by 1
+        for i = 1, numColumns do
+            columnRange[i].colStart = columnRange[i].colStart + 1
+            columnRange[i].colEnd = columnRange[i].colEnd + 1
+            if columnRange[i].colEnd > numRows then
+                columnRange[i].colEnd = columnRange[i].colEnd - numRows
+            end
+            if columnRange[i].colStart > numRows then
+                columnRange[i].colStart = columnRange[i].colStart - numRows
+            end
+        end
+    end
 end
 
 ```
@@ -36,6 +102,14 @@ end
 ```lua {code_id="lovedraw"}
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
+    -- draw the characters
+    for i = 1, numRows do
+        for j = 1, numColumns do
+            if i >= columnRange[j].colStart and i <= columnRange[j].colEnd then
+                love.graphics.print(chars[i][j].char, (j - 1) * charW, (i - 1) * charH)
+            end
+        end
+    end
 end
 
 ```
