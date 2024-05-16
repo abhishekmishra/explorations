@@ -17,3 +17,4 @@ clean:
 	@echo "Cleaning up"
 	rm -f main.lua
 	rm -f conf.lua
+	rm -f raindrop.lua
