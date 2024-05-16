@@ -9,7 +9,16 @@ program.
 
 ## Module Imports & Variables
 
+The program uses the [`middleclass`][1] library for implementing classes.
+
+```lua {code_id="requiredeps"}
+local Class = require 'middleclass'
+
+```
+
 ```lua {code_id="moduleglobal"}
+
+@<requiredeps@>
 
 local cw, ch
 local numColumns = 40
