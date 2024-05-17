@@ -16,7 +16,7 @@ function love.load()
         x = cw/2-10,
         w = 10,
         h = ch,
-        vy = 50,
+        vy = 100,
         numRows = 10
     })
 end

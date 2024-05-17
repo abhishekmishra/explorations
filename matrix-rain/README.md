@@ -73,8 +73,10 @@ local RainDrop = require 'raindrop'
 local RainColumn = Class('RainColumn')
 
 @<raincolumnconstructor@>
+@<raincolumninitdrops@>
 @<raincolumnupdate@>
 @<raincolumndraw@>
+@<raincolumninframe@>
 
 return RainColumn
 ```
@@ -90,6 +92,14 @@ function RainColumn:initialize(config)
     self.numRows = config.numRows
     self.rowHeight = self.h/self.numRows
 
+    self:initDrops()
+end
+```
+
+## RainColumn Initialize Drops
+
+```lua {code_id="raincolumninitdrops"}
+function RainColumn:initDrops()
     self.numDrops = math.random(1, self.numRows)
 
     self.drops = {}
@@ -107,11 +117,21 @@ function RainColumn:initialize(config)
 end
 ```
 
+## RainColumn in Frame?
+
+```lua {code_id="raincolumninframe"}
+function RainColumn:inFrame()
+    return self.drops[1]:inFrame(love.graphics.getDimensions())
+end
+```
 
 ## RainColumn Update
 
 ```lua {code_id="raincolumnupdate"}
 function RainColumn:update(dt)
+    if not self:inFrame() then
+        self:initDrops()
+    end
     for i, drop in ipairs(self.drops) do
         drop:update(dt)
     end
@@ -155,7 +175,7 @@ function love.load()
         x = cw/2-10,
         w = 10,
         h = ch,
-        vy = 50,
+        vy = 100,
         numRows = 10
     })
 end

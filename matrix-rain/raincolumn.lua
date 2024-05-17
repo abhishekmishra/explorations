@@ -11,6 +11,10 @@ function RainColumn:initialize(config)
     self.numRows = config.numRows
     self.rowHeight = self.h/self.numRows
 
+    self:initDrops()
+end
+
+function RainColumn:initDrops()
     self.numDrops = math.random(1, self.numRows)
 
     self.drops = {}
@@ -28,6 +32,9 @@ function RainColumn:initialize(config)
 end
 
 function RainColumn:update(dt)
+    if not self:inFrame() then
+        self:initDrops()
+    end
     for i, drop in ipairs(self.drops) do
         drop:update(dt)
     end
@@ -37,6 +44,10 @@ function RainColumn:draw()
     for i, drop in ipairs(self.drops) do
         drop:draw()
     end
+end
+
+function RainColumn:inFrame()
+    return self.drops[1]:inFrame(love.graphics.getDimensions())
 end
 
 
