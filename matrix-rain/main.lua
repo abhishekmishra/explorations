@@ -12,7 +12,14 @@ local drop
 
 function love.load()
     cw, ch = love.graphics.getDimensions()
-    drop = RainDrop(cw/2-10, 0, 10, 10, 0, 50)
+    drop = RainDrop({
+        x = cw/2-10,
+        y = 0,
+        w = 10,
+        h = 10,
+        vx = 0,
+        vy = 50
+    })
 end
 
 

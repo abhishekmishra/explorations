@@ -26,13 +26,13 @@ return RainDrop
 ## RainDrop Constructor
 
 ```lua {code_id="raindropconstructor"}
-function RainDrop:initialize(x, y, w, h, vx, vy)
-    self.x = x
-    self.y = y
-    self.w = w
-    self.h = h
-    self.vx = vx
-    self.vy = vy
+function RainDrop:initialize(config)
+    self.x = config.x
+    self.y = config.y
+    self.w = config.w
+    self.h = config.h
+    self.vx = config.vx
+    self.vy = config.vy
 end
 ```
 
@@ -85,7 +85,14 @@ local drop
 ```lua {code_id="loveload"}
 function love.load()
     cw, ch = love.graphics.getDimensions()
-    drop = RainDrop(cw/2-10, 0, 10, 10, 0, 50)
+    drop = RainDrop({
+        x = cw/2-10,
+        y = 0,
+        w = 10,
+        h = 10,
+        vx = 0,
+        vy = 50
+    })
 end
 
 ```

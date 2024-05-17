@@ -2,13 +2,13 @@ local Class = require 'middleclass'
 
 local RainDrop = Class('RainDrop')
 
-function RainDrop:initialize(x, y, w, h, vx, vy)
-    self.x = x
-    self.y = y
-    self.w = w
-    self.h = h
-    self.vx = vx
-    self.vy = vy
+function RainDrop:initialize(config)
+    self.x = config.x
+    self.y = config.y
+    self.w = config.w
+    self.h = config.h
+    self.vx = config.vx
+    self.vy = config.vy
 end
 
 
