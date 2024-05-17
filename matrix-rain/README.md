@@ -148,6 +148,67 @@ function RainColumn:draw()
 end
 ```
 
+
+# RainSheet Class
+
+```lua {code_file="rainsheet.lua"}
+local Class = require 'middleclass'
+local RainColumn = require 'raincolumn'
+
+local RainSheet = Class('RainSheet')
+
+@<rainsheetconstructor@>
+@<rainsheetupdate@>
+@<rainsheetdraw@>
+
+return RainSheet
+```
+
+## RainSheet Constructor
+
+```lua {code_id="rainsheetconstructor"}
+function RainSheet:initialize(config)
+    self.numCols = config.numCols
+    self.numRows = config.numRows
+    self.maxVy = config.maxVy
+    self.cw = config.cw
+    self.ch = config.ch
+
+    self.colWidth = self.cw/self.numCols
+
+    self.columns = {}
+    for i = 1, self.numCols do
+        local column = RainColumn({
+            x = (i - 1) * self.colWidth,
+            w = self.colWidth,
+            h = self.ch,
+            vy = math.random(1, self.maxVy),
+            numRows = self.numRows
+        })
+        table.insert(self.columns, column)
+    end
+end
+```
+
+## RainSheet Update
+
+```lua {code_id="rainsheetupdate"}
+function RainSheet:update(dt)
+    for _, column in ipairs(self.columns) do
+        column:update(dt)
+    end
+end
+```
+
+## RainSheet Draw
+
+```lua {code_id="rainsheetdraw"}
+function RainSheet:draw()
+    for _, column in ipairs(self.columns) do
+        column:draw()
+    end
+end
+```
 # Matrix Rain Program
 
 ## Module Imports
@@ -155,7 +216,7 @@ end
 The program uses the [`middleclass`][1] library for implementing classes.
 
 ```lua {code_id="requiredeps"}
-local RainColumn = require 'raincolumn'
+local RainSheet = require 'rainsheet'
 ```
 
 ## File Globals
@@ -163,7 +224,7 @@ local RainColumn = require 'raincolumn'
 ```lua {code_id="fileglobals"}
 local cw, ch
 
-local column
+local sheet
 ```
 
 ## Initialization
@@ -171,12 +232,12 @@ local column
 ```lua {code_id="loveload"}
 function love.load()
     cw, ch = love.graphics.getDimensions()
-    column = RainColumn({
-        x = cw/2-10,
-        w = 10,
-        h = ch,
-        vy = 100,
-        numRows = 10
+    sheet = RainSheet({
+        numRows = 50,
+        numCols = 50,
+        maxVy = 250,
+        cw = cw,
+        ch = ch
     })
 end
 
@@ -186,7 +247,7 @@ end
 
 ```lua {code_id="loveupdate"}
 function love.update(dt)
-    column:update(dt)
+    sheet:update(dt)
 end
 
 ```
@@ -195,7 +256,7 @@ end
 
 ```lua {code_id="lovedraw"}
 function love.draw()
-    column:draw()
+    sheet:draw()
 end
 
 ```

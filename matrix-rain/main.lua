@@ -2,35 +2,35 @@
 -- date: 16/05/2024
 -- author: Abhishek Mishra
 
-local RainColumn = require 'raincolumn'
+local RainSheet = require 'rainsheet'
 
 
 local cw, ch
 
-local column
+local sheet
 
 
 function love.load()
     cw, ch = love.graphics.getDimensions()
-    column = RainColumn({
-        x = cw/2-10,
-        w = 10,
-        h = ch,
-        vy = 100,
-        numRows = 10
+    sheet = RainSheet({
+        numRows = 50,
+        numCols = 50,
+        maxVy = 250,
+        cw = cw,
+        ch = ch
     })
 end
 
 
 
 function love.update(dt)
-    column:update(dt)
+    sheet:update(dt)
 end
 
 
 
 function love.draw()
-    column:draw()
+    sheet:draw()
 end
 
 

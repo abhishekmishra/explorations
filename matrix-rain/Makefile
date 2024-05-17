@@ -19,3 +19,4 @@ clean:
 	rm -f conf.lua
 	rm -f raindrop.lua
 	rm -f raincolumn.lua
+	rm -f rainsheet.lua
