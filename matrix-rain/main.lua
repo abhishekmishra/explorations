@@ -2,38 +2,35 @@
 -- date: 16/05/2024
 -- author: Abhishek Mishra
 
-local RainDrop = require 'raindrop'
+local RainColumn = require 'raincolumn'
 
 
 local cw, ch
 
-local drop
+local column
 
 
 function love.load()
     cw, ch = love.graphics.getDimensions()
-    drop = RainDrop({
+    column = RainColumn({
         x = cw/2-10,
-        y = 0,
         w = 10,
-        h = 10,
-        vx = 0,
-        vy = 50
+        h = ch,
+        vy = 50,
+        numRows = 10
     })
 end
 
 
 
 function love.update(dt)
-    drop:update(dt)
+    column:update(dt)
 end
 
 
 
 function love.draw()
-    if drop:inFrame(cw, ch) then
-        drop:draw()
-    end
+    column:draw()
 end
 
 
