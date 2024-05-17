@@ -18,3 +18,4 @@ clean:
 	rm -f main.lua
 	rm -f conf.lua
 	rm -f raindrop.lua
+	rm -f raincolumn.lua
