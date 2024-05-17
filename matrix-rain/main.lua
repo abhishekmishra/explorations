@@ -7,19 +7,26 @@ local RainDrop = require 'raindrop'
 
 local cw, ch
 
+local drop
+
 
 function love.load()
     cw, ch = love.graphics.getDimensions()
+    drop = RainDrop(cw/2-10, 0, 10, 10, 0, 50)
 end
 
 
 
 function love.update(dt)
+    drop:update(dt)
 end
 
 
 
 function love.draw()
+    if drop:inFrame(cw, ch) then
+        drop:draw()
+    end
 end
 
 
