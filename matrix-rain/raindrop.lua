@@ -9,6 +9,10 @@ function RainDrop:initialize(config)
     self.h = config.h
     self.vx = config.vx
     self.vy = config.vy
+    self.alphabet = string.char(string.byte('a') + math.random(0, 25))
+
+    -- create love2d text for the alphabet
+    self.text = love.graphics.newText(love.graphics.getFont(), self.alphabet)
 end
 
 
@@ -19,10 +23,13 @@ end
 
 
 function RainDrop:draw()
-    love.graphics.setColor(1, 0, 0, 1)
-    love.graphics.rectangle('fill', self.x, self.y, self.w, self.h)
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.rectangle('line', self.x, self.y, self.w, self.h)
+    -- love.graphics.setColor(1, 0, 0, 1)
+    -- love.graphics.rectangle('fill', self.x, self.y, self.w, self.h)
+    -- love.graphics.setColor(1, 1, 1, 1)
+    -- love.graphics.rectangle('line', self.x, self.y, self.w, self.h)
+    -- print the text in the center of the rectangle
+    love.graphics.setColor(0, 1, 0, 1)
+    love.graphics.draw(self.text, self.x + self.w/2 - self.text:getWidth()/2, self.y + self.h/2 - self.text:getHeight()/2)
 end
 
 
