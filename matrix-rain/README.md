@@ -10,6 +10,10 @@ program.
 ```lua {code_file="raindrop.lua"}
 local Class = require 'middleclass'
 
+-- fonts for the raindrop
+local NORMAL_FONT
+local GLOW_FONT
+
 local RainDrop = Class('RainDrop')
 
 @<raindropconstructor@>
@@ -34,10 +38,17 @@ function RainDrop:initialize(config)
     self.vx = config.vx
     self.vy = config.vy
     self.color = config.color or {0, 1, 0, 1}
+    self.glowColor = config.glowColor or {0, 1, 0, 0.2}
     self.alphabet = string.char(string.byte('a') + math.random(0, 25))
 
+    if not NORMAL_FONT then
+        NORMAL_FONT = love.graphics.newFont(self.w - 2)
+        GLOW_FONT = love.graphics.newFont(self.w + 2)
+    end
+
     -- create love2d text for the alphabet
-    self.text = love.graphics.newText(love.graphics.getFont(), self.alphabet)
+    self.text = love.graphics.newText(NORMAL_FONT, self.alphabet)
+    self.glowText = love.graphics.newText(GLOW_FONT, self.alphabet)
 end
 ```
 
@@ -61,6 +72,8 @@ function RainDrop:draw()
     -- print the text in the center of the rectangle
     love.graphics.setColor(unpack(self.color))
     love.graphics.draw(self.text, self.x + self.w/2 - self.text:getWidth()/2, self.y + self.h/2 - self.text:getHeight()/2)
+    love.graphics.setColor(unpack(self.glowColor))
+    love.graphics.draw(self.glowText, self.x + self.w/2 - self.glowText:getWidth()/2, self.y + self.h/2 - self.glowText:getHeight()/2)
 end
 ```
 
