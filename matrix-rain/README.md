@@ -107,14 +107,15 @@ end
 
 ```lua {code_id="raincolumninitdrops"}
 function RainColumn:initDrops()
-    self.numDrops = math.random(1, self.numRows)
+    self.numDrops = math.random(1, 2 * self.numRows)
+    local colHeight = self.numDrops * self.rowHeight
 
     self.drops = {}
     for i = 1, self.numDrops do
         table.insert(self.drops,
             RainDrop({
                 x = self.x,
-                y = (i - 1) * self.rowHeight,
+                y = colHeight/2 - ((i - 1) * self.rowHeight),
                 w = self.w,
                 h = self.rowHeight,
                 vx = 0,
