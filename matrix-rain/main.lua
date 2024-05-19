@@ -12,10 +12,20 @@ local sheet
 
 function love.load()
     cw, ch = love.graphics.getDimensions()
+
+    local numRows = 50
+    local numCols = 50
+    local maxRainSpeed = 350
+
+    -- create a font and set it as the active font
+    -- with the default face, but size is equal to cw/numCols
+    local font = love.graphics.newFont(cw/numCols)
+    love.graphics.setFont(font)
+
     sheet = RainSheet({
-        numRows = 50,
-        numCols = 50,
-        maxVy = 250,
+        numRows = numRows,
+        numCols = numCols,
+        maxVy = maxRainSpeed,
         cw = cw,
         ch = ch
     })
