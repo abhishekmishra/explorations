@@ -18,7 +18,7 @@ function RainSheet:initialize(config)
             x = (i - 1) * self.colWidth,
             w = self.colWidth,
             h = self.ch,
-            vy = math.random(1, self.maxVy),
+            vy = math.random(self.maxVy/4, self.maxVy),
             numRows = self.numRows
         })
         table.insert(self.columns, column)
