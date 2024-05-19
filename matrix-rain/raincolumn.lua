@@ -52,7 +52,11 @@ function RainColumn:draw()
 end
 
 function RainColumn:inFrame()
-    return self.drops[1]:inFrame(love.graphics.getDimensions())
+    local outIndex = math.floor(self.numDrops/3)
+    if outIndex < 1 then
+        outIndex = 1
+    end
+    return self.drops[outIndex]:inFrame(love.graphics.getDimensions())
 end
 
 
