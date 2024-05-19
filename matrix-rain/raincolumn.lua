@@ -20,15 +20,19 @@ function RainColumn:initDrops()
 
     self.drops = {}
     for i = 1, self.numDrops do
-        table.insert(self.drops,
-            RainDrop({
+        local dropConfig = {
                 x = self.x,
                 y = colHeight/2 - ((i - 1) * self.rowHeight),
                 w = self.w,
                 h = self.rowHeight,
                 vx = 0,
                 vy = self.vy
-            }))
+            }
+        if i == 1 then
+            dropConfig.color = {1, 1, 1, 1}
+        end
+        table.insert(self.drops,
+            RainDrop(dropConfig))
     end
 end
 
