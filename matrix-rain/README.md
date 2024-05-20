@@ -1,5 +1,10 @@
 # Matrix Rain Simulation
 
+Here is a demo of the program output. Note that it is in low resolution to
+reduce the file size.
+
+![Matrix Rain Demo (low quality)](<MatrixRain-20052024 - 1716211448694.gif>)
+
 ## Building and Running the Program
 
 See the `Makefile` in the current directory to see how to build and run the
