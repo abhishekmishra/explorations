@@ -41,7 +41,20 @@
                 "reveal": "always"
             },
             "problemMatcher": [],
-            "dependsOn": "Make Clean"
+        },
+        // run make build run
+        {
+            "label": "Make Build Run",
+            "type": "shell",
+            "command": "make build run",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": [],
         },
     ]
 }
