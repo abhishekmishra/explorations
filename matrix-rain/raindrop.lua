@@ -36,11 +36,6 @@ end
 
 
 function RainDrop:draw()
-    -- love.graphics.setColor(1, 0, 0, 1)
-    -- love.graphics.rectangle('fill', self.x, self.y, self.w, self.h)
-    -- love.graphics.setColor(1, 1, 1, 1)
-    -- love.graphics.rectangle('line', self.x, self.y, self.w, self.h)
-    -- print the text in the center of the rectangle
     love.graphics.setColor(unpack(self.color))
     love.graphics.draw(self.text, self.x + self.w/2 - self.text:getWidth()/2, self.y + self.h/2 - self.text:getHeight()/2)
     love.graphics.setColor(unpack(self.glowColor))
