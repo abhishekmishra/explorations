@@ -29,7 +29,7 @@ function RainColumn:initDrops()
                 vy = self.vy
             }
         if i == 1 then
-            dropConfig.color = {1, 1, 1, 1}
+            dropConfig.color = {0, 0, 1}
         end
         table.insert(self.drops,
             RainDrop(dropConfig))
