@@ -45,6 +45,19 @@ classes in the `main.lua` program.
 
 # The RainDrop Class
 
+- The `RainDrop` class represents the smallest unit/atom of the program. It
+represents one falling letter on the screen.
+- Each `RainDrop` is constructed with a configuration, some initialization
+  parameters.
+- The `update(dt)` and `draw()` methods correspond to the lifecycle methods of
+  love2d and are supposed to be called every frame. They update the state of the
+  instance and draw the instance respectively.
+- There are a couple of utility methods `resetPosition` and `setAlphabet`
+  provided to help reuse the instance as another drop after the current one has
+  gone past the screen.
+- The `inFrame` method helps figure out if the `RainDrop` is beyond the screen
+  dimenstions.
+
 ```lua {code_file="raindrop.lua"}
 local Class = require 'middleclass'
 local utf8 = require("utf8")
@@ -76,6 +89,13 @@ return RainDrop
 
 ## HSV to RGB Utility
 
+The colours used do draw the `RainDrop` are stored in HSV and are only converted
+to RGB when drawing. This way the value part of the colour can be changed on
+every update to give a flickering look to the letter and the scene as a whole.
+
+The following utility method from the love2d.org wiki site helps convert from
+HSV values to RGB values.
+
 ```lua {code_id="hsvrgb"}
 --- copied from https://love2d.org/wiki/HSV_color
 -- Converts HSV to RGB. (input and output range: 0 - 1)
@@ -103,6 +123,20 @@ end
 ```
 
 ## RainDrop Constructor
+
+* The `RainDrop` is constructed with some initialization parameters. These
+  parameters specify:
+    - A position (`config.x`, `config.y`)
+    - The dimensions of the drop (`config.w`, `config.h`)
+    - The speed of the drop (`config.vx`, `config.vy`). The `vx` is always 0 in
+      the current program as the rain only drops down and does not move
+      horizontally.
+    - The optional `config.color` can set the colour of the text to the
+      specified HSV value.
+* The constructor generates a random alphabet from a few supported codepoint
+  ranges in unicode and also loads the appropriate fonts.
+* A love2d text object representing the alphabet to be drawn is created and
+  stored to avoid creating it in every draw call.
 
 ```lua {code_id="raindropconstructor"}
 function RainDrop:initialize(config)
@@ -148,6 +182,12 @@ end
 
 ## RainDrop Update
 
+* The `update(dt)` method updates the position of the drop.
+* In this method we also use inbuilt Simplex noise to change the Value part of
+  the drawing colour thus giving a flickering look to the text.
+* The `timer` used to get the time-based parameter for the noise lookup is also
+  reset if it crosses a hard-coded threshold of 100 seconds.
+
 ```lua {code_id="raindropupdate"}
 function RainDrop:update(dt)
     self.x = self.x + (self.vx * dt)
@@ -168,6 +208,8 @@ end
 
 ## RainDrop Draw
 
+* We simply use the colour, position and text of the drop to draw it.
+
 ```lua {code_id="raindropdraw"}
 function RainDrop:draw()
     local color_rgb = {HSV(unpack(self.color))}
@@ -184,6 +226,9 @@ end
 
 ## RainDrop In Frame?
 
+* This method checks if the current postion of the drop is beyond the bounds of
+the canvas.
+
 ```lua {code_id="raindropinframe"}
 function RainDrop:inFrame(cw, ch)
     return self.x <= cw and self.y <= ch
@@ -191,6 +236,8 @@ end
 ```
 
 ## RainDrop Reset Position
+
+* Updates the position of the drop back to its initial settings.
 
 ```lua {code_id="raindropresetposition"}
 function RainDrop:resetPosition(x, y)
@@ -200,6 +247,9 @@ end
 ```
 
 ## RainDrop Set Alphabet
+
+* Change the alphabet to the given alphabet.
+* This method is not used at the moment.
 
 ```lua {code_id="raindropsetalphabet"}
 function RainDrop:setAlphabet(alpha)
