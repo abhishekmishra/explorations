@@ -6,12 +6,14 @@ local RainSheet = require 'rainsheet'
 
 
 local cw, ch
-
+local fpsOn
 local sheet
 
 
 function love.load()
     cw, ch = love.graphics.getDimensions()
+
+    fpsOn = false
 
     local numRows = 40
     local numCols = cw / (ch/numRows)
@@ -43,8 +45,10 @@ function love.draw()
     sheet:draw()
 
     -- draw fps
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print("FPS: "..tostring(love.timer.getFPS()), cw - 100, ch - 25)
+    if fpsOn then
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.print("FPS: "..tostring(love.timer.getFPS()), cw - 100, ch - 25)
+    end
 end
 
 
@@ -53,6 +57,26 @@ end
 function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
+    end
+
+    -- check for modifiers
+    CTRL_KEY = ""
+    SHIFT_KEY = ""
+    ALT_KEY = ""
+    if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+        CTRL_KEY = "CTRL"
+    end
+
+    if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
+        SHIFT_KEY = "SHIFT"
+    end
+
+    if love.keyboard.isDown("lalt") or love.keyboard.isDown("ralt") then
+        ALT_KEY = "ALT"
+    end
+
+    if CTRL_KEY and key == "f" then
+        fpsOn = not fpsOn
     end
 end
 
