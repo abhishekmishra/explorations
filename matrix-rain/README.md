@@ -343,7 +343,7 @@ function love.load()
 
     local numRows = 40
     local numCols = cw / (ch/numRows)
-    local maxRainSpeed = (ch/numRows) * 15
+    local maxRainSpeed = (ch/numRows) * 20
 
     -- create a font and set it as the active font
     -- with the default face, but size is equal to cw/numCols
