@@ -79,11 +79,11 @@ function RainDrop:update(dt)
     self.x = self.x + (self.vx * dt)
     self.y = self.y + (self.vy * dt)
 
-    local timeSlot = self.timer
+    local timeSlot = self.timer % 17
     local ySlot = self.y % 50
     local xSlot = self.x % 100
-    self.color[3] = love.math.noise(timeSlot, ySlot, xSlot)
-    self.glowColor[3] = love.math.noise(timeSlot, ySlot, xSlot)
+    self.color[3] = love.math.noise(ySlot, xSlot, timeSlot)
+    self.glowColor[3] = love.math.noise(ySlot, xSlot, timeSlot)
 
     self.timer = self.timer + dt
     if self.timer > 100 then
