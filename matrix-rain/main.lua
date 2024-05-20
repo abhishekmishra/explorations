@@ -13,9 +13,9 @@ local sheet
 function love.load()
     cw, ch = love.graphics.getDimensions()
 
-    local numRows = 60
-    local numCols = 40
-    local maxRainSpeed = 500
+    local numRows = 40
+    local numCols = cw / (ch/numRows)
+    local maxRainSpeed = (ch/numRows) * 15
 
     -- create a font and set it as the active font
     -- with the default face, but size is equal to cw/numCols

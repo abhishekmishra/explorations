@@ -79,8 +79,8 @@ function RainDrop:initialize(config)
     self.alphabet = string.char(string.byte('a') + math.random(0, 25))
 
     if not NORMAL_FONT then
-        NORMAL_FONT = love.graphics.newFont(self.w - 4)
-        GLOW_FONT = love.graphics.newFont(self.w - 2)
+        NORMAL_FONT = love.graphics.newFont(math.min(self.w, self.h))
+        GLOW_FONT = love.graphics.newFont(0.95 * math.min(self.w, self.h))
     end
 
     -- create love2d text for the alphabet
@@ -341,9 +341,9 @@ local sheet
 function love.load()
     cw, ch = love.graphics.getDimensions()
 
-    local numRows = 60
-    local numCols = 40
-    local maxRainSpeed = 500
+    local numRows = 40
+    local numCols = cw / (ch/numRows)
+    local maxRainSpeed = (ch/numRows) * 15
 
     -- create a font and set it as the active font
     -- with the default face, but size is equal to cw/numCols

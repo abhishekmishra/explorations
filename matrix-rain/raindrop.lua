@@ -46,8 +46,8 @@ function RainDrop:initialize(config)
     self.alphabet = string.char(string.byte('a') + math.random(0, 25))
 
     if not NORMAL_FONT then
-        NORMAL_FONT = love.graphics.newFont(self.w - 4)
-        GLOW_FONT = love.graphics.newFont(self.w - 2)
+        NORMAL_FONT = love.graphics.newFont(math.min(self.w, self.h))
+        GLOW_FONT = love.graphics.newFont(0.95 * math.min(self.w, self.h))
     end
 
     -- create love2d text for the alphabet
