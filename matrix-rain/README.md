@@ -24,6 +24,10 @@ local RainDrop = Class('RainDrop')
 
 @<raindropinframe@>
 
+@<raindropresetposition@>
+
+@<raindropsetalphabet@>
+
 return RainDrop
 ```
 
@@ -31,6 +35,7 @@ return RainDrop
 
 ```lua {code_id="raindropconstructor"}
 function RainDrop:initialize(config)
+    self.config = config
     self.x = config.x
     self.y = config.y
     self.w = config.w
@@ -85,6 +90,23 @@ function RainDrop:inFrame(cw, ch)
 end
 ```
 
+## RainDrop Reset Position
+
+```lua {code_id="raindropresetposition"}
+function RainDrop:resetPosition(x, y)
+    self.x = self.config.x
+    self.y = self.config.y
+end
+```
+
+## RainDrop Set Alphabet
+
+```lua {code_id="raindropsetalphabet"}
+function RainDrop:setAlphabet(alpha)
+    self.alphabet = alpha
+end
+```
+
 # RainColumn Class
 
 ```lua {code_file="raincolumn.lua"}
@@ -95,6 +117,7 @@ local RainColumn = Class('RainColumn')
 
 @<raincolumnconstructor@>
 @<raincolumninitdrops@>
+@<raincolumnresetdrops@>
 @<raincolumnupdate@>
 @<raincolumndraw@>
 @<raincolumninframe@>
@@ -143,6 +166,16 @@ function RainColumn:initDrops()
 end
 ```
 
+## RainColumn Reset Drops
+
+```lua {code_id="raincolumnresetdrops"}
+function RainColumn:resetDrops()
+    for _, drop in ipairs(self.drops) do
+        drop:resetPosition()
+    end
+end
+```
+
 ## RainColumn in Frame?
 
 ```lua {code_id="raincolumninframe"}
@@ -160,7 +193,7 @@ end
 ```lua {code_id="raincolumnupdate"}
 function RainColumn:update(dt)
     if not self:inFrame() then
-        self:initDrops()
+        self:resetDrops()
     end
     for i, drop in ipairs(self.drops) do
         drop:update(dt)

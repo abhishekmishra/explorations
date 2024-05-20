@@ -7,6 +7,7 @@ local GLOW_FONT
 local RainDrop = Class('RainDrop')
 
 function RainDrop:initialize(config)
+    self.config = config
     self.x = config.x
     self.y = config.y
     self.w = config.w
@@ -49,6 +50,17 @@ end
 
 function RainDrop:inFrame(cw, ch)
     return self.x <= cw and self.y <= ch
+end
+
+
+function RainDrop:resetPosition(x, y)
+    self.x = self.config.x
+    self.y = self.config.y
+end
+
+
+function RainDrop:setAlphabet(alpha)
+    self.alphabet = alpha
 end
 
 

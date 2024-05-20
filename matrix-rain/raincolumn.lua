@@ -36,9 +36,15 @@ function RainColumn:initDrops()
     end
 end
 
+function RainColumn:resetDrops()
+    for _, drop in ipairs(self.drops) do
+        drop:resetPosition()
+    end
+end
+
 function RainColumn:update(dt)
     if not self:inFrame() then
-        self:initDrops()
+        self:resetDrops()
     end
     for i, drop in ipairs(self.drops) do
         drop:update(dt)
