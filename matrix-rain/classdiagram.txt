@@ -1,0 +1,31 @@
+@startuml
+
+class RainDrop {
+    constructor(config)
+    update(dt)
+    draw()
+    inFrame()
+    resetPosition(w, h)
+    setAlphabet(alpha)
+}
+
+class RainColumn {
+    constructor(config)
+    update(dt)
+    draw()
+    initDrops()
+    resetDrops()
+    inFrame()
+}
+
+class RainSheet {
+    constructor(config)
+    update(dt)
+    draw()
+}
+
+RainColumn "1" *-- "numRows" RainDrop
+
+RainSheet "1" *-- "numCols" RainColumn
+
+@enduml
