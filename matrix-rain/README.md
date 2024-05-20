@@ -1,24 +1,47 @@
 # Matrix Rain Simulation
 
+This is a literate program to simulate the famous [Matrix Rain][1] simulation.
+It is a straightforward implementation written in Love2d. The rain visualization
+is implemented using classes which represent the objects displayed on the screen.
+
 ## Demo
 
-Here is a demo of the program output. Note that it is in low resolution to
+Here is a demo of the final program output. Note that it is in low resolution to
 reduce the file size.
 
 ![Matrix Rain Demo (low quality)](<MatrixRain-20052024 - 1716211448694.gif>)
 
 ## Screenshot
 
+A screenshot of the final program on windows shows how one frame looks like.
+
 ![Screenshot of the program on Windows](matrixrain-screenshot.jpg)
-
-## Class Diagram
-
-![Class Diagram](classdiagram.png)
 
 ## Building and Running the Program
 
 See the `Makefile` in the current directory to see how to build and run the
 program.
+
+# Design of the Program
+
+* The Matrix Rain program tries to simulate each of the objects in the scene as
+classes.
+* Each individual character dropping down the scene is modelled as a
+`RainDrop` class.
+* Each column of falling `RainDrops` is modelled as a `RainColumn` class.
+* Finally the whole rain is modelled as a `RainSheet`.
+* The following class diagram shows the relationships of the three classes.
+* The `main.lua` program instantiates the `RainSheet` and calls the `update` and
+  `draw` functions of the object at appropriate times.
+* The `RainSheet` in turn calls `update` and `draw` on each `RainColumn` which
+  in turn does the same for each `RainDrop`.
+* Various input parameters to the `RainSheet` decide the number of columns,
+  number of drops per column and also the maximum speed of the rain.
+
+![Class Diagram](classdiagram.png)
+
+In the subsequent sections we implement the classes first and then we use the
+classes in the `main.lua` program.
 
 # The RainDrop Class
 
