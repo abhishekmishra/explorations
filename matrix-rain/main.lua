@@ -41,6 +41,10 @@ end
 
 function love.draw()
     sheet:draw()
+
+    -- draw fps
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print("FPS: "..tostring(love.timer.getFPS()), cw - 100, ch - 25)
 end
 
 
