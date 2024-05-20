@@ -9,6 +9,7 @@ program.
 
 ```lua {code_file="raindrop.lua"}
 local Class = require 'middleclass'
+local utf8 = require("utf8")
 
 @<hsvrgb@>
 
@@ -76,11 +77,11 @@ function RainDrop:initialize(config)
     self.vy = config.vy
     self.color = config.color or GREEN_HSV
     self.glowColor = self.color
-    self.alphabet = string.char(string.byte('a') + math.random(0, 25))
+    self.alphabet = utf8.char(utf8.codepoint('अ') + math.random(0, 50))
 
     if not NORMAL_FONT then
-        NORMAL_FONT = love.graphics.newFont(math.min(self.w, self.h))
-        GLOW_FONT = love.graphics.newFont(0.95 * math.min(self.w, self.h))
+        NORMAL_FONT = love.graphics.newFont('NotoSans_Condensed-Regular.ttf', math.min(self.w, self.h))
+        GLOW_FONT = love.graphics.newFont('NotoSans_Condensed-Regular.ttf', 0.95 * math.min(self.w, self.h))
     end
 
     -- create love2d text for the alphabet
