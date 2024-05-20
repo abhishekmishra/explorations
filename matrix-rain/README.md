@@ -77,7 +77,7 @@ function RainDrop:draw()
 end
 ```
 
-## RainDrop Inframe?
+## RainDrop In Frame?
 
 ```lua {code_id="raindropinframe"}
 function RainDrop:inFrame(cw, ch)
@@ -171,7 +171,7 @@ function RainColumn:resetDrops()
 end
 ```
 
-## RainColumn in Frame?
+## RainColumn In Frame?
 
 ```lua {code_id="raincolumninframe"}
 function RainColumn:inFrame()
