@@ -44,16 +44,32 @@ function RainDrop:initialize(config)
     self.vy = config.vy
     self.color = config.color or GREEN_HSV
     self.glowColor = self.color
-    self.alphabet = utf8.char(utf8.codepoint('अ') + math.random(0, 50))
+
+    local lang = math.random(1, 3)
+    if lang == 1 then
+        self.alphabet = utf8.char(utf8.codepoint('अ') + math.random(0, 50))
+    elseif lang == 2 then
+        self.alphabet = utf8.char(utf8.codepoint('a') + math.random(0, 25))
+    elseif lang == 3 then
+        self.alphabet = utf8.char(utf8.codepoint('ಅ') + math.random(0, 30))
+    end
 
     if not NORMAL_FONT then
-        NORMAL_FONT = love.graphics.newFont('NotoSans_Condensed-Regular.ttf', math.min(self.w, self.h))
-        GLOW_FONT = love.graphics.newFont('NotoSans_Condensed-Regular.ttf', 0.95 * math.min(self.w, self.h))
+        NORMAL_FONT = {
+            love.graphics.newFont('NotoSans_Condensed-Regular.ttf', math.min(self.w, self.h)),
+            love.graphics.newFont('NotoSans_Condensed-Regular.ttf', math.min(self.w, self.h)),
+            love.graphics.newFont('NotoSansKannada-Regular.ttf', math.min(self.w, self.h))
+        }
+        GLOW_FONT = {
+            love.graphics.newFont('NotoSans_Condensed-Regular.ttf', 0.95 * math.min(self.w, self.h)),
+            love.graphics.newFont('NotoSans_Condensed-Regular.ttf', 0.95 * math.min(self.w, self.h)),
+            love.graphics.newFont('NotoSansKannada-Regular.ttf', 0.95 * math.min(self.w, self.h))
+        }
     end
 
     -- create love2d text for the alphabet
-    self.text = love.graphics.newText(NORMAL_FONT, self.alphabet)
-    self.glowText = love.graphics.newText(GLOW_FONT, self.alphabet)
+    self.text = love.graphics.newText(NORMAL_FONT[lang], self.alphabet)
+    self.glowText = love.graphics.newText(GLOW_FONT[lang], self.alphabet)
 
     self.timer = 0
 end
