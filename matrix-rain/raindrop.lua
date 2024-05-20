@@ -15,12 +15,13 @@ function RainDrop:initialize(config)
     self.vx = config.vx
     self.vy = config.vy
     self.color = config.color or {0, 1, 0, 1}
-    self.glowColor = config.glowColor or {0, 1, 0, 0.2}
+    self.glowColor = self.color
+    self.glowColor[4] = 0.8
     self.alphabet = string.char(string.byte('a') + math.random(0, 25))
 
     if not NORMAL_FONT then
-        NORMAL_FONT = love.graphics.newFont(self.w - 2)
-        GLOW_FONT = love.graphics.newFont(self.w + 2)
+        NORMAL_FONT = love.graphics.newFont(self.w - 4)
+        GLOW_FONT = love.graphics.newFont(self.w)
     end
 
     -- create love2d text for the alphabet
@@ -32,6 +33,10 @@ end
 function RainDrop:update(dt)
     self.x = self.x + (self.vx * dt)
     self.y = self.y + (self.vy * dt)
+
+    local timeSlot = (dt * 10) % 10
+    local ySlot = self.y % 10
+    self.color[4] = love.math.noise(ySlot, timeSlot)
 end
 
 
