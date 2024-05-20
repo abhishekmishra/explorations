@@ -1,9 +1,19 @@
 # Matrix Rain Simulation
 
+## Demo
+
 Here is a demo of the program output. Note that it is in low resolution to
 reduce the file size.
 
 ![Matrix Rain Demo (low quality)](<MatrixRain-20052024 - 1716211448694.gif>)
+
+## Screenshot
+
+![Screenshot of the program on Windows](matrixrain-screenshot.jpg)
+
+## Class Diagram
+
+![Class Diagram](classdiagram.png)
 
 ## Building and Running the Program
 
