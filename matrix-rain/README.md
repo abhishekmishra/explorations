@@ -4,6 +4,8 @@ This is a literate program to simulate the famous [Matrix Rain][1] simulation.
 It is a straightforward implementation written in Love2d. The rain visualization
 is implemented using classes which represent the objects displayed on the screen.
 
+[1]: https://en.wikipedia.org/wiki/Matrix_digital_rain
+
 ## Demo
 
 Here is a demo of the final program output. Note that it is in low resolution to
@@ -43,7 +45,7 @@ classes.
 In the subsequent sections we implement the classes first and then we use the
 classes in the `main.lua` program.
 
-# The RainDrop Class
+# RainDrop Class
 
 - The `RainDrop` class represents the smallest unit/atom of the program. It
 represents one falling letter on the screen.
@@ -57,6 +59,10 @@ represents one falling letter on the screen.
   gone past the screen.
 - The `inFrame` method helps figure out if the `RainDrop` is beyond the screen
   dimenstions.
+
+The program uses the [`middleclass`][2] library for implementing classes.
+
+[2]: https://github.com/kikito/middleclass
 
 ```lua {code_file="raindrop.lua"}
 local Class = require 'middleclass'
@@ -413,6 +419,17 @@ end
 
 # RainSheet Class
 
+* The `RainSheet` class as we discussed in the design represents the overall
+  simulaton.
+* The `RainSheet` contains an array of `RainColumn` instances moving at
+  different speeds. This is what creates the illusion of matrix rain.
+* Since the bulk of update and drawing takes place in the sub-ordinate classes
+  `RainColumn` and `RainDrop`, this class is fairly simple. The bulk of the
+  logic of the class is in setting up the initial parameters and starting up the
+  simulation.
+* The constructor sets up the simulation parametrs and creates an array of
+  columns to fit the width of the canvas.
+
 ```lua {code_file="rainsheet.lua"}
 local Class = require 'middleclass'
 local RainColumn = require 'raincolumn'
@@ -427,6 +444,18 @@ return RainSheet
 ```
 
 ## RainSheet Constructor
+
+* The `RainSheet` constructor accepts a `config` table with its initialization
+  parameters. This helps the class setup the simulation.
+    - The number of columns is given by `config.numCols`.
+    - The maximum number of rows possible in a rain column is given by
+      `config.numRows`.
+    - The maximum possible vertical velocity of a rain column is given by
+      `config.maxVy`.
+    - The size of the canvas is given by (`config.cw`, `config.ch`).
+* Once all the state is initialized, the array of columns are created with their
+  postion one after the other on the x-axis. Each column is given a random
+  vertical speed.
 
 ```lua {code_id="rainsheetconstructor"}
 function RainSheet:initialize(config)
@@ -454,6 +483,9 @@ end
 
 ## RainSheet Update
 
+* This method simply iterates over each `RainColumn` and calls the `update(dt)`
+  method on each instance.
+
 ```lua {code_id="rainsheetupdate"}
 function RainSheet:update(dt)
     for _, column in ipairs(self.columns) do
@@ -464,6 +496,9 @@ end
 
 ## RainSheet Draw
 
+* This method simply iterates over each `RainColumn` and calls the `draw()`
+  method on each instance.
+
 ```lua {code_id="rainsheetdraw"}
 function RainSheet:draw()
     for _, column in ipairs(self.columns) do
@@ -471,17 +506,37 @@ function RainSheet:draw()
     end
 end
 ```
+
 # Matrix Rain Program
+
+* The main program in a love2d game is the `main.lua` file.
+* One must define love2d lifecycle functions to implement the simulation.
+* In the `love.load()` function we initialize the `RainSheet` with some
+  configuration.
+* In `love.update(dt)` we update the `RainSheet` instance stored in `sheet` and
+  in `love.draw` we draw the `sheet`.
+* There are a couple of shortcuts implemented:
+    - `ESC` to quit the program
+    - `Ctrl+f` to toggle the FPS of the simulation on the bottom right. By
+       default the FPS display is turned off.
 
 ## Module Imports
 
-The program uses the [`middleclass`][1] library for implementing classes.
+* The only import needed is the `RainSheet` class in the **rainsheet.lua** file.
 
 ```lua {code_id="requiredeps"}
 local RainSheet = require 'rainsheet'
 ```
 
 ## File Globals
+
+* There are three sets of file global variables:
+    - (`cw`, `ch`) store the size of the canvas. They are initialized in
+      `love.load()`.
+    - `fpsOn` is a boolean which indicates if the FPS of the simulation is to be
+      shown.
+    - `sheet` represents the instance of the `RainSheet` class created in the
+      `love.load()` function.
 
 ```lua {code_id="fileglobals"}
 local cw, ch
@@ -490,6 +545,13 @@ local sheet
 ```
 
 ## Initialization
+
+* The bulk of the code in this file is in the `love.load()` function where we
+  setup the initialization parameters for the simulation.
+* Based on a fixed number of rows and the given canvas size (as decided in the
+  `conf.lua`) we set up the number of columns and a maximum rain speed.
+* We then create a single instance of the `RainSheet` class with these
+  parameters and store it in the `sheet` file-global variable.
 
 ```lua {code_id="loveload"}
 function love.load()
@@ -519,6 +581,8 @@ end
 
 ## Update the Simulation
 
+* This function calls `sheet:update(dt)`.
+
 ```lua {code_id="loveupdate"}
 function love.update(dt)
     sheet:update(dt)
@@ -527,6 +591,10 @@ end
 ```
 
 ## Draw the Simulation
+
+* This method calls `sheet:draw()`.
+* It also checks the `fpsOn` variable to see if the FPS is to be displayed on
+  the screen.
 
 ```lua {code_id="lovedraw"}
 function love.draw()
@@ -542,6 +610,11 @@ end
 ```
 
 ## Handle Keyboard Events
+
+* The `love.keypressed(key)` lifecycle function is implemented to provide two
+  shortcuts.
+* If the user presses `ESC` key then the application quits.
+* If the user presses `Ctrl+f` then the FPS display is toggled.
 
 ```lua {code_id="lovekeypressed"}
 -- escape to exit
@@ -591,7 +664,11 @@ end
 @<lovekeypressed@>
 ```
 
-# `conf.lua`
+# Simulation Configuration
+
+* In the `conf.lua` file we define some initialization parameters for the love2d
+  simulation like size of the canvas, title of the window and we turn off some
+  unused modules to make the simulation faster.
 
 ```lua { code_file="conf.lua" }
 --- conf.lua: Config for the love2d game.

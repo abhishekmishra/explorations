@@ -99,9 +99,12 @@ function RainDrop:draw()
     glowColor_rgb[4] = 0.8
 
     love.graphics.setColor(color_rgb)
-    love.graphics.draw(self.text, self.x + self.w/2 - self.text:getWidth()/2, self.y + self.h/2 - self.text:getHeight()/2)
+    love.graphics.draw(self.text, self.x + self.w/2 - self.text:getWidth()/2,
+            self.y + self.h/2 - self.text:getHeight()/2)
     love.graphics.setColor(glowColor_rgb)
-    love.graphics.draw(self.glowText, self.x + self.w/2 - self.glowText:getWidth()/2, self.y + self.h/2 - self.glowText:getHeight()/2)
+    love.graphics.draw(self.glowText,
+            self.x + self.w/2 - self.glowText:getWidth()/2,
+            self.y + self.h/2 - self.glowText:getHeight()/2)
 end
 
 
