@@ -14,10 +14,14 @@ summary: A program to recreate the classic Matrix Rain graphic.
 # Matrix Rain Simulation
 
 This is a literate program to simulate the famous [Matrix Rain][1] simulation.
-It is a straightforward implementation written in Love2d. The rain visualization
-is implemented using classes which represent the objects displayed on the screen.
+It is a straightforward implementation written in [Love2d](https://love2d.org/).
+The rain visualization is implemented using classes which represent the objects
+displayed on the screen.
 
 [1]: https://en.wikipedia.org/wiki/Matrix_digital_rain
+
+The source code for this program is on github at
+<https://github.com/abhishekmishra/explorations/tree/main/matrix-rain>.
 
 ## Demo
 
@@ -31,6 +35,17 @@ reduce the file size.
 A screenshot of the final program on windows shows how one frame looks like.
 
 ![Screenshot of the program on Windows](matrixrain-screenshot.jpg)
+
+
+## Literate Programming using `litpd`
+
+This program is written using my own literate programming tool named
+[litpd](https://github.com/abhishekmishra/litpd). `litpd` is a command-line tool
+that takes a [markdown document in pandoc
+format](https://pandoc.org/MANUAL.html#pandocs-markdown), and creates two
+outputs. The first output is a human readable document in a format like
+html/pdf. The second output is the source code files for building and running
+the program.
 
 ## Building and Running the Program
 
