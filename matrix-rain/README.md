@@ -1,3 +1,16 @@
+---
+title: Matrix Rain Simulation
+date: 05/05/2024
+author: Abhishek Mishra
+category: simulation
+tags: noise, simplexnoise, love2d, lua, matrix, matrixrain, matrixdigitalrain, simulation
+summary: A program to recreate the classic Matrix Rain graphic.
+---
+
+|Version     |Date      |Comments                       |
+|------------|----------|-------------------------------|
+|0.1         |21/05/2024|Initial version                |
+
 # Matrix Rain Simulation
 
 This is a literate program to simulate the famous [Matrix Rain][1] simulation.
