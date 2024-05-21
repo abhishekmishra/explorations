@@ -1,6 +1,6 @@
 ---
 title: Matrix Rain Simulation
-date: 05/05/2024
+date: 21/05/2024
 author: Abhishek Mishra
 category: simulation
 tags: noise, simplexnoise, love2d, lua, matrix, matrixrain, matrixdigitalrain, simulation
