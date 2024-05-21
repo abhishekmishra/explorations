@@ -218,9 +218,12 @@ function RainDrop:draw()
     glowColor_rgb[4] = 0.8
 
     love.graphics.setColor(color_rgb)
-    love.graphics.draw(self.text, self.x + self.w/2 - self.text:getWidth()/2, self.y + self.h/2 - self.text:getHeight()/2)
+    love.graphics.draw(self.text, self.x + self.w/2 - self.text:getWidth()/2,
+            self.y + self.h/2 - self.text:getHeight()/2)
     love.graphics.setColor(glowColor_rgb)
-    love.graphics.draw(self.glowText, self.x + self.w/2 - self.glowText:getWidth()/2, self.y + self.h/2 - self.glowText:getHeight()/2)
+    love.graphics.draw(self.glowText,
+            self.x + self.w/2 - self.glowText:getWidth()/2,
+            self.y + self.h/2 - self.glowText:getHeight()/2)
 end
 ```
 
@@ -259,6 +262,19 @@ end
 
 # RainColumn Class
 
+* The `RainColumn` class contains a sequence or an array of `RainDrop`
+  instances.
+* In the simulation it represents one column of display in the matrix rain
+  simulation.
+* The `RainColumn` is initialized with some configuration parameters including
+  its location, size, velocity, and number of rows/drops.
+* The class has the standard lifecycle methods of `update(dt)` and `draw()`
+  methods to be called at the appropriate time.
+* Some utility methods like `initDrops`, `inFrame` and `resetDrops` provide the
+  ability to reuse the same instance once the entire column is past the screen.
+  This helps us reduce the number of objects created by simply resetting the
+  column to its original position.
+
 ```lua {code_file="raincolumn.lua"}
 local Class = require 'middleclass'
 local RainDrop = require 'raindrop'
@@ -277,6 +293,16 @@ return RainColumn
 
 ## RainColumn Constructor
 
+* The constructor takes a `config` table which contains initialization
+  parameters for the column of rain drops.
+    - The location of the column on the x-axis is given by `config.x`.
+    - The size of column is given by (`config.w`, `config.h`).
+    - The vertical velocity of the column is given by `config.vy`. The
+      horizontal velocity is 0.
+    - The number of drops in the column are given by `config.numRows`.
+* After initializing the state variables, the constructor calls the utility
+  method `initDrops` to initialize the `RainDrop` instances.
+
 ```lua {code_id="raincolumnconstructor"}
 function RainColumn:initialize(config)
     self.x = config.x
@@ -291,6 +317,14 @@ end
 ```
 
 ## RainColumn Initialize Drops
+
+* This method creates an array of `RainDrop` instances of the same size.
+* The size of each `RainDrop` is equal to (`self.w`, `self.rowHeight`). Where
+  `rowHeight` is `self.h/self.numRows`.
+* The drops are placed one after the other in a vertical line and each of them
+  is given the velocity (`0`, `self.vy`) thus making sure they all move at the
+  same speed in tandem.
+* The bottom-most drop is given a colour white.
 
 ```lua {code_id="raincolumninitdrops"}
 function RainColumn:initDrops()
@@ -318,6 +352,9 @@ end
 
 ## RainColumn Reset Drops
 
+* This method iterates over all the drops in the array `self.drops` and resets
+  their position by calling `drop:resetPosition`.
+
 ```lua {code_id="raincolumnresetdrops"}
 function RainColumn:resetDrops()
     for _, drop in ipairs(self.drops) do
@@ -327,6 +364,10 @@ end
 ```
 
 ## RainColumn In Frame?
+
+* This method checks if a sentinel drop in the column is past the frame by
+  calling `inFrame` method on the drop.
+* Currently the sentinel is one-third of the way down the column.
 
 ```lua {code_id="raincolumninframe"}
 function RainColumn:inFrame()
@@ -340,6 +381,12 @@ end
 
 ## RainColumn Update
 
+* The `update(dt)` method first checks if the column is `inFrame`. If it is not
+  in frame then it resets the drops, thereby resetting the column and reusing it
+  for another run through the canvas.
+* After the check the method iterates over each drop and calls `update(dt)` on
+  each of them individually.
+
 ```lua {code_id="raincolumnupdate"}
 function RainColumn:update(dt)
     if not self:inFrame() then
@@ -352,6 +399,8 @@ end
 ```
 
 ## RainColumn Draw
+
+* This method iterates over each drop and calls `draw()` for each of them.
 
 ```lua {code_id="raincolumndraw"}
 function RainColumn:draw()
