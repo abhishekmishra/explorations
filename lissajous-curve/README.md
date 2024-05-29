@@ -1,4 +1,4 @@
-# EMPTY Simulation
+# Lissajous Curves Simulation
 
 Written as a literate program using:
 
@@ -50,7 +50,7 @@ end
 ```lua {code_id="lovedraw"}
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
-    local text = "Empty Simulation"
+    local text = "Lissajous Curves Simulation"
     local tw = love.graphics.getFont():getWidth(text)
     -- write empty simulation in the middle of the screen
     love.graphics.print(text,
@@ -73,8 +73,8 @@ end
 
 
 ```lua {code_file="main.lua"}
---- main.lua: <Empty> Simulation in LÖVE
--- date: 4/3/2024
+--- main.lua: Lissajous Curves Simulation in LÖVE
+-- date: 29/5/2024
 -- author: Abhishek Mishra
 
 @<moduleglobal@>
@@ -102,7 +102,7 @@ local canvasHeight = 400
 
 function love.conf(t)
     -- set the window title
-    t.window.title = "<Empty> Simulation"
+    t.window.title = "Lissajous Curves Simulation"
 
     -- set the window size
     t.window.width = canvasWidth
