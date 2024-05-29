@@ -86,8 +86,10 @@ local programs = {
     -- "shader/ch07-distfield1-fourcenters.glsl"),
     -- shaderProg("Ch 7: Distance Field Moving Like a Wave",
     -- "shader/ch07-distfield2-wave.glsl"),
-    shaderProg("Ch 8: Coordinate System Translation",
-    "shader/ch08-coord-translate.glsl"),
+    -- shaderProg("Ch 8: Coordinate System Translation",
+    -- "shader/ch08-coord-translate.glsl"),
+
+    shaderProg("Misc: Lissajous Curves", "shader/misc-lissajous0.glsl"),
 }
 
 local shaderId
