@@ -89,7 +89,8 @@ local programs = {
     -- shaderProg("Ch 8: Coordinate System Translation",
     -- "shader/ch08-coord-translate.glsl"),
 
-    shaderProg("Misc: Lissajous Curves", "shader/misc-lissajous0.glsl"),
+    -- shaderProg("Misc: Lissajous Curves", "shader/misc-lissajous0.glsl"),
+    shaderProg("Misc: Lissajous Curves", "shader/misc-lissajous1.glsl"),
 }
 
 local shaderId
