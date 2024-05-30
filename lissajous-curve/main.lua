@@ -15,7 +15,7 @@ local a = 3
 local b = 4
 local delta = 1
 
-local NUM = 500
+local NUM = 100
 -- stores NUM points of the curve
 local points
 
@@ -26,10 +26,13 @@ function love.load()
 end
 
 function love.update(dt)
-    totalTime = totalTime + dt/10
+    totalTime = totalTime + dt
+    if totalTime > 2 * math.pi then
+        totalTime = 0
+    end
     points = {}
-    for i = 1, NUM do
-        local t = totalTime + (i * dt)/10
+    for i = NUM, 1, -1 do
+        local t = totalTime + (i * dt)
         local x = A * math.sin(a * t + delta) + cw / 2
         local y = B * math.sin(b * t) + ch / 2
         table.insert(points, x)
