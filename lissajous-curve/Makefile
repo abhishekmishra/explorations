@@ -22,4 +22,5 @@ md: clean
 clean:
 	rm main.lua
 	rm conf.lua
+	rm circle.lua
 	@echo "Cleaning up"

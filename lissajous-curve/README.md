@@ -1,5 +1,52 @@
 # Lissajous Curves Simulation
 
+# The Circles
+
+```lua {code_file="circle.lua"}
+
+local Class = require('middleclass')
+local nl = require('ne0luv')
+
+local Circle = Class('Circle', nl.Panel)
+
+@<circleconstructor@>
+
+@<circleupdate@>
+
+@<circledraw@>
+
+return Circle
+```
+
+## Constructor
+
+```lua {code_id="circleconstructor"}
+function Circle:initialize(radius, phase)
+    nl.Panel.initialize(self, nl.Rect(0, 0, radius * 2, radius * 2))
+    self.radius = radius
+    self.phase = phase
+end
+```
+
+## Update
+
+```lua {code_id="circleupdate"}
+function Circle:update(dt)
+end
+```
+
+## Draw
+
+```lua {code_id="circledraw"}
+function Circle:draw()
+    love.graphics.push()
+    love.graphics.translate(self:getX(), self:getY())
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.circle("fill", self.radius, self.radius, self.radius)
+    love.graphics.pop()
+end
+```
+
 # `main.lua`
 
 ```lua {code_file="main.lua"}
@@ -24,6 +71,7 @@
 
 ```lua {code_id="moduleglobal"}
 local nl = require('ne0luv')
+local Circle = require('Circle')
 ```
 
 ## Module Variables
@@ -51,6 +99,10 @@ function love.load()
         layout = 'row',
         bgColor = {0, 0, 1, 1}
     })
+
+    for i = 1, 7 do
+        rowCirclesPanel:addChild(Circle(cw/16, 0))
+    end
 
     topRow:addChild(nl.Layout(nl.Rect(0, 0, cw/8, ch/8), {
         bgColor = {0, 0, 0, 0.1}

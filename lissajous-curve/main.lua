@@ -3,6 +3,7 @@
 -- author: Abhishek Mishra
 
 local nl = require('ne0luv')
+local Circle = require('Circle')
 
 
 local cw, ch
@@ -24,6 +25,10 @@ function love.load()
         layout = 'row',
         bgColor = {0, 0, 1, 1}
     })
+
+    for i = 1, 7 do
+        rowCirclesPanel:addChild(Circle(cw/16, 0))
+    end
 
     topRow:addChild(nl.Layout(nl.Rect(0, 0, cw/8, ch/8), {
         bgColor = {0, 0, 0, 0.1}
