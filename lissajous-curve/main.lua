@@ -8,34 +8,40 @@ local Circle = require('Circle')
 
 local cw, ch
 
+-- parameters for a lissajous curve
+local A = 100
+local B = 100
+local a = 3
+local b = 4
+local delta = 1
+
+local NUM = 100
+-- stores NUM points of the curve
+local points
+
+local totalTime = 0
 
 function love.load()
     cw, ch = love.graphics.getDimensions()
 end
 
-
-
 function love.update(dt)
-end
-
-
-
-function love.draw()
-    -- draw a sine curve
-    local x0, y0 = 0, ch/2
-    local x1, y1 = cw, ch/2
-    love.graphics.line(x0, y0, x1, y1)
-    local amp = 100
-    local freq = 1
-    local phase = 0
-    local y = 0
-    for x = 0, cw do
-        y = y0 + amp * math.sin(2 * math.pi * freq * x / cw + phase)
-        love.graphics.points(x, y)
+    totalTime = totalTime + dt
+    points = {}
+    for i = 1, NUM do
+        local t = totalTime + (i * dt)
+        local x = A * math.sin(a * t + delta) + cw / 2
+        local y = B * math.sin(b * t) + ch / 2
+        table.insert(points, x)
+        table.insert(points, y)
     end
 end
 
-
+function love.draw()
+    -- draw a curve using the points as argument to love.graphics.points function
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.points(points)
+end
 
 -- escape to exit
 function love.keypressed(key)
@@ -43,4 +49,3 @@ function love.keypressed(key)
         love.event.quit()
     end
 end
-
