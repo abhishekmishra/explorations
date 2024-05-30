@@ -1,37 +1,83 @@
 # Lissajous Curves Simulation
 
-Written as a literate program using:
-
-1. **litpd**
-2. **Love2d**
-
-The program generates code in two important files.
-
-1. *conf.lua*: This is the program run before love2d window is started. The
-   window related configurations are set here to reduce flickering.
-2. *main.lua*: This is the entry point for the love2d game. All the code for the
-   simulation/game should go here.
-
-The program contains some starter boilerplate code for the two files.
-
-## Building and Running the Program
-
-See the `Makefile` in the current directory to see how to build and run the
-program.
-
 # `main.lua`
 
-## Module Imports & Variables
+```lua {code_file="main.lua"}
+--- main.lua: Lissajous Curves Simulation in LÖVE
+-- date: 29/5/2024
+-- author: Abhishek Mishra
+
+@<moduleglobal@>
+
+@<varmodule@>
+
+@<loveload@>
+
+@<loveupdate@>
+
+@<lovedraw@>
+
+@<lovekeypressed@>
+```
+
+## Module Imports
 
 ```lua {code_id="moduleglobal"}
--- All imports and module scope variables go here.
+local nl = require('ne0luv')
+```
+
+## Module Variables
+
+```lua {code_id="varmodule"}
+local cw, ch
+local layout
 ```
 
 ## `love.load` - Initialization
 
 ```lua {code_id="loveload"}
---- love.load: Called once at the start of the simulation
 function love.load()
+    cw, ch = love.graphics.getDimensions()
+    layout = nl.Layout(nl.Rect(0, 0, cw, ch), {
+        layout = 'column',
+    })
+
+    local topRow = nl.Layout(nl.Rect(0, 0, cw, ch/8), {
+        layout = 'row',
+        bgColor = {0, 1, 0, 1}
+    })
+
+    local rowCirclesPanel = nl.Layout(nl.Rect(0, 0, 7 * cw/8, ch/8), {
+        layout = 'row',
+        bgColor = {0, 0, 1, 1}
+    })
+
+    topRow:addChild(nl.Layout(nl.Rect(0, 0, cw/8, ch/8), {
+        bgColor = {0, 0, 0, 0.1}
+    }))
+
+    topRow:addChild(rowCirclesPanel)
+
+    local bottomRow = nl.Layout(nl.Rect(0, ch/8, cw, 7 * ch/8), {
+        layout = 'row',
+        bgColor = {1, 0, 1, 1}
+    })
+
+    local colCirclesPanel = nl.Layout(nl.Rect(0, 0, cw/8, 7 * ch/8), {
+        layout = 'column',
+        bgColor = {1, 1, 1, 0.8}
+    })
+
+    local curvesPanel = nl.Layout(nl.Rect(0, 0, 7 * cw/8, 7 * ch/8), {
+        layout = 'column',
+        bgColor = {1, 0, 0, 0.4}
+    })
+
+    bottomRow:addChild(colCirclesPanel)
+    bottomRow:addChild(curvesPanel)
+
+    layout:addChild(topRow)
+    layout:addChild(bottomRow)
 end
 
 ```
@@ -39,8 +85,8 @@ end
 ## `love.update` - Update the Simulation
 
 ```lua {code_id="loveupdate"}
---- love.update: Called every frame, updates the simulation
 function love.update(dt)
+    layout:update(dt)
 end
 
 ```
@@ -48,14 +94,8 @@ end
 ## `love.draw` - Draw the Simulation
 
 ```lua {code_id="lovedraw"}
---- love.draw: Called every frame, draws the simulation
 function love.draw()
-    local text = "Lissajous Curves Simulation"
-    local tw = love.graphics.getFont():getWidth(text)
-    -- write empty simulation in the middle of the screen
-    love.graphics.print(text,
-        love.graphics.getWidth() / 2 - tw / 2,
-        love.graphics.getHeight() / 2 - 12)
+    layout:draw()
 end
 
 ```
@@ -71,22 +111,6 @@ function love.keypressed(key)
 end
 ```
 
-
-```lua {code_file="main.lua"}
---- main.lua: Lissajous Curves Simulation in LÖVE
--- date: 29/5/2024
--- author: Abhishek Mishra
-
-@<moduleglobal@>
-
-@<loveload@>
-
-@<loveupdate@>
-
-@<lovedraw@>
-
-@<lovekeypressed@>
-```
 
 # `conf.lua`
 
