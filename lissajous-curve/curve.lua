@@ -35,15 +35,6 @@ function Curve:update(dt)
         end
         self.currentPoint = {self.points[self.currentIndex], self.points[self.currentIndex + 1]}
     end
-
-    -- self.points = {}
-    -- for i = self.NUM, 1, -1 do
-    --     local t = self.totalTime + (i * 0.03)
-    --     local x = self.A * math.sin(self.a * t + self.delta)
-    --     local y = self.B * math.sin(self.b * t)
-    --     table.insert(self.points, x)
-    --     table.insert(self.points, y)
-    -- end
 end
 
 function Curve:draw()

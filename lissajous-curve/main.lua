@@ -6,7 +6,6 @@ local nl = require('ne0luv')
 local Circle = require('Circle')
 local Curve = require('Curve')
 
-
 local cw, ch
 
 local layout
@@ -46,19 +45,6 @@ function love.load()
 
         layout:addChild(row)
     end
-
-    -- local c = Curve({
-    --     w = cw,
-    --     h = ch,
-    --     A = cw/4,
-    --     B = ch/4,
-    --     a = 3,
-    --     b = 4,
-    --     delta = 1,
-    --     NUM = 100
-    -- })
-
-    -- layout:addChild(c)
 end
 
 function love.update(dt)
