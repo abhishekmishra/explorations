@@ -11,6 +11,11 @@ local cw, ch
 
 local layout
 
+-- see https://resources.pcb.cadence.com/blog/how-to-read-lissajous-curves-on-oscilloscopes
+-- for decision on number of rows and columns
+local NUM_ROWS = 8
+local NUM_COLS = 5
+
 function love.load()
     cw, ch = love.graphics.getDimensions()
 
@@ -19,21 +24,21 @@ function love.load()
         bgColor = {1, 0, 0, 1}
     })
 
-    for i = 1, 5 do
-        local row = nl.Layout(nl.Rect(0, 0, cw, ch/5), {
+    for i = 1, NUM_ROWS do
+        local row = nl.Layout(nl.Rect(0, 0, cw, ch/NUM_ROWS), {
             layout = "row",
             bgColor = {0, 0.1, 0, 1}
         })
 
-        for j = 1, 5 do
+        for j = 1, NUM_COLS do
             local c = Curve({
-                w = cw/5,
-                h = ch/5,
+                w = cw/NUM_COLS,
+                h = ch/NUM_ROWS,
                 A = cw/20,
                 B = ch/20,
                 a = i,
                 b = j,
-                delta = i+j,
+                delta = j * (math.pi / 4),
                 NUM = 100
             })
             row:addChild(c)
