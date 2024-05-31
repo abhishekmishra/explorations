@@ -9,19 +9,6 @@ local Curve = require('Curve')
 
 local cw, ch
 
--- -- parameters for a lissajous curve
--- local A = 100
--- local B = 100
--- local a = 3
--- local b = 4
--- local delta = 1
-
--- local NUM = 100
--- -- stores NUM points of the curve
--- local points
-
--- local totalTime = 0
-
 local layout
 
 function love.load()
@@ -32,18 +19,41 @@ function love.load()
         bgColor = {1, 0, 0, 1}
     })
 
-    local c = Curve({
-        w = cw,
-        h = ch,
-        A = cw/4,
-        B = ch/4,
-        a = 3,
-        b = 4,
-        delta = 1,
-        NUM = 100
-    })
+    for i = 1, 5 do
+        local row = nl.Layout(nl.Rect(0, 0, cw, ch/5), {
+            layout = "row",
+            bgColor = {0, 0.1, 0, 1}
+        })
 
-    layout:addChild(c)
+        for j = 1, 5 do
+            local c = Curve({
+                w = cw/5,
+                h = ch/5,
+                A = cw/20,
+                B = ch/20,
+                a = i,
+                b = j,
+                delta = i+j,
+                NUM = 100
+            })
+            row:addChild(c)
+        end
+
+        layout:addChild(row)
+    end
+
+    -- local c = Curve({
+    --     w = cw,
+    --     h = ch,
+    --     A = cw/4,
+    --     B = ch/4,
+    --     a = 3,
+    --     b = 4,
+    --     delta = 1,
+    --     NUM = 100
+    -- })
+
+    -- layout:addChild(c)
 end
 
 function love.update(dt)

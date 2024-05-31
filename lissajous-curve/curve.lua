@@ -31,9 +31,12 @@ function Curve:update(dt)
 end
 
 function Curve:draw()
+    love.graphics.push()
+    love.graphics.translate(self:getX(), self:getY())
     -- draw a curve using the points as argument to love.graphics.points function
     love.graphics.setColor(1, 1, 1)
     love.graphics.line(self.points)
+    love.graphics.pop()
 end
 
 return Curve
