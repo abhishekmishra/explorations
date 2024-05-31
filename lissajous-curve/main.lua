@@ -23,16 +23,25 @@ function love.load()
         bgColor = {1, 0, 0, 1}
     })
 
+    local rowHeight = ch/(NUM_ROWS + 1)
+
+    local topRow = nl.Layout(nl.Rect(0, 0, cw, rowHeight), {
+        layout = "row",
+        bgColor = {0, 0.1, 0, 1}
+    })
+
+    layout:addChild(topRow)
+
     for i = 1, NUM_ROWS do
-        local row = nl.Layout(nl.Rect(0, 0, cw, ch/NUM_ROWS), {
+        local row = nl.Layout(nl.Rect(0, 0, cw, rowHeight), {
             layout = "row",
             bgColor = {0, 0.1, 0, 1}
         })
 
         for j = 1, NUM_COLS do
             local c = Curve({
-                w = cw/NUM_COLS,
-                h = ch/NUM_ROWS,
+                w = row:getWidth()/NUM_COLS,
+                h = row:getHeight(),
                 A = cw/20,
                 B = ch/20,
                 a = i,
