@@ -4,46 +4,54 @@
 
 local nl = require('ne0luv')
 local Circle = require('Circle')
+local Curve = require('Curve')
 
 
 local cw, ch
 
--- parameters for a lissajous curve
-local A = 100
-local B = 100
-local a = 3
-local b = 4
-local delta = 1
+-- -- parameters for a lissajous curve
+-- local A = 100
+-- local B = 100
+-- local a = 3
+-- local b = 4
+-- local delta = 1
 
-local NUM = 100
--- stores NUM points of the curve
-local points
+-- local NUM = 100
+-- -- stores NUM points of the curve
+-- local points
 
-local totalTime = 0
+-- local totalTime = 0
+
+local layout
 
 function love.load()
     cw, ch = love.graphics.getDimensions()
+
+    layout = nl.Layout(nl.Rect(0, 0, cw, ch),{
+        layout = "column",
+        bgColor = {1, 0, 0, 1}
+    })
+
+    local c = Curve({
+        w = cw,
+        h = ch,
+        A = cw/4,
+        B = ch/4,
+        a = 3,
+        b = 4,
+        delta = 1,
+        NUM = 100
+    })
+
+    layout:addChild(c)
 end
 
 function love.update(dt)
-    totalTime = totalTime + dt
-    if totalTime > 2 * math.pi then
-        totalTime = 0
-    end
-    points = {}
-    for i = NUM, 1, -1 do
-        local t = totalTime + (i * 0.03)
-        local x = A * math.sin(a * t + delta) + cw / 2
-        local y = B * math.sin(b * t) + ch / 2
-        table.insert(points, x)
-        table.insert(points, y)
-    end
+    layout:update(dt)
 end
 
 function love.draw()
-    -- draw a curve using the points as argument to love.graphics.points function
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.line(points)
+    layout:draw()
 end
 
 -- escape to exit
