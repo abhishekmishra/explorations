@@ -32,7 +32,7 @@ function love.update(dt)
     end
     points = {}
     for i = NUM, 1, -1 do
-        local t = totalTime + (i * dt)
+        local t = totalTime + (i * 0.03)
         local x = A * math.sin(a * t + delta) + cw / 2
         local y = B * math.sin(b * t) + ch / 2
         table.insert(points, x)
