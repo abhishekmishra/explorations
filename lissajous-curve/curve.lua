@@ -23,8 +23,8 @@ function Curve:update(dt)
     self.points = {}
     for i = self.NUM, 1, -1 do
         local t = self.totalTime + (i * 0.03)
-        local x = self.A * math.sin(self.a * t + self.delta) + self:getWidth() / 2
-        local y = self.B * math.sin(self.b * t) + self:getHeight() / 2
+        local x = self.A * math.sin(self.a * t + self.delta)
+        local y = self.B * math.sin(self.b * t)
         table.insert(self.points, x)
         table.insert(self.points, y)
     end
@@ -32,7 +32,10 @@ end
 
 function Curve:draw()
     love.graphics.push()
-    love.graphics.translate(self:getX(), self:getY())
+    love.graphics.translate(
+        self:getX() + self:getWidth() / 2,
+        self:getY() + self:getHeight() / 2
+    )
     -- draw a curve using the points as argument to love.graphics.points function
     love.graphics.setColor(1, 1, 1)
     love.graphics.line(self.points)
