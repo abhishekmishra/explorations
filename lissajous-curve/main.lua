@@ -39,7 +39,7 @@ function love.load()
                 a = i,
                 b = j,
                 delta = j * (math.pi / 4),
-                NUM = 100
+                NUM = 500
             })
             row:addChild(c)
         end
