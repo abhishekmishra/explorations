@@ -12,17 +12,18 @@ function Curve:initialize(config)
     self.delta = config.delta
     self.NUM = config.NUM
     self.points = {}
-    for i = self.NUM, 1, -1 do
-        local t = i * 0.03
+    local pointDiff = (2 * math.pi) / self.NUM
+    for i = 1, self.NUM do
+        local t = i * pointDiff
         local x = self.A * math.sin(self.a * t + self.delta)
         local y = self.B * math.sin(self.b * t)
         table.insert(self.points, x)
         table.insert(self.points, y)
     end
     self.totalTime = 0
-    self.speed = .01
+    self.speed = self.NUM / 100000
     self.currentIndex = 1
-    self.currentPoint = {self.points[1], self.points[2]}
+    self.currentPoint = nl.Vector( self.points[1], self.points[2] )
 end
 
 function Curve:update(dt)
@@ -30,10 +31,13 @@ function Curve:update(dt)
     if self.totalTime > self.speed then
         self.totalTime = 0
         self.currentIndex = self.currentIndex + 2
-        if self.currentIndex > #self.points/2 then
+        if self.currentIndex > #self.points then
             self.currentIndex = 1
         end
-        self.currentPoint = {self.points[self.currentIndex], self.points[self.currentIndex + 1]}
+        self.currentPoint = nl.Vector(
+            self.points[self.currentIndex],
+            self.points[self.currentIndex + 1]
+        )
     end
 end
 
@@ -49,7 +53,11 @@ function Curve:draw()
 
     -- draw a point at the current point
     love.graphics.setColor(1, 0, 1, 0.9)
-    love.graphics.circle('fill', self.currentPoint[1], self.currentPoint[2], 4)
+    love.graphics.circle('fill', self.currentPoint.x, self.currentPoint.y, 4)
+
+    -- -- print the current point index
+    -- love.graphics.setColor(1, 1, 1)
+    -- love.graphics.print(self.currentIndex, 0, 0)
     love.graphics.pop()
 end
 
