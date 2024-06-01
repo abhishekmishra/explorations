@@ -18,16 +18,16 @@ local NUM_COLS = 5
 function love.load()
     cw, ch = love.graphics.getDimensions()
 
-    layout = nl.Layout(nl.Rect(0, 0, cw, ch),{
+    layout = nl.Layout(nl.Rect(0, 0, cw, ch), {
         layout = "column",
-        bgColor = {1, 0, 0, 1}
+        bgColor = { 1, 0, 0, 1 }
     })
 
-    local rowHeight = ch/(NUM_ROWS + 1)
+    local rowHeight = ch / (NUM_ROWS + 1)
 
     local topRow = nl.Layout(nl.Rect(0, 0, cw, rowHeight), {
         layout = "row",
-        bgColor = {0, 0.1, 0, 1}
+        bgColor = { 0, 0.1, 0, 1 }
     })
 
     layout:addChild(topRow)
@@ -35,15 +35,15 @@ function love.load()
     for i = 1, NUM_ROWS do
         local row = nl.Layout(nl.Rect(0, 0, cw, rowHeight), {
             layout = "row",
-            bgColor = {0, 0.1, 0, 1}
+            bgColor = { 0, 0.1, 0, 1 }
         })
 
         for j = 1, NUM_COLS do
             local c = Curve({
-                w = row:getWidth()/NUM_COLS,
+                w = row:getWidth() / NUM_COLS,
                 h = row:getHeight(),
-                A = cw/20,
-                B = ch/20,
+                A = cw / 20,
+                B = ch / 20,
                 a = i,
                 b = j,
                 delta = j * (math.pi / 4),
