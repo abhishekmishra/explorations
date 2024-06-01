@@ -48,7 +48,7 @@ function Curve:draw()
         self:getY() + self:getHeight() / 2
     )
     -- draw a curve using the points as argument to love.graphics.points function
-    love.graphics.setColor(1, 1, 1)
+    love.graphics.setColor(1, 1, 0.5, 0.8)
     love.graphics.line(self.points)
 
     -- draw a point at the current point
