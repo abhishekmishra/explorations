@@ -3,8 +3,28 @@
 -- author: Abhishek Mishra
 
 local nl = require('ne0luv')
+local Class = require('middleclass')
 local Circle = require('Circle')
 local Curve = require('Curve')
+
+local TextPanel = Class('TextPanel', nl.Panel)
+
+function TextPanel:initialize(config)
+    nl.Panel.initialize(self, nl.Rect(0, 0, config.w, config.h))
+    self.text = config.text
+    -- create love2d text object
+    self.textObj = love.graphics.newText(love.graphics.getFont(), self.text)
+end
+
+function TextPanel:draw()
+    love.graphics.setColor(1, 1, 1)
+    -- draw the text in the center
+    love.graphics.draw(
+        self.textObj,
+        self:getX() + self:getWidth() / 2 - self.textObj:getWidth() / 2,
+        self:getY() + self:getHeight() / 2 - self.textObj:getHeight() / 2
+    )
+end
 
 local cw, ch
 
@@ -29,6 +49,15 @@ function love.load()
         layout = "row",
         bgColor = { 0, 0.1, 0, 1 }
     })
+
+    for i = 1, NUM_COLS do
+        local tp = TextPanel({
+            w = topRow:getWidth() / NUM_COLS,
+            h = topRow:getHeight(),
+            text = "      b = " .. tostring(i) .. "\ndelta = " .. tostring(i) .. " * pi/4"
+        })
+        topRow:addChild(tp)
+    end
 
     layout:addChild(topRow)
 
