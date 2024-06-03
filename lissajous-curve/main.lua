@@ -39,16 +39,30 @@ function love.load()
     cw, ch = love.graphics.getDimensions()
 
     layout = nl.Layout(nl.Rect(0, 0, cw, ch), {
-        layout = "column",
+        layout = "row",
         bgColor = { 1, 0, 0, 1 }
     })
 
-    local rowHeight = ch / (NUM_ROWS + 1)
-
-    local topRow = nl.Layout(nl.Rect(0, 0, cw, rowHeight), {
-        layout = "row",
-        bgColor = { 0, 0.1, 0, 1 }
+    local leftColumn = nl.Layout(nl.Rect(0, 0, cw / (NUM_COLS + 1), ch), {
+        layout = "column",
+        bgColor = { 0, 0, 1, 1 }
     })
+
+    local mainContent = nl.Layout(nl.Rect(0, 0, cw - cw / (NUM_COLS + 1), ch), {
+        layout = "column",
+        bgColor = { 0, 1, 0, 1 }
+    })
+
+    local rowHeight = ch / (NUM_ROWS + 1)
+    local colWidth = NUM_COLS * (cw / (NUM_COLS + 1))
+
+    local topRow = nl.Layout(nl.Rect(0, 0, colWidth, rowHeight), {
+        layout = "row",
+        bgColor = { 0, 0, 0, 1 }
+    })
+
+    mainContent:addChild(topRow)
+
 
     for i = 1, NUM_COLS do
         local tp = TextPanel({
@@ -59,10 +73,9 @@ function love.load()
         topRow:addChild(tp)
     end
 
-    layout:addChild(topRow)
 
     for i = 1, NUM_ROWS do
-        local row = nl.Layout(nl.Rect(0, 0, cw, rowHeight), {
+        local row = nl.Layout(nl.Rect(0, 0, colWidth, rowHeight), {
             layout = "row",
             bgColor = { 0, 0.1, 0, 1 }
         })
@@ -81,8 +94,11 @@ function love.load()
             row:addChild(c)
         end
 
-        layout:addChild(row)
+        mainContent:addChild(row)
     end
+
+    layout:addChild(leftColumn)
+    layout:addChild(mainContent)
 end
 
 function love.update(dt)
