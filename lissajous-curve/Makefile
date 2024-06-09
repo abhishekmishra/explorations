@@ -20,7 +20,6 @@ md: clean
 	pwsh -Command "Remove-Item -Path *.tmp -Force -ErrorAction SilentlyContinue"
 
 clean:
-	rm main.lua
-	rm conf.lua
-	rm circle.lua
+	rm -f main.lua
+	rm -f conf.lua
 	@echo "Cleaning up"
