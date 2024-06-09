@@ -38,6 +38,9 @@ local NUM_COLS = 5
 function love.load()
     cw, ch = love.graphics.getDimensions()
 
+    -- set a large font size
+    love.graphics.setFont(love.graphics.newFont(14))
+
     layout = nl.Layout(nl.Rect(0, 0, cw, ch), {
         layout = "row",
         bgColor = { 1, 0, 0, 1 }
@@ -45,7 +48,7 @@ function love.load()
 
     local leftColumn = nl.Layout(nl.Rect(0, 0, cw / (NUM_COLS + 1), ch), {
         layout = "column",
-        bgColor = { 0, 0, 1, 1 }
+        bgColor = { 0, 0, 0, 1 }
     })
 
     local mainContent = nl.Layout(nl.Rect(0, 0, cw - cw / (NUM_COLS + 1), ch), {
@@ -63,7 +66,6 @@ function love.load()
 
     mainContent:addChild(topRow)
 
-
     for i = 1, NUM_COLS do
         local tp = TextPanel({
             w = topRow:getWidth() / NUM_COLS,
@@ -73,6 +75,20 @@ function love.load()
         topRow:addChild(tp)
     end
 
+    leftColumn:addChild(TextPanel({
+        w = leftColumn:getWidth(),
+        h = leftColumn:getHeight() / (NUM_ROWS + 1),
+        text = "A = " .. tostring(cw / 20) .. "\nB = " .. tostring(ch / 20)
+    }))
+
+    for i = 1, NUM_ROWS do
+        local tp = TextPanel({
+            w = leftColumn:getWidth(),
+            h = leftColumn:getHeight() / (NUM_ROWS + 1),
+            text = "a = " .. tostring(i)
+        })
+        leftColumn:addChild(tp)
+    end
 
     for i = 1, NUM_ROWS do
         local row = nl.Layout(nl.Rect(0, 0, colWidth, rowHeight), {
