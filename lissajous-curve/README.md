@@ -1,61 +1,13 @@
+---
+title: Lissajous Curves Simulation
+date: 29/05/2024
+author: Abhishek Mishra
+category: simulation
+tags: noise, simulation, codingtrain, lissajouscurve, lissajous
+summary: Lissajous Curves Simulation in LÖVE
+---
+
 # Lissajous Curves Simulation
-
-# The Circles
-
-```lua {code_file="circle.lua"}
-
-local Class = require('middleclass')
-local nl = require('ne0luv')
-
-local Circle = Class('Circle', nl.Panel)
-
-@<circleconstructor@>
-
-@<circleupdate@>
-
-@<circledraw@>
-
-return Circle
-```
-
-## Constructor
-
-```lua {code_id="circleconstructor"}
-function Circle:initialize(radius, phase, speed)
-    nl.Panel.initialize(self, nl.Rect(0, 0, radius * 2, radius * 2))
-    self.radius = radius
-    self.angle = phase
-    self.speed = speed or 1
-end
-```
-
-## Update
-
-```lua {code_id="circleupdate"}
-function Circle:update(dt)
-    self.angle = self.angle + (self.speed * dt)
-end
-```
-
-## Draw
-
-```lua {code_id="circledraw"}
-function Circle:draw()
-    love.graphics.push()
-
-    love.graphics.translate(self:getX(), self:getY())
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.circle("fill", self.radius, self.radius, self.radius)
-
-    love.graphics.translate(self.radius, self.radius)
-    local x = self.radius * math.cos(self.angle)
-    local y = self.radius * math.sin(self.angle)
-    love.graphics.setColor(1, 0, 1)
-    love.graphics.circle("fill", x, y, 5)
-
-    love.graphics.pop()
-end
-```
 
 # `main.lua`
 
@@ -81,13 +33,41 @@ end
 
 ```lua {code_id="moduleglobal"}
 local nl = require('ne0luv')
-local Circle = require('Circle')
+local Class = require('middleclass')
+local Curve = require('Curve')
+
+local TextPanel = Class('TextPanel', nl.Panel)
+
+function TextPanel:initialize(config)
+    nl.Panel.initialize(self, nl.Rect(0, 0, config.w, config.h))
+    self.text = config.text
+    -- create love2d text object
+    self.textObj = love.graphics.newText(love.graphics.getFont(), self.text)
+end
+
+function TextPanel:draw()
+    love.graphics.setColor(1, 1, 1)
+    -- draw the text in the center
+    love.graphics.draw(
+        self.textObj,
+        self:getX() + self:getWidth() / 2 - self.textObj:getWidth() / 2,
+        self:getY() + self:getHeight() / 2 - self.textObj:getHeight() / 2
+    )
+end
 ```
 
 ## Module Variables
 
 ```lua {code_id="varmodule"}
 local cw, ch
+
+local layout
+
+-- see https://resources.pcb.cadence.com/blog/how-to-read-lissajous-curves-on-oscilloscopes
+-- for decision on number of rows and columns
+local NUM_ROWS = 8
+local NUM_COLS = 5
+
 ```
 
 ## `love.load` - Initialization
@@ -95,6 +75,84 @@ local cw, ch
 ```lua {code_id="loveload"}
 function love.load()
     cw, ch = love.graphics.getDimensions()
+
+    -- set a large font size
+    love.graphics.setFont(love.graphics.newFont(14))
+
+    layout = nl.Layout(nl.Rect(0, 0, cw, ch), {
+        layout = "row",
+        bgColor = { 1, 0, 0, 1 }
+    })
+
+    local leftColumn = nl.Layout(nl.Rect(0, 0, cw / (NUM_COLS + 1), ch), {
+        layout = "column",
+        bgColor = { 0, 0, 0, 1 }
+    })
+
+    local mainContent = nl.Layout(nl.Rect(0, 0, cw - cw / (NUM_COLS + 1), ch), {
+        layout = "column",
+        bgColor = { 0, 1, 0, 1 }
+    })
+
+    local rowHeight = ch / (NUM_ROWS + 1)
+    local colWidth = NUM_COLS * (cw / (NUM_COLS + 1))
+
+    local topRow = nl.Layout(nl.Rect(0, 0, colWidth, rowHeight), {
+        layout = "row",
+        bgColor = { 0, 0, 0, 1 }
+    })
+
+    mainContent:addChild(topRow)
+
+    for i = 1, NUM_COLS do
+        local tp = TextPanel({
+            w = topRow:getWidth() / NUM_COLS,
+            h = topRow:getHeight(),
+            text = "      b = " .. tostring(i) .. "\ndelta = " .. tostring(i) .. " * pi/4"
+        })
+        topRow:addChild(tp)
+    end
+
+    leftColumn:addChild(TextPanel({
+        w = leftColumn:getWidth(),
+        h = leftColumn:getHeight() / (NUM_ROWS + 1),
+        text = "A = " .. tostring(cw / 20) .. "\nB = " .. tostring(ch / 20)
+    }))
+
+    for i = 1, NUM_ROWS do
+        local tp = TextPanel({
+            w = leftColumn:getWidth(),
+            h = leftColumn:getHeight() / (NUM_ROWS + 1),
+            text = "a = " .. tostring(i)
+        })
+        leftColumn:addChild(tp)
+    end
+
+    for i = 1, NUM_ROWS do
+        local row = nl.Layout(nl.Rect(0, 0, colWidth, rowHeight), {
+            layout = "row",
+            bgColor = { 0, 0.1, 0, 1 }
+        })
+
+        for j = 1, NUM_COLS do
+            local c = Curve({
+                w = row:getWidth() / NUM_COLS,
+                h = row:getHeight(),
+                A = cw / 20,
+                B = ch / 20,
+                a = i,
+                b = j,
+                delta = j * (math.pi / 4),
+                NUM = 500
+            })
+            row:addChild(c)
+        end
+
+        mainContent:addChild(row)
+    end
+
+    layout:addChild(leftColumn)
+    layout:addChild(mainContent)
 end
 
 ```
@@ -103,6 +161,7 @@ end
 
 ```lua {code_id="loveupdate"}
 function love.update(dt)
+    layout:update(dt)
 end
 
 ```
@@ -111,6 +170,7 @@ end
 
 ```lua {code_id="lovedraw"}
 function love.draw()
+    layout:draw()
 end
 
 ```
@@ -136,8 +196,8 @@ end
 -- author: Abhishek Mishra
 
 -- canvas size
-local canvasWidth = 400
-local canvasHeight = 400
+local canvasWidth = 800
+local canvasHeight = 800
 
 function love.conf(t)
     -- set the window title
