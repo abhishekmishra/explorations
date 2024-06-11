@@ -9,6 +9,13 @@ summary: Lissajous Curves Simulation in LÖVE
 
 # Introduction
 
+This article is about Lissajous Curves. I try to take a deep dive into the
+history and mathematics of Lissajous Curves. First I talk about how the
+mathematician Antoine Lissajous discovered this phenomenon. Then we take a look
+at the mathematical equations for the curves. We try various possible values of
+the parameters and explore what kind of curves are created by them. Finally I
+describe a simulation of Lissajous Curves in LÖVE.
+
 ## History
 
 In the heart of the 19th century, France was a tableau of transformation, a
