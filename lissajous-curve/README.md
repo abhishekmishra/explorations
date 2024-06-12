@@ -18,38 +18,28 @@ describe a simulation of Lissajous Curves in LÖVE.
 
 ## History
 
-In the heart of the 19th century, France was a tableau of transformation, a
-nation caught between the remnants of feudalism and the dawn of
-industrialization. The 1840s and 1850s were particularly pivotal, a period where
-the cultural, economic, and scientific milieu of France was as rich and complex
-as the tapestry of its history. Culturally, the era was marked by a vibrant
-artistic movement, with Romanticism giving way to Realism, reflecting a society
-in flux. Economically, it was a time of cautious transition; the agrarian
-economy slowly yielded to the burgeoning forces of industry, with the systematic
-establishment of primary education and new engineering schools laying the
-groundwork for an industrial expansion that would flourish in subsequent
-decades. Scientifically, the period was no less dynamic. It was an epoch that
-saw the rise of great minds like Louis Pasteur, whose germ theory would
-revolutionize medicine. Yet, this was also a time of great disparity and social
-upheaval, with the revolution of 1848 ushering in the Second Republic, only for
-it to be replaced by the Second Empire under Napoleon III. This era set the
-stage for modern France, a crucible of ideas and ideologies, where the struggles
-and aspirations of a nation were reflected in the mirror of its cultural and
-scientific achievements. The legacy of this time is a testament to the enduring
-spirit of inquiry and innovation that defines the French historical narrative.
+To understand how Antoine Lissajous, a French Mathematician, came to disover
+these curves, we shall look at the prevailing scientific and cultural
+environment of the time.
 
-In the mid-19th century, a period of profound scientific discovery and
-innovation, Jules Antoine Lissajous, a French physicist, made significant
-contributions to the field of mathematics and physics with his study of what
-would later be known as Lissajous curves. These curves, intricate and beautiful,
-are a visual representation of harmonic motion, and they provided a new window
-into the study of vibrations and waves.
+19th century France was in the midst of a transformation from feudalism to
+industrialization. Cultural, scientific and economic environment of 1840s and
+1850s France was complex and rich and in flux. There was a vibrant artistic
+movement from Romanticism to Realism. Economically, the agrarian economy was
+giving way to industrialization. Scientifically, the era saw the rise of great
+minds like Louis Pasteur. This was also the time of great social changes and
+revolution.
+
+In a period of great change, Jules Antoine Lissajous, a French physicist, made
+significant contributions to the field of mathematics and physics with his study
+of what would later be known as Lissajous curves. These curves, intricate and
+beautiful, are a visual representation of harmonic motion, and they provided a
+new window into the study of vibrations and waves.
 
 Lissajous was born in Versailles in 1822 and embarked on his scientific journey
-at the École Normale Supérieure in 1841. By the 1850s, France was a hub of
-scientific activity, with scholars and researchers delving into the mysteries of
-natural phenomena. It was a time when the lines between physics and mathematics
-were blurred, and the study of wave motion was gaining momentum.
+at the École Normale Supérieure in 1841. The 1850s was a time when the lines
+between physics and mathematics were blurred, and the study of wave motion was
+gaining momentum.
 
 The problem area that Lissajous was trying to address was the visualization of
 sound vibrations. Prior to his work, Ernst Chladni had demonstrated the ability
