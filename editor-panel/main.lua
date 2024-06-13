@@ -15,7 +15,7 @@ local TextEditor = Class('TextEditor', Panel)
 function TextEditor:initialize(r, text)
     Panel.initialize(self, r)
     self.text = text or ''
-    self.cursor = 0
+    self.cursor = 1
 
     -- the love2d text object
     self.font = love.graphics.newFont(12)
@@ -42,11 +42,13 @@ end
 
 --- TextEditor:delete: Delete text at the cursor position
 function TextEditor:delete()
-    if self.cursor > 0 then
+    if #self.text == 0 then
+        return
+    end
+    if #self.text > self.cursor then
         local start = self.text:sub(1, self.cursor - 1)
         local finish = self.text:sub(self.cursor + 1)
         self.text = start .. finish
-        self.cursor = self.cursor - 1
         self.textDisplay:set(self.text)
     end
 end
@@ -54,7 +56,7 @@ end
 --- TextEditor:setText: Set the text of the TextEditor
 function TextEditor:setText(text)
     self.text = text
-    self.cursor = 0
+    self.cursor = 1
     self.textDisplay:set(self.text)
 end
 
@@ -73,12 +75,8 @@ local textEditor = TextEditor(Rect(10, 10, 380, 380))
 
 --- love.load: Called once at the start of the simulation
 function love.load()
-    textEditor:setText [[
-        lorem ipsum dolor sit amet
-        consectetur adipiscing elit
-        sed do eiusmod tempor incididunt
-        ut labore et dolore magna aliqua
-        ]]
+    textEditor:setText [[lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua]]
+    textEditor:delete()
 end
 
 --- love.update: Called every frame, updates the simulation
