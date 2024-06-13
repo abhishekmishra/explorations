@@ -1,6 +1,7 @@
 --- main.lua: Text Editor in LÖVE
 -- date: 6/4/2024
 -- author: Abhishek Mishra
+---@diagnostic disable: duplicate-set-field
 
 local Class = require'middleclass'
 local nl = require'ne0luv'
