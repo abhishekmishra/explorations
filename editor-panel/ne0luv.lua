@@ -1,12 +1,13 @@
+
 --[[
   ne0luv - Some love2d utilities
 
   date: 25/03/2024
   author: Abhishek Mishra
 ]]
-local ne0luv = {}
 
 local Class = require('middleclass')
+
 
 --- vector.lua - A simple vector class. Similar to the Vector implementation in
 -- the p5.js library.
@@ -17,6 +18,8 @@ local Class = require('middleclass')
 -- date: 23/03/2024
 -- author: Abhishek Mishra
 -- license: MIT, see LICENSE for more details.
+
+
 --- Vector class
 local Vector = Class('Vector')
 
@@ -38,15 +41,21 @@ function Vector:set(x, y, z)
     self.z = z
 end
 
+
+
 --- tostring operator overloading
 function Vector:__tostring()
     return 'Vector(' .. self.x .. ', ' .. self.y .. ', ' .. self.z .. ')'
 end
 
+
+
 --- copy the vector
 function Vector:copy()
     return Vector(self.x, self.y, self.z)
 end
+
+
 
 --- add a vector to this vector using the lua operator overloading
 --@param v the vector to add
@@ -71,6 +80,8 @@ end
 function Vector:__div(s)
     return Vector(self.x / s, self.y / s, self.z / s)
 end
+
+
 
 --- get the magnitude of the vector
 function Vector:mag()
@@ -108,6 +119,8 @@ function Vector:limit(max)
     return limited
 end
 
+
+
 --- dot product of this vector with another vector
 --@param v the other vector
 function Vector:dot(v)
@@ -124,6 +137,8 @@ function Vector:cross(v)
     )
 end
 
+
+
 --- distance between this vector and another vector
 --@param v the other vector
 function Vector:dist(v)
@@ -137,6 +152,8 @@ function Vector:normalize()
         self:set(self.x / m, self.y / m, self.z / m)
     end
 end
+
+
 
 --- equals operator overloading
 --@param v the other vector
@@ -184,6 +201,8 @@ function Vector:__ge(v)
     return self:magSq() >= v:magSq()
 end
 
+
+
 --- create a random 2D vector
 --@return a random 2D vector
 function Vector.random2D()
@@ -200,6 +219,9 @@ function Vector.random3D()
     local vy = math.sqrt(1 - vz * vz) * math.sin(angle)
     return Vector(vx, vy, vz)
 end
+
+
+
 
 local Rect = Class('Rect')
 
@@ -246,6 +268,8 @@ function Rect:setHeight(h)
 end
 
 
+
+
 -- Default values for the panel
 local PANEL_DEFAULT_WIDTH = 100
 local PANEL_DEFAULT_HEIGHT = 100
@@ -258,6 +282,7 @@ local Panel = Class('Panel')
 function Panel:initialize(rect)
     self.rect = rect or Rect(0, 0, PANEL_DEFAULT_WIDTH, PANEL_DEFAULT_HEIGHT)
     self.parent = nil
+    self.shown = true
 end
 
 function Panel:setParent(parent)
@@ -270,11 +295,11 @@ end
 
 -- Lifecycle methods
 function Panel:show()
-    -- Code to show the panel
+    self.shown = true
 end
 
 function Panel:hide()
-    -- Code to hide the panel
+    self.shown = false
 end
 
 function Panel:update(dt)
@@ -284,9 +309,11 @@ end
 --- set the position of the panel and then draw using internal _draw method
 -- Subclasses should override the _draw method
 function Panel:draw()
-    love.graphics.push()
-    self:_draw()
-    love.graphics.pop()
+    if self.shown then
+        love.graphics.push()
+        self:_draw()
+        love.graphics.pop()
+    end
 end
 
 function Panel:_draw()
@@ -352,6 +379,8 @@ end
 function Panel:setY(y)
     self.rect:setY(y)
 end
+
+
 --- text.lua - A panel class that displays a single line of text
 --
 -- date: 17/02/2024
@@ -388,6 +417,8 @@ function Text:_draw()
     love.graphics.setFont(self.font)
     love.graphics.printf(self.displayText, self:getX(), self:getY(), self:getWidth(), self.align)
 end
+
+
 --- button.lua - A simple button class
 --
 -- date: 17/02/2024
@@ -400,20 +431,23 @@ local Button = Class('Button', Panel)
 Button.static.idCounter = 0
 
 --- constructor
---@param displayText the text to display on the button
---@param onActivate the function to call when the button is activated
-function Button:initialize(dim, displayText, onActivate, colors)
-    Panel.initialize(self, dim)
+--@param rect dimensions of the panel
+--@param config the configuration options for the button
+function Button:initialize(rect, config)
+    Panel.initialize(self, rect)
+    self.config = config
     Button.idCounter = Button.idCounter + 1
     self.id = 'Button' .. Button.idCounter
-    self.displayText = displayText
-    self.onActivate = onActivate or function() end
-    self.text = love.graphics.newText(love.graphics.getFont(), self.displayText)
-    self.colors = colors or {
-        bg = { 0.5, 0.5, 0.5, 1 },
-        fg = { 1, 1, 1, 1 },
-        bgSelect = { 0.7, 0.7, 0.7, 1 },
-        fgSelect = { 0, 0, 0, 1 }
+    self.displayText = self.config.text
+    self.onActivate = self.config.onActivate or function() end
+    -- self.text = love.graphics.newText(love.graphics.getFont(), self.displayText)
+    self.font = self.config.font
+    self.align = self.config.align or "left"
+    self.colors = {
+        bg = self.config.bgColor,
+        fg = self.config.fgColor,
+        bgSelect = self.config.bgSelectColor or self.config.bgColor,
+        fgSelect = self.config.fgSelectColor or self.config.fgColor
     }
 end
 
@@ -432,15 +466,9 @@ function Button:setSelected(selected)
     self.select = selected
 end
 
---- run the onActivate function
-function Button:activate()
-    self.onActivate()
-end
-
 --- draw the button
 function Button:_draw()
     local bgColor, fgColor
-    love.graphics.push()
     if self:isSelected() then
         bgColor = self.colors.bgSelect
         fgColor = self.colors.fgSelect
@@ -449,10 +477,10 @@ function Button:_draw()
         fgColor = self.colors.fg
     end
     love.graphics.setColor(bgColor)
-    love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
+    love.graphics.rectangle('fill', self:getX(), self:getY(), self:getWidth(), self:getHeight())
     love.graphics.setColor(fgColor)
-    love.graphics.draw(self.text, self.x + 10, self.y + 10)
-    love.graphics.pop()
+    love.graphics.setFont(self.font)
+    love.graphics.printf(self.displayText, self:getX(), self:getY(), self:getWidth(), self.align)
 end
 
 function Button:_mouseout()
@@ -460,24 +488,14 @@ function Button:_mouseout()
 end
 
 function Button:_mousemoved(x, y, dx, dy, istouch)
-    if self:contains(x, y) then
-        self:setSelected(true)
-    else
-        self:setSelected(false)
-    end
+    self:setSelected(true)
 end
 
 function Button:_mousepressed(x, y, button, istouch, presses)
-    if self:contains(x, y) then
-        self:activate()
-    end
+    self.onActivate()
 end
 
--- contains - check if the button contains the point x, y
-function Button:contains(x, y)
-    return x >= 0 and x <= self.width and
-        y >= 0 and y <= self.height
-end
+
 -- Define the Slider class that extends the Panel class
 local Slider = Class('Slider', Panel)
 
@@ -592,6 +610,8 @@ end
 -- function Slider:setY(y)
 --     self.rect:setY(y)
 -- end
+
+
 
 -- Define the Layout class that extends the Panel class
 local Layout = Class('Layout', Panel)
@@ -756,6 +776,249 @@ function Layout:_mousemoved(x, y, dx, dy, istouch)
     end
 end
 
+
+
+-- The StateMachine class
+local StateMachine = Class('StateMachine')
+
+-- The constructor
+function StateMachine:initialize(states)
+    self.states = states or {}
+    self.current = nil
+
+    self.keyboard = {}
+    self.mouse = {}
+
+    -- define global handlers for key and mouse events
+    self:defineGlobalLove2dHandlers()
+end
+
+-- Change the state
+function StateMachine:change(stateName, enterParams)
+    assert(self.states[stateName], 'State ' .. stateName .. ' does not exist')
+
+    -- create an empty table if enterParams is not provided
+    enterParams = enterParams or {}
+
+    -- add the state machine to the enterParams, such that a global reference
+    -- to the state machine is not required.
+    enterParams.Machine = self
+
+    -- exit the current state if it exists
+    if self.current then
+        self.current:exit()
+    end
+
+    -- reset the keys and mouse buttons pressed
+    love.keyboard.keysPressed = {}
+    love.mouse.buttonsPressed = {}
+
+    -- change the state
+    self.current = self.states[stateName]()
+
+    -- enter the new state
+    self.current:enter(enterParams)
+end
+
+-- Update the current state
+function StateMachine:update(dt)
+    self.current:update(dt)
+
+    -- reset the keys and mouse buttons pressed
+    love.keyboard.keysPressed = {}
+    love.mouse.buttonsPressed = {}
+end
+
+-- Draw the current state
+function StateMachine:draw()
+    self.current:draw()
+end
+
+--- Resize the current state
+function StateMachine:resize(w, h)
+    if self.current then
+        self.current:resize(w, h)
+    end
+end
+
+--- reset the keys and mouse buttons pressed
+function StateMachine:resetKeys()
+    self.keyboard.keysPressed = {}
+    self.mouse.buttonsPressed = {}
+end
+
+--- keypressed function
+function StateMachine:keypressed(key, scancode, isrepeat)
+    -- update the keys pressed table with this key
+    self.keyboard.keysPressed[key] = true
+
+    if key == "escape" then
+        love.event.quit()
+    end
+
+    if self.current then
+        self.current:keypressed(key, scancode, isrepeat)
+    end
+end
+
+--- keyreleased function
+function StateMachine:keyreleased(key)
+    if self.current then
+        self.current:keyreleased(key)
+    end
+end
+
+function StateMachine:mousepressed(x, y, button, istouch, presses)
+    -- update the buttons pressed table with this button
+    self.mouse.buttonsPressed[button] = button
+    self.mouse.location = {
+        ["x"] = x,
+        ["y"] = y
+    }
+    if self.current then
+        self.current:mousepressed(x, y, button, istouch, presses)
+    end
+end
+
+--- Define some global love2d handlers
+function StateMachine:defineGlobalLove2dHandlers()
+    self:resetKeys()
+
+    --- love.keyboard.wasPressed: Global function to check if a key was pressed
+    -- (checks in the keysPressed table)
+    -- @param key The key to check
+    -- @return true if the key was pressed, false otherwise
+    function self.keyboard.wasPressed(key)
+        return self.keyboard.keysPressed[key]
+    end
+
+    --- love.mouse.wasPressed: Global function to check if a mouse button was pressed
+    -- (checks in the buttonsPressed table)
+    -- @param button The button to check
+    -- @return true if the button was pressed, false otherwise
+    function self.mouse.wasPressed(button)
+        return self.mouse.buttonsPressed[button]
+    end
+
+    --- love.mousepressed: Called when a mouse button is pressed
+    -- @param x The x coordinate of the mouse
+    -- @param y The y coordinate of the mouse
+    -- @param button The button pressed
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function love.mousepressed(x, y, button)
+        self:mousepressed(x, y, button)
+    end
+
+    -- Define the love state management functions
+    -- to call the corresponding state functions
+    -- in the state machine
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function love.update(dt)
+        self:update(dt)
+    end
+
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function love.draw()
+        self:draw()
+    end
+
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function love.resize(w, h)
+        self:resize(w, h)
+    end
+
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function love.keypressed(key, scancode, isrepeat)
+        self:keypressed(key, scancode, isrepeat)
+    end
+
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function love.keyreleased(key)
+        self:keyreleased(key)
+    end
+
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function love.mousemoved(x, y, dx, dy, istouch)
+        if self.current then
+            self.current:mousemoved(x, y, dx, dy, istouch)
+        end
+    end
+
+    function love.textinput(text)
+        if self.current then
+            self.current:textinput(text)
+        end
+    end
+end
+
+
+
+local BaseState = Class('BaseState')
+
+-- The constructor
+function BaseState:initialize(config)
+    self.config = config or {}
+end
+
+-- Enter the state
+function BaseState:enter(params)
+    self.enterParams = params
+    self.Machine = self.enterParams.Machine
+end
+
+-- Exit the state
+function BaseState:exit()
+    -- empty exit function
+end
+
+-- Update the state
+function BaseState:update(dt)
+    -- empty update function
+end
+
+-- Draw the state
+function BaseState:draw()
+    -- empty draw function
+end
+
+--- Resize the state
+function BaseState:resize(w, h)
+    -- empty resize function
+end
+
+--- keypressed function
+function BaseState:keypressed(key, scancode, isrepeat)
+    -- empty keypressed function
+end
+
+--- keyreleased function
+function BaseState:keyreleased(key)
+    -- empty keyreleased function
+end
+
+--- mousepressed function
+function BaseState:mousepressed(x, y, button, istouch, presses)
+    -- empty mousepressed function
+end
+
+--- mousereleased function
+function BaseState:mousereleased(x, y, button, istouch, presses)
+    -- empty mousereleased function
+end
+
+--- mousemoved function
+function BaseState:mousemoved(x, y, dx, dy, istouch)
+    -- empty mousemoved function
+end
+
+--- textinput function
+function BaseState:textinput(text)
+    -- empty textinput function
+end
+
+
+local ne0luv = {}
+
 ne0luv["Vector"] = Vector
 ne0luv["Rect"] = Rect
 ne0luv["Panel"] = Panel
@@ -763,5 +1026,8 @@ ne0luv["Text"] = Text
 ne0luv["Button"] = Button
 ne0luv["Slider"] = Slider
 ne0luv["Layout"] = Layout
+ne0luv["StateMachine"] = StateMachine
+ne0luv["BaseState"] = BaseState
 
 return ne0luv
+
