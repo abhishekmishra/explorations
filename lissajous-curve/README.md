@@ -78,20 +78,20 @@ of human curiosity and ingenuity.
 ## The Lissajous Curve Equations
 
 The Lissajous curve, a captivating dance of mathematics visualized, is defined
-by the parametric equations \( x = A \sin(a t + \delta) \) and \( y = B \sin(b
-t) \). These equations represent two oscillations: one horizontal with amplitude
-\( A \), frequency \( a \), and phase shift \( \delta \); and one vertical with
-amplitude \( B \) and frequency \( b \).
+by the parametric equations $x = A \sin(a t + \delta)$ and $y = B \sin(b
+t)$. These equations represent two oscillations: one horizontal with amplitude
+$A$, frequency $a$, and phase shift $\delta$; and one vertical with
+amplitude $B$ and frequency $b$.
 
 As we adjust these parameters, the Lissajous curve morphs in a ballet of shapes
-and forms. When \( a \) and \( b \) are integers and their ratio is rational,
+and forms. When $a$ and $b$ are integers and their ratio is rational,
 the curve draws a closed path, creating patterns that range from simple ellipses
 to complex figures with multiple lobes. The number of lobes along the x-axis and
-y-axis corresponds to the values of \( a \) and \( b \), respectively.
+y-axis corresponds to the values of $a$ and $b$, respectively.
 
-The amplitude parameters \( A \) and \( B \) scale the curve in the x and y
+The amplitude parameters $A$ and $B$ scale the curve in the x and y
 directions, influencing its width and height. A change in the phase shift \(
-\delta \) rotates the curve, offering a new perspective on the intricate pattern
+\delta$ rotates the curve, offering a new perspective on the intricate pattern
 as if viewing a three-dimensional object from different angles.
 
 The beauty of the Lissajous curve lies in its sensitivity to these parameters. A
@@ -108,35 +108,35 @@ aspects of their intricate structure. Here's a curated list of visualizations
 and parameter combinations that bring to life the diverse beauty of Lissajous
 figures:
 
-- **Basic Ellipse**: By setting both parameters \( a \) and \( b \) to 1 and the
-  phase difference \( \phi \) to \( \frac{\pi}{2} \), one can observe the
+- **Basic Ellipse**: By setting both parameters $a$ and $b$ to 1 and the
+  phase difference $\phi$ to $\frac{\pi}{2}$, one can observe the
   simplest form of a Lissajous curve: a perfect circle. This visualization
   serves as a gentle introduction to the harmony of motion and symmetry.
 
-- **Intersecting Lines**: With \( a = b \) and \( \phi = 0 \), the curve
+- **Intersecting Lines**: With $a = b$ and $\phi = 0$, the curve
   transforms into a diagonal line across the plane, showcasing the unity of
   direction and proportion.
 
-- **Lobed Patterns**: Altering \( a \) and \( b \) to different integers, such
-  as \( a = 3 \) and \( b = 2 \), creates a figure with three horizontal lobes
+- **Lobed Patterns**: Altering $a$ and $b$ to different integers, such
+  as $a = 3$ and $b = 2$, creates a figure with three horizontal lobes
   and two vertical lobes. This pattern illustrates how simple numerical changes
   can lead to complex and aesthetically pleasing designs.
 
-- **Rotating Figures**: When the ratio of \( a \) to \( b \) is irrational, the
+- **Rotating Figures**: When the ratio of $a$ to $b$ is irrational, the
   Lissajous figure appears to rotate endlessly, a mesmerizing dance that never
   repeats, highlighting the beauty of asymmetry and continuous motion.
 
-- **Precessing Ellipses**: A slight deviation from the integer ratio of \( a \)
-  and \( b \) results in ellipses that precess, creating a visual representation
+- **Precessing Ellipses**: A slight deviation from the integer ratio of $a$
+  and $b$ results in ellipses that precess, creating a visual representation
   of near-resonance and the delicate balance required to maintain it.
 
-- **Three-Dimensional Knots**: By adjusting the amplitude parameters \( A \) and
-  \( B \), and the phase \( \phi \), one can create visualizations that resemble
+- **Three-Dimensional Knots**: By adjusting the amplitude parameters $A$ and
+  $B$, and the phase $\phi$, one can create visualizations that resemble
   three-dimensional knots, offering a glimpse into the complex topology that
   underlies simple harmonic motion.
 
 - **Harmonic Visualizer**: Incorporating sound, by mapping the frequency of
-  tones to the parameters \( a \) and \( b \), allows one to not only see but
+  tones to the parameters $a$ and $b$, allows one to not only see but
   also hear the harmony of Lissajous figures, creating a multi-sensory
   experience of mathematical elegance.
 
