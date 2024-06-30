@@ -18,7 +18,7 @@ function TextEditor:initialize(r, text)
     self.cursor = 1
 
     -- the love2d text object
-    self.font = love.graphics.newFont(12)
+    self.font = love.graphics.newFont(16)
     love.graphics.setFont(self.font)
     self.textDisplay = love.graphics.newText(self.font, self.text)
 end
@@ -65,8 +65,14 @@ function TextEditor:draw()
     love.graphics.setColor(1, 0, 0)
     love.graphics.draw(self.textDisplay, self.rect.pos.x, self.rect.pos.y)
 
+    -- blink the cursor
+    if math.floor(love.timer.getTime() * 2) % 2 == 0 then
+        love.graphics.setColor(1, 1, 1)
+    else
+        love.graphics.setColor(0, 0, 0)
+    end
     -- draw the cursor
-    local x = self.rect.pos.x + self.font:getWidth('a')
+    local x = self.rect.pos.x
     local y = self.rect.pos.y
     love.graphics.line(x, y, x, y + self.font:getHeight())
 end
