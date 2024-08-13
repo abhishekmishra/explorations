@@ -63,7 +63,34 @@ end
 --- TextEditor:draw: Draw the TextEditor
 function TextEditor:draw()
     love.graphics.setColor(1, 0, 0)
-    love.graphics.draw(self.textDisplay, self.rect.pos.x, self.rect.pos.y)
+    -- get rectangle width and figure out the number of lines of text to print
+    -- based on the font height and width
+    local width = self.rect:getWidth()
+    local height = self.font:getHeight()
+    -- split the text at the point of word wrap and draw each line
+    local x = self.rect.pos.x
+    local y = self.rect.pos.y
+    local currentLine = ""
+    for word in self.text:gmatch("%S+") do
+        -- if currentLine is not empty, add a space before the word
+        if currentLine ~= "" then
+            word = " " .. word
+        end
+        local testLine = currentLine .. word
+        if self.font:getWidth(testLine) < width then
+            currentLine = testLine
+        else
+            love.graphics.print(currentLine, x, y)
+            y = y + height
+            currentLine = word
+        end
+    end
+
+    -- love.graphics.draw(self.textDisplay, self.rect.pos.x, self.rect.pos.y)
+
+    -- print the rectangle position at the bottom right of the panel
+    -- love.graphics.setColor(0, 0, 1)
+    -- love.graphics.print("x = " .. self.rect.pos.x .. ", y = " .. self.rect.pos.y, self.rect.pos.x, self.rect.pos.y + 100)
 
     -- blink the cursor
     if math.floor(love.timer.getTime() * 2) % 2 == 0 then
@@ -82,7 +109,7 @@ local textEditor = TextEditor(Rect(10, 10, 380, 380))
 --- love.load: Called once at the start of the simulation
 function love.load()
     textEditor:setText [[lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua]]
-    textEditor:delete()
+    -- textEditor:delete()
 end
 
 --- love.update: Called every frame, updates the simulation
