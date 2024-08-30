@@ -72,11 +72,12 @@ function TextEditor:draw()
     local y = self.rect.pos.y
     local currentLine = ""
     for word in self.text:gmatch("%S+") do
-        -- if currentLine is not empty, add a space before the word
-        if currentLine ~= "" then
-            word = " " .. word
+        local testLine
+        if currentLine == "" then
+            testLine = word
+        else
+            testLine = currentLine .. " " .. word
         end
-        local testLine = currentLine .. word
         if self.font:getWidth(testLine) < width then
             currentLine = testLine
         else
