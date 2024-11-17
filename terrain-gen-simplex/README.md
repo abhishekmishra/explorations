@@ -7,6 +7,10 @@ tags: noise, simplexnoise, love2d, lua, terrain
 summary: A program to generate a terrain using simplex noise.
 ---
 
+|Version     |Date      |Comments                       |
+|------------|----------|-------------------------------|
+|0.1         |17/11/2024|Initial version                |
+
 # Terrain Generation
 
 This small program explores terrain generation using Simplex noise. We define
