@@ -1,4 +1,20 @@
-# Fractal Terrain Generation
+---
+title: Terrain Generation with Simplex Noise
+date: 17/11/2024
+author: Abhishek Mishra
+category: simulation
+tags: noise, simplexnoise, love2d, lua, terrain
+summary: A program to generate a terrain using simplex noise.
+---
+
+# Terrain Generation
+
+This small program explores terrain generation using Simplex noise. We define
+a terrain as a 2-dimensional grid with each cell having a depth. To create a
+continuous surface like an actual terrain we should avoid sudden,
+discontinous changes between the depth value of adjacent cells. To create a
+field or terrain like this we use Simplex noise (similar to Perlin noise) as
+it provides this property, and is also readily available in the love2d engine.
 
 ## Building and Running the Program
 
