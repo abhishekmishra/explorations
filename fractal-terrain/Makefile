@@ -6,7 +6,7 @@ run:
 	pwsh -Command "love ."
 
 # Run the $env:LITPD_HOME/litpd.ps1 script to build the README.md file
-build:
+build: clean
 	@echo "Building README.md"
 	pwsh -Command "../.luaenv/bin/activate.ps1 ; ${LITPD_HOME}\litpd.ps1 README.md -o README.html --to=html --standalone --toc"
 
@@ -22,4 +22,6 @@ md: clean
 clean:
 	rm main.lua
 	rm conf.lua
+	rm terrain.lua
+	rm simplex_terrain.lua
 	@echo "Cleaning up"

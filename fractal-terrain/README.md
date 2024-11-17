@@ -5,12 +5,103 @@
 See the `Makefile` in the current directory to see how to build and run the
 program.
 
+# The Terrain
+
+We start with representation of the terrain as a simple grid.
+
+```lua { code_file="terrain.lua" }
+local class = require "middleclass"
+
+local Terrain = class("Terrain")
+
+Terrain.static.DEFAULT_WIDTH = 128
+Terrain.static.DEFAULT_HEIGHT = 128
+
+function Terrain:initialize(width, height)
+    self.width = width or Terrain.DEFAULT_WIDTH
+    self.height = height or Terrain.DEFAULT_HEIGHT
+
+    self.data = {}
+    for x = 1, self.width do
+        self.data[x] = {}
+        for y = 1, self.height do
+            self.data[x][y] = 0
+        end
+    end
+end
+
+function Terrain:fill()
+end
+
+function Terrain:update(dt)
+end
+
+function Terrain:draw()
+    -- get the max height value
+    local max = 0
+    for x = 1, self.width do
+        for y = 1, self.height do
+            if self.data[x][y] > max then
+                max = self.data[x][y]
+            end
+        end
+    end
+
+    -- draw terrain as grayscale height map directly to screen
+    for x = 1, self.width do
+        for y = 1, self.height do
+            -- colour normalized to range 0-1
+            local color = self.data[x][y] / max
+            love.graphics.setColor(color, color, color)
+            love.graphics.points(x, y)
+        end
+    end
+end
+
+return Terrain
+```
+
+# Simplex Noise Terrain
+```lua {code_file="simplex_terrain.lua"}
+local Terrain = require "terrain"
+local class = require "middleclass"
+
+local SimplexTerrain = class("SimplexTerrain", Terrain)
+
+function SimplexTerrain:initialize(width, height)
+    Terrain.initialize(self, width, height)
+
+    self:fill()
+end
+
+function SimplexTerrain:fill()
+    local baseX = 100 * love.math.random()
+	local baseY = 100 * love.math.random()
+
+    for x = 1, self.width do
+        for y = 1, self.height do
+            local nx = 0.02
+            local ny = 0.02
+            local value = love.math.noise(baseX + nx * x, baseY + ny * y)
+            self.data[x][y] = value
+        end
+    end
+end
+
+return SimplexTerrain
+```
+
 # `main.lua`
 
 ## Module Imports & Variables
 
 ```lua {code_id="moduleglobal"}
 -- All imports and module scope variables go here.
+
+local Terrain = require "terrain"
+local SimplexTerrain = require "simplex_terrain"
+
+local t
 ```
 
 ## `love.load` - Initialization
@@ -18,6 +109,7 @@ program.
 ```lua {code_id="loveload"}
 --- love.load: Called once at the start of the simulation
 function love.load()
+    t = SimplexTerrain(512, 512)
 end
 
 ```
@@ -27,6 +119,7 @@ end
 ```lua {code_id="loveupdate"}
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
+    t:update(dt)
 end
 
 ```
@@ -36,12 +129,7 @@ end
 ```lua {code_id="lovedraw"}
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
-    local text = "Fractal Terrain Generation"
-    local tw = love.graphics.getFont():getWidth(text)
-    -- write empty simulation in the middle of the screen
-    love.graphics.print(text,
-        love.graphics.getWidth() / 2 - tw / 2,
-        love.graphics.getHeight() / 2 - 12)
+    t:draw()
 end
 
 ```
@@ -53,6 +141,10 @@ end
 function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
+    end
+    -- on spacebar press, generate new terrain
+    if key == "space" then
+        t:fill()
     end
 end
 ```
