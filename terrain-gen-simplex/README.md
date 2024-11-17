@@ -16,11 +16,6 @@ discontinous changes between the depth value of adjacent cells. To create a
 field or terrain like this we use Simplex noise (similar to Perlin noise) as
 it provides this property, and is also readily available in the love2d engine.
 
-## Building and Running the Program
-
-See the `Makefile` in the current directory to see how to build and run the
-program.
-
 # The Terrain
 
 We start with representation of the terrain as a simple grid.
@@ -275,3 +270,9 @@ function love.conf(t)
 end
 
 ```
+
+## Building and Running the Program
+
+See the `Makefile` in the current directory to see how to build and run the
+program.
+
