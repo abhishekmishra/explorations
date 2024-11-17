@@ -1,18 +1,4 @@
-# EMPTY Simulation
-
-Written as a literate program using:
-
-1. **litpd**
-2. **Love2d**
-
-The program generates code in two important files.
-
-1. *conf.lua*: This is the program run before love2d window is started. The
-   window related configurations are set here to reduce flickering.
-2. *main.lua*: This is the entry point for the love2d game. All the code for the
-   simulation/game should go here.
-
-The program contains some starter boilerplate code for the two files.
+# Fractal Terrain Generation
 
 ## Building and Running the Program
 
@@ -50,7 +36,7 @@ end
 ```lua {code_id="lovedraw"}
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
-    local text = "Empty Simulation"
+    local text = "Fractal Terrain Generation"
     local tw = love.graphics.getFont():getWidth(text)
     -- write empty simulation in the middle of the screen
     love.graphics.print(text,
@@ -102,7 +88,7 @@ local canvasHeight = 400
 
 function love.conf(t)
     -- set the window title
-    t.window.title = "<Empty> Simulation"
+    t.window.title = "Fractal Terrain Generation"
 
     -- set the window size
     t.window.width = canvasWidth
