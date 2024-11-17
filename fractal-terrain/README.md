@@ -78,12 +78,12 @@ function Terrain:draw_grayscale()
 end
 
 function Terrain:get_colour_of_height(value)
-    if value < 0.1 then
-        return {0, 0, 1} -- Blue for water
-    elseif value < 0.5 then
-        return {0, 1, 0} -- Green for plains
-    elseif value < 0.9 then
-        return {0.5, 0.25, 0} -- Brown for mountains
+    if value < 0.25 then
+        return {0, 0, value * 10} -- Blue for water
+    elseif value < 0.75 then
+        return {0, value * 2, 0} -- Green for plains
+    elseif value < 0.95 then
+        return {0.5 * value, 0.25 * value, 0} -- Brown for mountains
     else
         return {1, 1, 1} -- White for snow
     end
