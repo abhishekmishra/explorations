@@ -3,4 +3,4 @@ main.lua
 terrain.lua
 simplex_terrain.lua
 README.html
-program.md
+simplex-terrain-generation.md

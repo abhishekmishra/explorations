@@ -14,7 +14,7 @@ build: clean
 	pwsh -Command "Remove-Item -Path *.tmp -Force -ErrorAction SilentlyContinue"
 
 md: clean
-	pwsh -Command "../.luaenv/bin/activate.ps1 ; ${LITPD_HOME}\litpd.ps1 README.md -o program.md --to=markdown+pipe_tables-simple_tables-multiline_tables-grid_tables --standalone --toc --wrap=none"
+	pwsh -Command "../.luaenv/bin/activate.ps1 ; ${LITPD_HOME}\litpd.ps1 README.md -o simplex-terrain-generation.md --to=markdown+pipe_tables-simple_tables-multiline_tables-grid_tables --standalone --toc --wrap=none"
 
 	# Remove *.tmp files
 	pwsh -Command "Remove-Item -Path *.tmp -Force -ErrorAction SilentlyContinue"
