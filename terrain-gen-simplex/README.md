@@ -18,9 +18,26 @@ it provides this property, and is also readily available in the love2d engine.
 
 # The Terrain
 
-We start with representation of the terrain as a simple grid.
+We start with representation of the terrain as a simple grid. In this section
+we define a Terrain class which creates the grid and also defines methods to
+draw the Terrain grid onto the screen either as a grayscale image or as a
+colour-mapped terrain image.
 
-```lua { code_file="terrain.lua" }
+The creation and display of the Terrain are independent of what algorithm is
+used to assign the depth values. To keep this program extensible so that I can
+explore other generation strategies, I've decided to keep only the grid creation
+and display in the base Terrain class. The grid creation simply assigns a depth
+of 0 to every cell.
+
+Later in the program we create another class SimplexTerrain which extends this
+class and provides the implementation for the key method `fill` which assigns
+the depth values for each cell.
+
+## Imports and Constants
+
+First lets declare the class and also specify some defaults for the grid size.
+
+```lua { code_id="terraindef" }
 local class = require "middleclass"
 
 local Terrain = class("Terrain")
@@ -28,6 +45,17 @@ local Terrain = class("Terrain")
 Terrain.static.DEFAULT_WIDTH = 128
 Terrain.static.DEFAULT_HEIGHT = 128
 
+```
+
+## Constructor
+
+The constructor is quite simple - it creates a 2-d grid of numbers, initialized
+to 0.
+
+Note that the `display` member variable is assigned the value `grayscale`. This
+will be discussed in the next section.
+
+```lua { code_id="terrainconstructor" }
 function Terrain:initialize(width, height)
     self.width = width or Terrain.DEFAULT_WIDTH
     self.height = height or Terrain.DEFAULT_HEIGHT
@@ -41,6 +69,32 @@ function Terrain:initialize(width, height)
         end
     end
 end
+```
+
+## Displaying the Terrain
+
+Here we provide two ways of visualizing the grid which can be selected by
+using the appropriate method call.
+
+1. *Grayscale*: This is selected by calling method `display_grayscale()` on the
+   `Terrain` instance. It will display the terrain as a field of grayscale
+   values ranging from 0 to the maximum depth of the terrain.
+2. *Colour-mapped Terrain*: This is selected by calling the method
+   `display_colour_mapped()`. It will display the terrain in four colours for
+   water, grassland, mountain and snow in increasing order of depth value. The
+   thresholds for these colours are chosen arbitrarily.
+
+The `draw` method simply chooses between `draw_grayscale` or 
+`draw_colour_mapped` based on the chosen display. As we saw in the constructor
+the default display is `grayscale`.
+
+The implementations of the two display mechanisms are rather straightforward
+and self-explanatory. We find the maximum depth of the field, and then map the
+values to the appropriate range. In the case of grayscale this range is [0, 1].
+Whereas in the case of colour-mapped terrain the ranges are some arbitrary
+values I have picked.
+
+```lua { code_id="terraindisplay" }
 
 function Terrain:display_grayscale()
     self.display = "grayscale"
@@ -48,12 +102,6 @@ end
 
 function Terrain:display_colour_mapped()
     self.display = "colour_mapped"
-end
-
-function Terrain:fill()
-end
-
-function Terrain:update(dt)
 end
 
 function Terrain:draw()
@@ -121,6 +169,24 @@ function Terrain:draw_colour_mapped()
         end
     end
 end
+```
+
+## Terrain Class
+
+We bring together all the elements of the class in the `terrain.lua` file.
+Notice that we define an empty method `fill()` which must be extended by a class
+which implements a particular strategy for creating the depth field.
+
+```lua { code_file="terrain.lua" }
+
+@<terraindef@>
+
+@<terrainconstructor@>
+
+@<terraindisplay@>
+
+function Terrain:fill()
+end
 
 return Terrain
 ```
@@ -183,7 +249,6 @@ end
 ```lua {code_id="loveupdate"}
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
-    t:update(dt)
 end
 
 ```
