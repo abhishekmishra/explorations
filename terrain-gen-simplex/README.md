@@ -16,6 +16,14 @@ discontinous changes between the depth value of adjacent cells. To create a
 field or terrain like this we use Simplex noise (similar to Perlin noise) as
 it provides this property, and is also readily available in the love2d engine.
 
+The program provides two different ways to visualize the generated terrain,
+a *grayscale* display and a *colour-mapped terrain* display. The following
+images provide an example of each.
+
+![Grayscale Visualization of Terrain](grayscale0.jpg)
+
+![Colour-Mapped Visualization of Terrain](colormapped0.jpg)
+
 # The Terrain
 
 We start with representation of the terrain as a simple grid. In this section
@@ -68,6 +76,9 @@ function Terrain:initialize(width, height)
             self.data[x][y] = 0
         end
     end
+
+    self:fill()
+
 end
 ```
 
@@ -192,6 +203,13 @@ return Terrain
 ```
 
 # Simplex Noise Terrain
+
+The `SimplexTerrain` class defines just one method. This method is the key to
+the entire program. It uses the Simplex Noise API available in love2d, using
+the function `love.math.noise`. We generate the noise in 2-d space with inputs
+which are a function of x, and y, the cell coordinates, and some randomness to
+ensure we can create a new terrain every time we call `fill()`.
+
 ```lua {code_file="simplex_terrain.lua"}
 local Terrain = require "terrain"
 local class = require "middleclass"
@@ -200,8 +218,6 @@ local SimplexTerrain = class("SimplexTerrain", Terrain)
 
 function SimplexTerrain:initialize(width, height)
     Terrain.initialize(self, width, height)
-
-    self:fill()
 end
 
 function SimplexTerrain:fill()
@@ -222,6 +238,17 @@ return SimplexTerrain
 ```
 
 # `main.lua`
+
+The main program is quite simple.
+
+* We import the SimplexTerrain class, and create an instance during `load()`.
+* We draw the state of the terrain in the `draw()` method by calling `t:draw()`,
+  where `t` is the instance of the terrain.
+* The keypressed method defines shortcuts:
+  * *spacebar*: to generate a new terrain.
+  * *g*: switches to grayscale display.
+  * *c*: switches to colour-mapped display.
+  * *esc*: quits the program.
 
 ## Module Imports & Variables
 
@@ -307,13 +334,9 @@ end
 
 ```lua { code_file="conf.lua" }
 --- conf.lua: Config for the love2d game.
---
--- date: 4/3/2024
--- author: Abhishek Mishra
-
 -- canvas size
-local canvasWidth = 400
-local canvasHeight = 400
+local canvasWidth = 512
+local canvasHeight = 512
 
 function love.conf(t)
     -- set the window title
