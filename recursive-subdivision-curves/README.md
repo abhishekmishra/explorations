@@ -60,6 +60,18 @@ the program in lua.
     detail level `N`, the number of points in the curve should be `2^N`. The
     maxlevel `N` can be a user input.
 
+- **Step 3: Recursive Subdivision:** In the third step we take a segment and
+    find its midpoint. Then we perturb the midpoint by a random amount. This
+    gives us two new segments. We run the process till the segments are of zero
+    lengths and cannot be subdivided. Each recursive step doubles the number
+    of segments to be processed in the next round. The entire process is started
+    with the first and last points decided in the _Step 1_.
+
+The amound of perturbation at each level of recursion decreases as we subdivide
+smaller and smaller segments. The amount of randomness added is the **Hurst
+Exponent** - which is related to the shape of the fBm. The value of the Hurst
+Exponent decides the roughness/smoothness of the generated curve.
+
 ## Building and Running the Program
 
 See the `Makefile` in the current directory to see how to build and run the
