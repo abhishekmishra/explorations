@@ -22,4 +22,5 @@ md: clean
 clean:
 	rm main.lua
 	rm conf.lua
+	rm README.html
 	@echo "Cleaning up"
