@@ -1,18 +1,37 @@
+---
+title: Recursive Subdivision of Curves
+date: 25/11/2024
+author: Abhishek Mishra
+category: simulation
+tags: noise, love2d, lua, curve, fractal, recursion
+summary: A program to create a complex fractal curve using recursive subdivision.
+---
+
+|Version     |Date      |Comments                       |
+|------------|----------|-------------------------------|
+|0.1         |25/11/2024|Initial version                |
+
 # Recursive Subdivision of Curves
 
-Written as a literate program using:
+This is a literate program (written in litpd [^litpd]) that demonstrates creating
+fractal paths/curves starting with a simple curve with a few line segments. The
+algorithm is from the classic paper on the topic of such methods [^fournier].
+The paper discusses the use of recursive subdivision methods to create fractal
+curves and surfaces. This method and its variations have been frequently used
+as they produce decent results and the 1-D version that we use here has linear
+complexity.
 
-1. **litpd**
-2. **Love2d**
+This article is divided into two sections:
 
-The program generates code in two important files.
+1. *Algorithm*: We discuss the recursive subdivision algoritm and its properties
+   in this section.
+2. *Program*: We develop a love2d simulation to demonstrate the use of this
+   algorithm in various scenarios and with varying parameters.
 
-1. *conf.lua*: This is the program run before love2d window is started. The
-   window related configurations are set here to reduce flickering.
-2. *main.lua*: This is the entry point for the love2d game. All the code for the
-   simulation/game should go here.
-
-The program contains some starter boilerplate code for the two files.
+[^litpd]: <https://neolateral.in/litpd-literate-programming-for-pandoc-markdown>
+[^fournier]: <https://doi.org/10.1145/358523.358553> "Alain Fournier, Don
+    Fussell, and Loren Carpenter. 1982. Computer rendering of stochastic
+    models. Commun. ACM 25, 6 (June 1982), 371–384."
 
 ## Building and Running the Program
 
