@@ -23,4 +23,5 @@ clean:
 	rm -f main.lua
 	rm -f conf.lua
 	rm -f README.html
+	rm -f fbmcurve.lua
 	@echo "Cleaning up"
