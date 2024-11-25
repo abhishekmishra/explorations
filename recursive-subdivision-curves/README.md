@@ -86,9 +86,84 @@ in one go or over time to show the animated process.
 ## Class definition
 
 ```lua {code_file="fbmcurve.lua"}
-local Class = require`middleclass`
+local Class = require "middleclass"
 
+local FBMCurve = Class("FBMCurve")
 
+--- Create a new FBMCurve object
+-- @param seed (number) The seed for the random number generator
+-- @param num_levels (number) The number of levels of the curve
+function FBMCurve:initialize(seed, num_levels)
+    self.seed = seed or 1
+    -- use the seed to create a new random number generator
+    math.randomseed(seed)
+
+    self.num_levels = num_levels or 9
+    self.num_points = (2 ^ self.num_levels) + 1
+    self.points = {}
+    self.max_height = love.graphics.getHeight()
+
+    -- random start and end points using the given seed
+    -- in the range [0, num_levels]
+    self.points[1] = love.math.random(1, self.max_height)
+    self.points[self.num_points] = love.math.random(1, self.max_height)
+    -- fill the rest of the points with 0
+    for i = 2, self.num_points - 1, 1 do
+        self.points[i] = 10
+    end
+    self.h = 0.01
+    self.ratio = 2 ^ (-self.h)
+    self.scale = self.num_levels
+    self:generate()
+end
+
+function FBMCurve:subdivide(left, right, std)
+    local mid = math.floor((left + right) / 2)
+    if mid ~= left and mid ~= right then
+        self.points[mid] = (self.points[left] + self.points[right]) / 2.0 + self:gauss(mid) * std
+        local stdmid = std * self.ratio
+        self:subdivide(left, mid, stdmid)
+        self:subdivide(mid, right, stdmid)
+    end
+end
+
+-- Generate a Gaussian (normal) distributed random number
+function FBMCurve:gauss(index)
+    -- Seed the RNG uniquely for deterministic results
+    local combined_seed = self.seed + index
+    math.randomseed(combined_seed)
+
+    -- Generate two uniform random numbers (0, 1)
+    local u1 = math.random()
+    local u2 = math.random()
+
+    -- Box-Muller transform
+    local z0 = math.sqrt(-2.0 * math.log(u1)) * math.cos(2.0 * math.pi * u2)
+    -- You could also calculate z1 if you need a second Gaussian number
+    -- local z1 = math.sqrt(-2.0 * math.log(u1)) * math.sin(2.0 * math.pi * u2)
+
+    return z0 -- Return a Gaussian random number with mean 0 and standard deviation 1
+end
+
+function FBMCurve:generate()
+    local std = self.ratio * self.num_levels
+    self:subdivide(1, self.num_points, std)
+end
+
+function FBMCurve:update(dt)
+end
+
+function FBMCurve:draw()
+    love.graphics.setColor(1.0, 1.0, 0.0)
+
+    -- delta is window width divided number of points
+    local delta = love.graphics.getWidth() / self.num_points
+    for i = 1, self.num_points - 1 do
+        love.graphics.line(i * delta, self.points[i], (i + 1) * delta, self.points[i + 1])
+    end
+end
+
+return FBMCurve
 ```
 
 # `main.lua`
@@ -96,7 +171,9 @@ local Class = require`middleclass`
 ## Module Imports & Variables
 
 ```lua {code_id="moduleglobal"}
--- All imports and module scope variables go here.
+local FBMCurve = require"fbmcurve"
+
+local curve
 ```
 
 ## `love.load` - Initialization
@@ -104,6 +181,7 @@ local Class = require`middleclass`
 ```lua {code_id="loveload"}
 --- love.load: Called once at the start of the simulation
 function love.load()
+    curve = FBMCurve(1)
 end
 
 ```
@@ -113,6 +191,7 @@ end
 ```lua {code_id="loveupdate"}
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
+    curve:update(dt)
 end
 
 ```
@@ -122,12 +201,7 @@ end
 ```lua {code_id="lovedraw"}
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
-    local text = "Recursive Subdivision of Curves"
-    local tw = love.graphics.getFont():getWidth(text)
-    -- write Recursive Subdivision of Curves in the middle of the screen
-    love.graphics.print(text,
-        love.graphics.getWidth() / 2 - tw / 2,
-        love.graphics.getHeight() / 2 - 12)
+    curve:draw()
 end
 
 ```
