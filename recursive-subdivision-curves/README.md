@@ -77,6 +77,20 @@ Exponent decides the roughness/smoothness of the generated curve.
 See the `Makefile` in the current directory to see how to build and run the
 program.
 
+# The fBm Curve
+
+The `fbmcurve.lua` file defines the `FBMCurve` class. It represents a single
+curve defined using recursive subdivision. The subdivision can be carried out
+in one go or over time to show the animated process.
+
+## Class definition
+
+```lua {code_file="fbmcurve.lua"}
+local Class = require`middleclass`
+
+
+```
+
 # `main.lua`
 
 ## Module Imports & Variables
