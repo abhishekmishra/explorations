@@ -33,6 +33,33 @@ This article is divided into two sections:
     Fussell, and Loren Carpenter. 1982. Computer rendering of stochastic
     models. Commun. ACM 25, 6 (June 1982), 371–384."
 
+# The Algorithm in 1-D
+
+The paper mentioned in the introduction [^fournier] describes the algorithm we
+are about to discuss as "... a recursive algorithm for generating approximations
+to the sample paths of one dimensional fBm" (fBm stands for _fractional
+Brownian motion_). Thus the algorithm generates in every run a sample Brownian
+motion path between the input end-points.
+
+Since this algorithm is recursive in
+nature it can be repeated to any level of detail. The detail in the curve
+increases with the recursive depth of the program. This recursive depth should
+be used to produce a curve that retains sufficient detail at the highest zoom
+level used in the graphical application.
+
+Now, let's jump into the algorithm. In the original paper the algorithm is
+written in Pascal, however here I present it informally as we will later develop
+the program in lua.
+
+- **Step 1: End-points of the Curve:** First we must established the start and
+    end-point of the curve. These will serve as the starting input to the
+    recursive subdivision. These points on 1-d are simple _real_ values which
+    can be given as user input or assigned to random values.
+
+- **Step 2: Establish the number of points:** The paper provides states that for
+    detail level `N`, the number of points in the curve should be `2^N`. The
+    maxlevel `N` can be a user input.
+
 ## Building and Running the Program
 
 See the `Makefile` in the current directory to see how to build and run the
