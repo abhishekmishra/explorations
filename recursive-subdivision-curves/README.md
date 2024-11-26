@@ -249,31 +249,49 @@ end
 
 @<fbmsubdivision@>
 
-function FBMCurve:update(dt)
-end
-
-function FBMCurve:draw()
-    love.graphics.setColor(1.0, 1.0, 0.0)
-
-    -- delta is window width divided number of points
-    local delta = love.graphics.getWidth() / self.num_points
-    for i = 1, self.num_points - 1 do
-        love.graphics.line(i * delta, self.points[i], (i + 1) * delta, self.points[i + 1])
-    end
-end
-
 return FBMCurve
 ```
 
+# Displaying the Curve
+
+```lua {code_file="curvepanel.lua"}
+local Class = require('middleclass')
+local nl = require('ne0luv')
+local FBMCurve = require"fbmcurve"
+
+local CurvePanel = Class('CurvePanel', nl.Panel)
+
+function CurvePanel:initialize(bounds)
+    -- call the parent class constructor
+    nl.Panel.initialize(self, bounds)
+
+    self.curve = FBMCurve(1, 9, self:getHeight())
+end
+
+function CurvePanel:draw()
+    love.graphics.setColor(1.0, 1.0, 0.0)
+
+    -- delta is window width divided number of points
+    local delta = self:getWidth() / self.curve.num_points
+    for i = 1, self.curve.num_points - 1 do
+        love.graphics.line(i * delta,
+            self.curve.points[i], (i + 1) * delta, self.curve.points[i + 1])
+    end
+end
+
+return CurvePanel
+```
 
 # `main.lua`
 
 ## Module Imports & Variables
 
 ```lua {code_id="moduleglobal"}
-local FBMCurve = require"fbmcurve"
+local nl = require('ne0luv')
+local CurvePanel = require"curvepanel"
 
-local curve
+local layout
+local curvePanel
 ```
 
 ## `love.load` - Initialization
@@ -281,7 +299,18 @@ local curve
 ```lua {code_id="loveload"}
 --- love.load: Called once at the start of the simulation
 function love.load()
-    curve = FBMCurve(1)
+    -- get the canvas size
+    local cw = love.graphics.getWidth()
+    local ch = love.graphics.getHeight()
+
+    -- create a layout panel
+    layout = nl.Layout(nl.Rect(0, 0, cw, ch), {
+        layout = 'row',
+    })
+
+    curvePanel = CurvePanel(nl.Rect(0, 0, cw - 100, ch))
+
+    layout:addChild(curvePanel)
 end
 
 ```
@@ -291,7 +320,7 @@ end
 ```lua {code_id="loveupdate"}
 --- love.update: Called every frame, updates the simulation
 function love.update(dt)
-    curve:update(dt)
+    layout:update(dt)
 end
 
 ```
@@ -301,7 +330,7 @@ end
 ```lua {code_id="lovedraw"}
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
-    curve:draw()
+    layout:draw()
 end
 
 ```
