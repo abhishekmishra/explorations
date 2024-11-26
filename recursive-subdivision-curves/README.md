@@ -80,8 +80,28 @@ program.
 # The fBm Curve
 
 The `fbmcurve.lua` file defines the `FBMCurve` class. It represents a single
-curve defined using recursive subdivision. The subdivision can be carried out
-in one go or over time to show the animated process.
+curve defined using recursive subdivision.
+
+* The class constructor accepts two optional arguments `seed` and `num_levels`.
+* The `seed` argument is an input to the random number generator. The random
+  number generator is used to create the perturbation in the midpoint when
+  subdividing a line segment. The default value of `seed` is `1`.
+* The `num_levels` argument controls how many points will be generated in the
+  curve. It represents the amount of detail required in the curve. The higher
+  the value, the greater the number of points in the curve. The default value
+  for `num_levels` is `9`.
+* The constructor uses the inputs to initialize some state for the curve.
+* The number of points `num_points` in the curve is first set equal to
+  `2^num_levels + 1`.
+* A new table `points` is created to store the points of the curve.
+* The first and last points of the curve are created using the random number
+  generator.
+* A default initial value is assinged to all the other points of the curve.
+* The `h` value refers to the `Hurst Exponent` and is used to calculate the
+  ratio of dampening of the perturbation at each recursive depth. The dampening
+  increases as we descend into sub-dividing smaller and smaller line segments.
+  The value of `h` affects the roughness/smoothness of the generated curve.
+* The `ratio` of dampening is defined as `2^-h`.
 
 ## Class definition
 
