@@ -129,22 +129,7 @@ function FBMCurve:initialize(seed, num_levels, max_height, h)
     self.num_levels = num_levels or 9
     self.max_height = max_height or love.graphics.getHeight()
     self.h = 0.01
-    -- use the seed to create a new random number generator
-    math.randomseed(seed)
 
-    self.num_points = (2 ^ self.num_levels) + 1
-    self.points = {}
-
-    -- random start and end points using the given seed
-    -- in the range [0, num_levels]
-    self.points[1] = love.math.random(1, self.max_height)
-    self.points[self.num_points] = love.math.random(1, self.max_height)
-    -- fill the rest of the points with 0
-    for i = 2, self.num_points - 1, 1 do
-        self.points[i] = 10
-    end
-    self.ratio = 2 ^ (-self.h)
-    self.scale = self.num_levels
     self:generate()
 end
 ```
@@ -186,6 +171,27 @@ function FBMCurve:subdivide(left, right, std)
 end
 
 function FBMCurve:generate()
+    -- use the seed to create a new random number generator
+    math.randomseed(self.seed)
+
+    -- the number of points is a function of num_levels
+    self.num_points = (2 ^ self.num_levels) + 1
+    -- initialize the points array
+    self.points = {}
+
+    -- random start and end points using the given seed
+    -- in the range [0, num_levels]
+    self.points[1] = love.math.random(1, self.max_height)
+    self.points[self.num_points] = love.math.random(1, self.max_height)
+
+    -- fill the rest of the points with 0
+    for i = 2, self.num_points - 1, 1 do
+        self.points[i] = 10
+    end
+
+    self.ratio = 2 ^ (-self.h)
+    self.scale = self.num_levels
+    
     local std = self.ratio * self.num_levels
     self:subdivide(1, self.num_points, std)
 end
