@@ -247,6 +247,9 @@ end
 
 ## Class definition
 
+In this section we bring all the parts of the `FBMCurve` class together, and
+generate the program.
+
 ```lua {code_file="fbmcurve.lua"}
 
 @<fbmdeclaration@>
@@ -261,6 +264,14 @@ return FBMCurve
 ```
 
 # Displaying the Curve
+
+* In the final simulation we will see the curve drawn next to a bunch of
+  slider controls which allow us to tweak some of the parameters.
+* To this end, I will use the *ne0luv* library (described elsewhere on my
+  website) which contains some utility UI classes.
+* We will create a new panel called `CurvePanel` whose only task it to create
+  a new instance of the FBMCurve and display it.
+* I will not describe this in detail as the code below is self-explanatory.
 
 ```lua {code_file="curvepanel.lua"}
 local Class = require('middleclass')
@@ -298,6 +309,11 @@ return CurvePanel
 ```
 
 # `main.lua`
+
+We bring together the `CurvePanel` and a couple of slider controls to allow the
+user to change the values of `h` and `num_levels` input parameters.
+
+Again the code is documented below and therefore self-explanatory.
 
 ## Module Imports & Variables
 
