@@ -14,7 +14,7 @@ build: clean
 	pwsh -Command "Remove-Item -Path *.tmp -Force -ErrorAction SilentlyContinue"
 
 md: clean
-	pwsh -Command "../.luaenv/bin/activate.ps1 ; ${LITPD_HOME}\litpd.ps1 README.md -o program.md --to=markdown+pipe_tables-simple_tables-multiline_tables-grid_tables --standalone --toc --wrap=none"
+	pwsh -Command "../.luaenv/bin/activate.ps1 ; ${LITPD_HOME}\litpd.ps1 README.md -o recursive-subdivision-curves.md --to=markdown+pipe_tables-simple_tables-multiline_tables-grid_tables --standalone --toc --wrap=none"
 
 	# Remove *.tmp files
 	pwsh -Command "Remove-Item -Path *.tmp -Force -ErrorAction SilentlyContinue"
@@ -25,4 +25,5 @@ clean:
 	rm -f README.html
 	rm -f fbmcurve.lua
 	rm -f curvepanel.lua
+	rm -f recursive-subdivision-curves.md
 	@echo "Cleaning up"
