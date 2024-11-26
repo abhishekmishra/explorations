@@ -136,6 +136,13 @@ end
 
 ## Gaussian Random Number Generator
 
+* The `gauss` function is a utility function to generate random numbers
+  using the inbuilt pseudo-random generator with a mean of `0` and a standard
+  deviation of `1`.
+* The seed of the random generator is based on the input index and the seed
+  provided by user input. This allows us to create random number sequences
+  which can be replicated if the same input is provided again.
+* The function is used in the subdivision process.
 
 ```lua {code_id="fbmgauss"}
 -- Generate a Gaussian (normal) distributed random number
@@ -150,36 +157,34 @@ function FBMCurve:gauss(index)
 
     -- Box-Muller transform
     local z0 = math.sqrt(-2.0 * math.log(u1)) * math.cos(2.0 * math.pi * u2)
-    -- You could also calculate z1 if you need a second Gaussian number
-    -- local z1 = math.sqrt(-2.0 * math.log(u1)) * math.sin(2.0 * math.pi * u2)
 
-    return z0 -- Return a Gaussian random number with mean 0 and standard deviation 1
+    -- Return a Gaussian random number with mean 0 and standard deviation 1
+    return z0 
 end
 ```
 
 ## Subdivision Implemenation
 
+* In the subdivision implementation we define two methods viz. `generate` and
+  `subdivide`.
+* The `generate` method sets up the parameters for the subdivision using the
+  user provided input. The length of the curve is decided, the array of points
+  are created to match the length, and the first and last points are assigned
+  random y-values based on the maximum y-value of the display. The other values
+  in the array are given initial values which are later changed by the
+  `subdivide` method.
+* Lastly, the `generate` method calls the `subdivide` method with the first and
+  last counts of the points array, and a measure of standard division which is
+  based on the input *Hurst Expoonent*.
+* The `subdivide` method is a recursive function to create a new midpoint
+  for the given range, until we are down to a range with width `1`.
+* Each midpoint is the mean of the left and right values of the range added to
+  a random value generated using the `gauss` function defined earlier multiplied
+  with the given standard deviation. (Note the standard deviation of the value
+  returned from `gauss` is 1). The scaling of the random adjustment reduces with
+  the depth of recursion.
+
 ```lua {code_id="fbmsubdivision"}
-function FBMCurve:subdivide(left, right, std)
-    -- get the midpoint of the segment
-    local mid = math.floor((left + right) / 2)
-
-    -- only proceed if the midpoint is distinct from the left and right
-    if mid ~= left and mid ~= right then
-        -- the y-value at the midpoint is the mean of the left and right points
-        -- with an additional random compnent multiplied with the standard
-        -- deviation
-        self.points[mid] = (self.points[left] + self.points[right]) / 2.0 + self:gauss(mid) * std
-
-        -- define the standard deviation for the next level of recursion,
-        -- by multiplying with self.ratio
-        local stdmid = std * self.ratio
-
-        -- subdivide the left and right segments
-        self:subdivide(left, mid, stdmid)
-        self:subdivide(mid, right, stdmid)
-    end
-end
 
 function FBMCurve:generate()
     -- use the seed to create a new random number generator
@@ -208,6 +213,27 @@ function FBMCurve:generate()
 
     -- start with the subdivision of the outermost segment
     self:subdivide(1, self.num_points, std)
+end
+
+function FBMCurve:subdivide(left, right, std)
+    -- get the midpoint of the segment
+    local mid = math.floor((left + right) / 2)
+
+    -- only proceed if the midpoint is distinct from the left and right
+    if mid ~= left and mid ~= right then
+        -- the y-value at the midpoint is the mean of the left and right points
+        -- with an additional random compnent multiplied with the standard
+        -- deviation
+        self.points[mid] = (self.points[left] + self.points[right]) / 2.0 + self:gauss(mid) * std
+
+        -- define the standard deviation for the next level of recursion,
+        -- by multiplying with self.ratio
+        local stdmid = std * self.ratio
+
+        -- subdivide the left and right segments
+        self:subdivide(left, mid, stdmid)
+        self:subdivide(mid, right, stdmid)
+    end
 end
 ```
 
