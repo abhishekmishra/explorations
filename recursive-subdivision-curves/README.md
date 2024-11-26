@@ -161,10 +161,21 @@ end
 
 ```lua {code_id="fbmsubdivision"}
 function FBMCurve:subdivide(left, right, std)
+    -- get the midpoint of the segment
     local mid = math.floor((left + right) / 2)
+
+    -- only proceed if the midpoint is distinct from the left and right
     if mid ~= left and mid ~= right then
+        -- the y-value at the midpoint is the mean of the left and right points
+        -- with an additional random compnent multiplied with the standard
+        -- deviation
         self.points[mid] = (self.points[left] + self.points[right]) / 2.0 + self:gauss(mid) * std
+
+        -- define the standard deviation for the next level of recursion,
+        -- by multiplying with self.ratio
         local stdmid = std * self.ratio
+
+        -- subdivide the left and right segments
         self:subdivide(left, mid, stdmid)
         self:subdivide(mid, right, stdmid)
     end
