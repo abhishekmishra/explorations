@@ -268,7 +268,7 @@ function CurvePanel:initialize(bounds)
     self.curve = FBMCurve(1, 9, self:getHeight())
 end
 
-function CurvePanel:draw()
+function CurvePanel:_draw()
     love.graphics.setColor(1.0, 1.0, 0.0)
 
     -- delta is window width divided number of points
