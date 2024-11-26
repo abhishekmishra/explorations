@@ -189,9 +189,13 @@ function FBMCurve:generate()
         self.points[i] = 10
     end
 
+    -- the ratio of the perturbation is a function of the Hurst Exponent
     self.ratio = 2 ^ (-self.h)
     
+    -- define the standard deviation
     local std = self.ratio * self.num_levels
+
+    -- start with the subdivision of the outermost segment
     self:subdivide(1, self.num_points, std)
 end
 ```
