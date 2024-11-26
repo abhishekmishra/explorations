@@ -21,12 +21,20 @@ curves and surfaces. This method and its variations have been frequently used
 as they produce decent results and the 1-D version that we use here has linear
 complexity.
 
+![Recursive Subdivision Simulation](recursivesubdivision0.jpg)
+
 This article is divided into two sections:
 
 1. *Algorithm*: We discuss the recursive subdivision algoritm and its properties
    in this section.
 2. *Program*: We develop a love2d simulation to demonstrate the use of this
    algorithm in various scenarios and with varying parameters.
+
+Here is a youtube video which shows the simulation in action:
+
+<iframe width="630" height="473"
+src="https://www.youtube.com/embed/NocRNKwlvCw">
+</iframe>
 
 [^litpd]: <https://neolateral.in/litpd-literate-programming-for-pandoc-markdown>
 [^fournier]: <https://doi.org/10.1145/358523.358553> "Alain Fournier, Don
