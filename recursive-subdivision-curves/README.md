@@ -80,7 +80,16 @@ program.
 # The fBm Curve
 
 The `fbmcurve.lua` file defines the `FBMCurve` class. It represents a single
-curve defined using recursive subdivision.
+curve defined using recursive subdivision. The class is defined using the
+`middleclass` library.
+
+```lua {code_id="fbmdeclaration"}
+local Class = require "middleclass"
+
+local FBMCurve = Class("FBMCurve")
+```
+
+## Constructor
 
 * The class constructor accepts two optional arguments `seed` and `num_levels`.
 * The `seed` argument is an input to the random number generator. The random
@@ -103,13 +112,7 @@ curve defined using recursive subdivision.
   The value of `h` affects the roughness/smoothness of the generated curve.
 * The `ratio` of dampening is defined as `2^-h`.
 
-## Class definition
-
-```lua {code_file="fbmcurve.lua"}
-local Class = require "middleclass"
-
-local FBMCurve = Class("FBMCurve")
-
+```lua {code_id="fbmconstructor"}
 --- Create a new FBMCurve object
 -- @param seed (number) The seed for the random number generator
 -- @param num_levels (number) The number of levels of the curve
@@ -136,17 +139,12 @@ function FBMCurve:initialize(seed, num_levels)
     self.scale = self.num_levels
     self:generate()
 end
+```
 
-function FBMCurve:subdivide(left, right, std)
-    local mid = math.floor((left + right) / 2)
-    if mid ~= left and mid ~= right then
-        self.points[mid] = (self.points[left] + self.points[right]) / 2.0 + self:gauss(mid) * std
-        local stdmid = std * self.ratio
-        self:subdivide(left, mid, stdmid)
-        self:subdivide(mid, right, stdmid)
-    end
-end
+## Gaussian Random Number Generator
 
+
+```lua {code_id="fbmgauss"}
 -- Generate a Gaussian (normal) distributed random number
 function FBMCurve:gauss(index)
     -- Seed the RNG uniquely for deterministic results
@@ -164,11 +162,38 @@ function FBMCurve:gauss(index)
 
     return z0 -- Return a Gaussian random number with mean 0 and standard deviation 1
 end
+```
+
+## Subdivision Implemenation
+
+```lua {code_id="fbmsubdivision"}
+function FBMCurve:subdivide(left, right, std)
+    local mid = math.floor((left + right) / 2)
+    if mid ~= left and mid ~= right then
+        self.points[mid] = (self.points[left] + self.points[right]) / 2.0 + self:gauss(mid) * std
+        local stdmid = std * self.ratio
+        self:subdivide(left, mid, stdmid)
+        self:subdivide(mid, right, stdmid)
+    end
+end
 
 function FBMCurve:generate()
     local std = self.ratio * self.num_levels
     self:subdivide(1, self.num_points, std)
 end
+```
+
+## Class definition
+
+```lua {code_file="fbmcurve.lua"}
+
+@<fbmdeclaration@>
+
+@<fbmconstructor@>
+
+@<fbmgauss@>
+
+@<fbmsubdivision@>
 
 function FBMCurve:update(dt)
 end
@@ -185,6 +210,7 @@ end
 
 return FBMCurve
 ```
+
 
 # `main.lua`
 
