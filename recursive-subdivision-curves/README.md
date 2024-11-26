@@ -298,7 +298,10 @@ local nl = require('ne0luv')
 local CurvePanel = require"curvepanel"
 
 local layout
+local controlLayout
 local curvePanel
+local hText
+local hSlider
 ```
 
 ## `love.load` - Initialization
@@ -310,14 +313,46 @@ function love.load()
     local cw = love.graphics.getWidth()
     local ch = love.graphics.getHeight()
 
+    -- width of the control panel
+    local controlPanelWidth = 200
+
     -- create a layout panel
     layout = nl.Layout(nl.Rect(0, 0, cw, ch), {
         layout = 'row',
     })
 
-    curvePanel = CurvePanel(nl.Rect(0, 0, cw - 100, ch))
+    -- create a curve panel
+    curvePanel = CurvePanel(nl.Rect(0, 0, cw - controlPanelWidth, ch))
 
+    -- create a control panel
+    controlLayout = nl.Layout(nl.Rect(0, 0, controlPanelWidth, ch), {
+        layout = 'column',
+    })
+
+    -- Hurst Exponent text and slider
+    hText = nl.Text(nl.Rect(0, 0, controlPanelWidth, 20), {
+        text = "Hurst Exponent(h): " .. curvePanel.curve.h,
+    })
+
+    hSlider = nl.Slider(nl.Rect(0, 20, controlPanelWidth, 20), {
+        minValue = 1,
+        maxValue = 500,
+        currentValue = curvePanel.curve.h * 1000,
+    })
+
+    hSlider:addChangeHandler(function(slider)
+        local val = hSlider.currentValue / 1000
+        -- round to 2 decimal places
+        curvePanel.curve.h = math.floor(val * 100) / 100
+        curvePanel.curve:generate()
+        hText:setText("Hurst Exponent(h): " .. curvePanel.curve.h)
+    end)
+
+    -- add the curve panel and control panel to the layout
     layout:addChild(curvePanel)
+    controlLayout:addChild(hText)
+    controlLayout:addChild(hSlider)
+    layout:addChild(controlLayout)
 end
 
 ```
@@ -342,7 +377,7 @@ end
 
 ```
 
-## `love.keypressed` - Handle Keyboard Events
+## Handle Keyboard/Mouse Events
 
 ```lua {code_id="lovekeypressed"}
 -- escape to exit
@@ -351,8 +386,19 @@ function love.keypressed(key)
         love.event.quit()
     end
 end
-```
 
+function love.mousepressed(x, y, button)
+    layout:mousepressed(x, y, button)
+end
+
+function love.mousereleased(x, y, button)
+    layout:mousereleased(x, y, button)
+end
+
+function love.mousemoved(x, y, dx, dy)
+    layout:mousemoved(x, y, dx, dy)
+end
+```
 
 ```lua {code_file="main.lua"}
 --- main.lua: <Empty> Simulation in LÖVE
@@ -379,8 +425,8 @@ end
 -- author: Abhishek Mishra
 
 -- canvas size
-local canvasWidth = 400
-local canvasHeight = 400
+local canvasWidth = 800
+local canvasHeight = 600
 
 function love.conf(t)
     -- set the window title
