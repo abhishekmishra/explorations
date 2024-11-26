@@ -190,7 +190,6 @@ function FBMCurve:generate()
     end
 
     self.ratio = 2 ^ (-self.h)
-    self.scale = self.num_levels
     
     local std = self.ratio * self.num_levels
     self:subdivide(1, self.num_points, std)
