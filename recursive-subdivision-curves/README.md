@@ -269,10 +269,17 @@ function CurvePanel:initialize(bounds)
 end
 
 function CurvePanel:_draw()
+    -- draw a warm gray background
+    love.graphics.setColor(0.15, 0.1, 0.1)
+    love.graphics.rectangle('fill', 0, 0, self:getWidth(), self:getHeight())
+
+    -- draw the curve in yellow
     love.graphics.setColor(1.0, 1.0, 0.0)
 
     -- delta is window width divided number of points
     local delta = self:getWidth() / self.curve.num_points
+
+    -- draw the curve
     for i = 1, self.curve.num_points - 1 do
         love.graphics.line(i * delta,
             self.curve.points[i], (i + 1) * delta, self.curve.points[i + 1])
