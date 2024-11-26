@@ -316,7 +316,7 @@ function love.load()
     local ch = love.graphics.getHeight()
 
     -- width of the control panel
-    local controlPanelWidth = 200
+    local controlPanelWidth = 250
 
     -- create a layout panel
     layout = nl.Layout(nl.Rect(0, 0, cw, ch), {
@@ -334,6 +334,7 @@ function love.load()
     -- Hurst Exponent text and slider
     hText = nl.Text(nl.Rect(0, 0, controlPanelWidth, 20), {
         text = "Hurst Exponent(h): " .. curvePanel.curve.h,
+        align = 'center',
     })
 
     hSlider = nl.Slider(nl.Rect(0, 0, controlPanelWidth, 20), {
@@ -353,6 +354,7 @@ function love.load()
     -- Number of levels text and slider
     levelText = nl.Text(nl.Rect(0, 0, controlPanelWidth, 20), {
         text = "Number of Levels: " .. curvePanel.curve.num_levels,
+        align = 'center',
     })
 
     levelSlider = nl.Slider(nl.Rect(0, 0, controlPanelWidth, 20), {
@@ -369,10 +371,25 @@ function love.load()
 
     -- add the curve panel and control panel to the layout
     layout:addChild(curvePanel)
+
+    -- add a text panel saying "FBM Curve Parameter"
+    controlLayout:addChild(nl.Text(nl.Rect(0, 0, controlPanelWidth, 30), {
+        font = love.graphics.newFont(20),
+        text = "Curve Parameters",
+        fgColor = {0.1, 0.9, 0.2},
+        align = 'center',
+    }))
+
+    -- add some empty space at the top with an empty panel
+    controlLayout:addChild(nl.Panel(nl.Rect(0, 0, controlPanelWidth, 10)))
     controlLayout:addChild(hText)
     controlLayout:addChild(hSlider)
+
+    -- add some empty space at the top with an empty panel
+    controlLayout:addChild(nl.Panel(nl.Rect(0, 0, controlPanelWidth, 10)))
     controlLayout:addChild(levelText)
     controlLayout:addChild(levelSlider)
+
     layout:addChild(controlLayout)
 end
 
