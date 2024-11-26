@@ -302,6 +302,8 @@ local controlLayout
 local curvePanel
 local hText
 local hSlider
+local levelText
+local levelSlider
 ```
 
 ## `love.load` - Initialization
@@ -334,7 +336,7 @@ function love.load()
         text = "Hurst Exponent(h): " .. curvePanel.curve.h,
     })
 
-    hSlider = nl.Slider(nl.Rect(0, 20, controlPanelWidth, 20), {
+    hSlider = nl.Slider(nl.Rect(0, 0, controlPanelWidth, 20), {
         minValue = 1,
         maxValue = 500,
         currentValue = curvePanel.curve.h * 1000,
@@ -348,10 +350,29 @@ function love.load()
         hText:setText("Hurst Exponent(h): " .. curvePanel.curve.h)
     end)
 
+    -- Number of levels text and slider
+    levelText = nl.Text(nl.Rect(0, 0, controlPanelWidth, 20), {
+        text = "Number of Levels: " .. curvePanel.curve.num_levels,
+    })
+
+    levelSlider = nl.Slider(nl.Rect(0, 0, controlPanelWidth, 20), {
+        minValue = 5,
+        maxValue = 11,
+        currentValue = curvePanel.curve.num_levels,
+    })
+
+    levelSlider:addChangeHandler(function(slider)
+        curvePanel.curve.num_levels = math.floor(levelSlider.currentValue)
+        curvePanel.curve:generate()
+        levelText:setText("Number of Levels: " .. curvePanel.curve.num_levels)
+    end)
+
     -- add the curve panel and control panel to the layout
     layout:addChild(curvePanel)
     controlLayout:addChild(hText)
     controlLayout:addChild(hSlider)
+    controlLayout:addChild(levelText)
+    controlLayout:addChild(levelSlider)
     layout:addChild(controlLayout)
 end
 
