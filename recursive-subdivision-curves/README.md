@@ -1,5 +1,5 @@
 ---
-title: Recursive Subdivision of Curves
+title: Recursive Subdivision Of Curves
 date: 25/11/2024
 author: Abhishek Mishra
 category: simulation
@@ -11,7 +11,7 @@ summary: A program to create a complex fractal curve using recursive subdivision
 |------------|----------|-------------------------------|
 |0.1         |25/11/2024|Initial version                |
 
-# Recursive Subdivision of Curves
+# Recursive Subdivision Of Curves
 
 This is a literate program (written in litpd [^litpd]) that demonstrates creating
 fractal paths/curves starting with a simple curve with a few line segments. The
@@ -248,7 +248,7 @@ local canvasHeight = 400
 
 function love.conf(t)
     -- set the window title
-    t.window.title = "Recursive Subdivision of Curves"
+    t.window.title = "Recursive Subdivision Of Curves"
 
     -- set the window size
     t.window.width = canvasWidth
