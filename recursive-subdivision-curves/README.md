@@ -91,7 +91,8 @@ local FBMCurve = Class("FBMCurve")
 
 ## Constructor
 
-* The class constructor accepts two optional arguments `seed` and `num_levels`.
+* The class constructor accepts four optional arguments `seed`, `num_levels`,
+  `max_height`, and `h`.
 * The `seed` argument is an input to the random number generator. The random
   number generator is used to create the perturbation in the midpoint when
   subdividing a line segment. The default value of `seed` is `1`.
@@ -99,6 +100,11 @@ local FBMCurve = Class("FBMCurve")
   curve. It represents the amount of detail required in the curve. The higher
   the value, the greater the number of points in the curve. The default value
   for `num_levels` is `9`.
+* The `max_height` is the maximum value of the curve generated. It is used to
+  generate the first and last points of the curve. The x-values of each point
+  in the curve is the index in the sequence of points.
+* `h` is a parameter which controls roughness/smoothness of the generated curve.
+  It's default is `0.01`.
 * The constructor uses the inputs to initialize some state for the curve.
 * The number of points `num_points` in the curve is first set equal to
   `2^num_levels + 1`.
@@ -114,17 +120,20 @@ local FBMCurve = Class("FBMCurve")
 
 ```lua {code_id="fbmconstructor"}
 --- Create a new FBMCurve object
--- @param seed (number) The seed for the random number generator
--- @param num_levels (number) The number of levels of the curve
-function FBMCurve:initialize(seed, num_levels)
+-- @param seed (number) The seed for the random number generator (default 1)
+-- @param num_levels (number) The number of levels of the curve (default 9)
+-- @param max_height (number) The max value of y-axis (default window height)
+-- @prama h (number) Hurst Expoonent (default 0.01)
+function FBMCurve:initialize(seed, num_levels, max_height, h)
     self.seed = seed or 1
+    self.num_levels = num_levels or 9
+    self.max_height = max_height or love.graphics.getHeight()
+    self.h = 0.01
     -- use the seed to create a new random number generator
     math.randomseed(seed)
 
-    self.num_levels = num_levels or 9
     self.num_points = (2 ^ self.num_levels) + 1
     self.points = {}
-    self.max_height = love.graphics.getHeight()
 
     -- random start and end points using the given seed
     -- in the range [0, num_levels]
@@ -134,7 +143,6 @@ function FBMCurve:initialize(seed, num_levels)
     for i = 2, self.num_points - 1, 1 do
         self.points[i] = 10
     end
-    self.h = 0.01
     self.ratio = 2 ^ (-self.h)
     self.scale = self.num_levels
     self:generate()
