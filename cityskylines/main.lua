@@ -18,7 +18,72 @@ end
 --- seed the random number generator
 math.randomseed(os.time())
 
---- get random window colour
+--- Convert HSV to RGB
+--- @param h: hue (0-360)
+--- @param s: saturation (0-1)
+--- @param v: value/brightness (0-1)
+--- @return r, g, b: RGB values (0-1)
+local function hsv_to_rgb(h, s, v)
+    local r, g, b
+    local i = math.floor(h / 60) % 6
+    local f = h / 60 - i
+    local p = v * (1 - s)
+    local q = v * (1 - f * s)
+    local t = v * (1 - (1 - f) * s)
+    
+    if i == 0 then
+        r, g, b = v, t, p
+    elseif i == 1 then
+        r, g, b = q, v, p
+    elseif i == 2 then
+        r, g, b = p, v, t
+    elseif i == 3 then
+        r, g, b = p, q, v
+    elseif i == 4 then
+        r, g, b = t, p, v
+    else
+        r, g, b = v, p, q
+    end
+    
+    return r, g, b
+end
+
+--- get random window colour using HSV variations
+--- generates colors centered around three window types: dark, warm orange, cool blue
+--- @return table: a table containing r, g, b, a values
+local function get_random_window_colour_hsv()
+    local window_type = math.random(1, 3)
+    local r, g, b
+    
+    if window_type == 1 then
+        -- Dark windows (lights out) - very low value/brightness
+        local hue = math.random() * 360  -- any hue (doesn't matter much for dark colors)
+        local saturation = 0.1 + math.random() * 0.3  -- low saturation (0.1-0.4)
+        local value = 0.0 + math.random() * 0.15      -- very low brightness (0.0-0.15)
+        r, g, b = hsv_to_rgb(hue, saturation, value)
+    elseif window_type == 2 then
+        -- Warm orange lights
+        local hue = 15 + math.random() * 45    -- orange-yellow range (15-60°)
+        local saturation = 0.7 + math.random() * 0.3  -- high saturation (0.7-1.0)
+        local value = 0.6 + math.random() * 0.4       -- medium-high brightness (0.6-1.0)
+        r, g, b = hsv_to_rgb(hue, saturation, value)
+    else
+        -- Cool blue lights
+        local hue = 180 + math.random() * 60   -- blue-cyan range (180-240°)
+        local saturation = 0.4 + math.random() * 0.6  -- medium-high saturation (0.4-1.0)
+        local value = 0.5 + math.random() * 0.5       -- medium-high brightness (0.5-1.0)
+        r, g, b = hsv_to_rgb(hue, saturation, value)
+    end
+    
+    return {
+        r = r,
+        g = g,
+        b = b,
+        a = 1
+    }
+end
+
+--- get random window colour (original version)
 --- chooses among a set of predefined colours
 --- @return table: a table containing r, g, b, a values
 local function get_random_window_colour()
@@ -31,6 +96,26 @@ local function get_random_window_colour()
     -- choose a random colour from the list
     local index = math.random(1, #colours)
     return colours[index]
+end
+
+--- get random building colour using HSV color space
+--- generates more vibrant and varied colors than RGB
+--- @return table: a table containing r, g, b, a values
+local function get_random_building_colour_hsv()
+    -- Generate random HSV values
+    local hue = math.random() * 360              -- Full hue range (0-360)
+    local saturation = 0.3 + math.random() * 0.7 -- 0.3-1.0 for good color saturation
+    local value = 0.4 + math.random() * 0.5      -- 0.4-0.9 for visible buildings
+
+    -- Convert HSV to RGB using our custom function
+    local r, g, b = hsv_to_rgb(hue, saturation, value)
+
+    return {
+        r = r,
+        g = g,
+        b = b,
+        a = 1
+    }
 end
 
 --- Create a building at a random position,
@@ -49,12 +134,10 @@ local function create_building()
         width = math.random(50, 100),
         height = ch - building.position.y
     }
-    building.color = get_colour_from_bytes({
-        r = math.random(0, 255),
-        g = math.random(0, 255),
-        b = math.random(0, 255),
-        a = 255
-    })
+
+    -- Use random HSV color for more vibrant buildings
+    building.color = get_random_building_colour_hsv()
+
     building.num_floors = math.random(3, 10)
     building.num_windows = math.random(5, 20)
 
@@ -63,8 +146,8 @@ local function create_building()
     building.windows = {}
     for i = 1, building.num_floors do
         for j = 1, building.num_windows do
-            -- get a random window colour
-            local window_color = get_random_window_colour()
+            -- get a random window colour using HSV variations
+            local window_color = get_random_window_colour_hsv()
             table.insert(building.windows, window_color)
         end
     end
