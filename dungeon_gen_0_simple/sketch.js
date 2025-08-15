@@ -281,7 +281,7 @@ function setup() {
   dungeon = new Dungeon(dungeonW, dungeonH);
   // Start in the middle of the dungeon
   const startPosition = new Position(dungeonW / 2, dungeonH / 2);
-  const steps = 15; // Number of steps for the random walk
+  const steps = 100; // Number of steps for the random walk
   randomWalkDungeonLimSteps(dungeon, startPosition, steps);
 }
 
