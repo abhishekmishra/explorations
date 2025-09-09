@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Run Love2D",
+            "label": "Run🏃‍♂️‍➡️▶️",
             "type": "shell",
             "command": "love .",
             "group": {
