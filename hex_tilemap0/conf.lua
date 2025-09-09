@@ -9,7 +9,7 @@ local canvasHeight = 400
 
 function love.conf(t)
     -- set the window title
-    t.window.title = "<Empty> Simulation"
+    t.window.title = "Hexagon grid exploration"
 
     -- set the window size
     t.window.width = canvasWidth

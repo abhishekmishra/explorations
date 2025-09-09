@@ -1,5 +1,5 @@
---- main.lua: <Empty> Simulation in LÖVE
--- date: 4/3/2024
+--- main.lua: Hexagon grid exploration
+-- date: 2025-09-09
 -- author: Abhishek Mishra
 
 --- The list of angle of the vertices of the hexagon tile from its center
