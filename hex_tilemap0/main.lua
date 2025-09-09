@@ -121,7 +121,7 @@ function love.draw()
     cam:detach()
 
     -- UI overlay (screen-space)
-    love.graphics.setColor(1,1,1)
+    love.graphics.setColor(0, 0, 0)
     love.graphics.print(string.format("Scale: %.2f  Pos: (%.1f, %.1f)\nDrag: left mouse, Wheel to zoom\nArrows/WASD to pan", cam.scale, cam.x, cam.y), 10, 10)
 end
 
