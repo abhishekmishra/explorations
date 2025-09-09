@@ -69,15 +69,12 @@ function love.load()
     font = love.graphics.newFont(12)
 
     -- create a hundred tiles,
-    -- with the axial coords adjusted such that they are created
-    -- in a rectangle area with hexagons of the top row horizontal
-    -- instead of created diagonally.
-    -- the axial coords flow diagonally therefore there has to be a 
-    -- y-axis adjustment as the x increases.
-    for i = -1, 10 do
-        local offset = math.floor(i/2)-- % 2
-        for j = - offset, 10 - offset do
-            table.insert(tiles, createHexagonTile(i, j, 30))
+    -- with the axial coords calculated to fit in a rectangular grid
+    for i = 0, 10 do
+        for j = 0, 10 do
+            local q = j
+            local r = i - math.floor(j/2)
+            table.insert(tiles, createHexagonTile(q, r, 30))
         end
     end
     -- for _, pt in ipairs(tiles[1].vertices) do
