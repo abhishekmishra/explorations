@@ -51,15 +51,17 @@ end
 
 --- Draw a hexagon tile hex with the given radius s
 -- @param hex hexagon
-local function drawHexaGonTile (hex)
+local function drawHexagonTile (hex)
+    love.graphics.setColor(0, 1, 0)
+    love.graphics.polygon("fill", hex.vertices)
     love.graphics.setColor(1, 0, 0)
     love.graphics.setLineWidth(3)
     love.graphics.polygon("line", hex.vertices)
-    love.graphics.setColor(0, 1, 0)
-    love.graphics.polygon("fill", hex.vertices)
     love.graphics.setColor(0, 0, 1)
-    local text = love.graphics.newText(font, hex.q .. ", " .. hex.r)
-    love.graphics.draw(text, hex.cx - text:getWidth()/2, hex.cy - text:getHeight()/2)
+    if not hex.text then
+        hex.text = love.graphics.newText(font, hex.q .. ", " .. hex.r)
+    end
+    love.graphics.draw(hex.text, hex.cx - hex.text:getWidth()/2, hex.cy - hex.text:getHeight()/2)
 end
 
 --- love.load: Called once at the start of the simulation
@@ -90,7 +92,7 @@ end
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
     for k, v in ipairs(tiles) do
-        drawHexaGonTile(v)
+        drawHexagonTile(v)
     end
 end
 
