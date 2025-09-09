@@ -136,6 +136,17 @@ function love.keypressed(key)
     elseif key == "-" or key == "kp-" then
         cam:zoomAt(1/1.1, love.graphics.getWidth()/2, love.graphics.getHeight()/2)
     end
+    -- pan with arrow keys or WASD
+    local panStep = 20 / cam.scale
+    if key == "up" or key == "w" then
+        cam:move(0, -panStep)
+    elseif key == "down" or key == "s" then
+        cam:move(0, panStep)
+    elseif key == "left" or key == "a" then
+        cam:move(-panStep, 0)
+    elseif key == "right" or key == "d" then
+        cam:move(panStep, 0)
+    end
 end
 
 function love.mousepressed(x,y,button)
