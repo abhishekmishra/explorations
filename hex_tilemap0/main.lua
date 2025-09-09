@@ -2,6 +2,8 @@
 -- date: 2025-09-09
 -- author: Abhishek Mishra
 
+local Camera = require "camera"
+
 --- The list of angle of the vertices of the hexagon tile from its center
 local hexagonAngles = {
     0,
@@ -64,14 +66,27 @@ local function drawHexagonTile (hex)
     love.graphics.draw(hex.text, hex.cx - hex.text:getWidth()/2, hex.cy - hex.text:getHeight()/2)
 end
 
+local cam
+
 --- love.load: Called once at the start of the simulation
 function love.load()
     font = love.graphics.newFont(12)
 
+    cam = Camera{
+        x = 0, y = 0, scale = 1,
+        minScale = 0.2, maxScale = 5,
+        wheelStep = 1.12,
+        enableInertia = true,
+        damp = 6,
+    }
+
+    -- Example bounds (a 2000x2000 world centered at 0)
+    cam:setBounds({-1000, -1000, 1000, 1000})
+
     -- create a hundred tiles,
     -- with the axial coords calculated to fit in a rectangular grid
-    for i = 0, 10 do
-        for j = 0, 10 do
+    for i = -10, 10 do
+        for j = -10, 10 do
             local q = j
             local r = i - math.floor(j/2)
             table.insert(tiles, createHexagonTile(q, r, 30))
@@ -88,9 +103,26 @@ end
 
 --- love.draw: Called every frame, draws the simulation
 function love.draw()
-    for k, v in ipairs(tiles) do
+    love.graphics.clear(0.12, 0.12, 0.12)
+    cam:attach()
+
+    -- draw grid/background
+    love.graphics.setColor(0.2, 0.2, 0.2)
+    love.graphics.rectangle("fill", -1000, -1000, 2000, 2000)
+
+    for _, v in ipairs(tiles) do
         drawHexagonTile(v)
     end
+
+    -- draw camera center marker
+    love.graphics.setColor(1,0,0)
+    love.graphics.circle("fill", cam.x, cam.y, 5)
+
+    cam:detach()
+
+    -- UI overlay (screen-space)
+    love.graphics.setColor(1,1,1)
+    love.graphics.print(string.format("Scale: %.2f  Pos: (%.1f, %.1f)\nDrag: left mouse, Wheel to zoom\nArrows/WASD to pan", cam.scale, cam.x, cam.y), 10, 10)
 end
 
 -- escape to exit
@@ -98,4 +130,26 @@ function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
     end
+    -- zoom in and out with +/-
+    if key == "=" or key == "kp+" then
+        cam:zoomAt(1.1, love.graphics.getWidth()/2, love.graphics.getHeight()/2)
+    elseif key == "-" or key == "kp-" then
+        cam:zoomAt(1/1.1, love.graphics.getWidth()/2, love.graphics.getHeight()/2)
+    end
+end
+
+function love.mousepressed(x,y,button)
+    cam:mousepressed(x,y,button)
+end
+
+function love.mousereleased(x,y,button)
+    cam:mousereleased(x,y,button)
+end
+
+function love.mousemoved(x,y,dx,dy, istouch)
+    cam:mousemoved(x,y,dx,dy)
+end
+
+function love.wheelmoved(dx, dy)
+    cam:wheelmoved(dx, dy)
 end
