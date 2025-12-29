@@ -127,3 +127,6 @@ www/
 
 .luaenv/
 .loveluaenv/
+
+# macOS files
+.DS_Store
