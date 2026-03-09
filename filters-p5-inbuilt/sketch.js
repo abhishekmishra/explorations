@@ -31,9 +31,9 @@ function draw() {
 
   // Apply erosion to the buffer periodically
   let fc = frameCount % 20;
-  if (fc < 1) {
+  if (fc < 2) {
     pg.filter(DILATE, false);
-  } else if (fc > 18) {
+  } else if (fc > 17) {
     pg.filter(ERODE, false);
   }
 
