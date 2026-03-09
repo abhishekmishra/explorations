@@ -50,6 +50,14 @@ function draw() {
   pop();
 }
 
+// Save a 5-second gif when the user presses the 's' key.
+// Wait 1 second after the key press before recording.
+function keyPressed() {
+  if (key === "s") {
+    saveGif("sketch", 5, { delay: 1 });
+  }
+}
+
 function drawSquare(x, y, w, tx) {
   push();
   //location of shadow
