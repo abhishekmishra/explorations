@@ -20,10 +20,32 @@ function draw() {
   background(COLOR_LIGHT);
 
   let tx = (sin(frameCount * 0.1) + 1) / 2;
-  drawSquare(20, 20, 80, tx);
-  drawCircle(180, 60, 80, tx);
-  drawEllipse(300, 60, 90, 60, tx);
-  drawRectangle(380, 30, 110, 60, tx);
+  push();
+  translate(20, 50);
+  drawSquare(0, 0, 80, tx);
+  drawCircle(140, 40, 80, tx);
+  drawEllipse(250, 40, 90, 60, tx);
+  drawRectangle(330, 10, 100, 60, tx);
+  drawTriangle(460, 10, 110, 60, tx);
+  pop();
+
+  push();
+  translate(20, 180);
+  drawSquare(0, 0, 80, tx);
+  drawCircle(140, 40, 80, tx);
+  drawEllipse(250, 40, 90, 60, tx);
+  drawRectangle(330, 10, 100, 60, tx);
+  drawTriangle(460, 10, 110, 60, tx);
+  pop();
+
+  push();
+  translate(20, 310);
+  drawSquare(0, 0, 80, tx);
+  drawCircle(140, 40, 80, tx);
+  drawEllipse(250, 40, 90, 60, tx);
+  drawRectangle(330, 10, 100, 60, tx);
+  drawTriangle(460, 10, 110, 60, tx);
+  pop();
 }
 
 function drawSquare(x, y, w, tx) {
@@ -110,6 +132,36 @@ function drawRectangle(x, y, w, h, tx) {
 
   fill(COLOR_DARKEST);
   rect(x + dx, y + dy, w, h);
+
+  pop();
+}
+
+function drawTriangle(x, y, w, h, tx) {
+  push();
+  //location of shadow
+  let sx = x + 20;
+  let sy = y + 20;
+  let sw = w * 0.9;
+  let sh = h * 0.9;
+
+  let dx = tx * w * 0.2;
+  let dy = tx * h * 0.2;
+  let dw = tx * w * 0.2;
+  let dh = tx * w * 0.1;
+
+  noStroke();
+  fill(COLOR_DARK);
+  triangle(
+    sx + dx / 2,
+    sy + dy / 2,
+    sx + dx / 2 + sw + dw,
+    sy + dy / 2 + sh + dh,
+    sx + dx / 2,
+    sy + dy / 2 + sh + dh,
+  );
+
+  fill(COLOR_DARKEST);
+  triangle(x + dx, y + dy, x + dx + w, y + dy + h, x + dx, y + dy + h);
 
   pop();
 }
