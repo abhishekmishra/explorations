@@ -31,20 +31,22 @@ function draw() {
 
   push();
   translate(20, 180);
-  drawSquare(0, 0, 80, tx);
-  drawCircle(140, 40, 80, tx);
-  drawEllipse(250, 40, 90, 60, tx);
-  drawRectangle(330, 10, 100, 60, tx);
-  drawTriangle(460, 10, 110, 60, tx);
+  drawRectangle(0, 10, 120, 50, tx);
+  drawTriangle(160, 10, 180, 60, tx);
+  // drawSquare(0, 0, 80, tx);
+  // drawCircle(140, 40, 80, tx);
+  drawEllipse(450, 40, 190, 60, tx);
+  // drawTriangle(460, 10, 110, 60, tx);
   pop();
 
   push();
   translate(20, 310);
   drawSquare(0, 0, 80, tx);
   drawCircle(140, 40, 80, tx);
-  drawEllipse(250, 40, 90, 60, tx);
-  drawRectangle(330, 10, 100, 60, tx);
-  drawTriangle(460, 10, 110, 60, tx);
+  drawSquare(200, 0, 80, tx);
+  drawCircle(340, 40, 80, tx);
+  drawSquare(400, 0, 80, tx);
+  drawCircle(540, 40, 80, tx);
   pop();
 }
 
