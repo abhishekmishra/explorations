@@ -45,7 +45,7 @@ function drawGrid() {
       push();
       translate(i * CELL_UNIT, j * CELL_UNIT);
       stroke(200);
-      if (target != null && target.x === i && target.y === j) {
+      if (target != null && floor(target.x) === i && floor(target.y) === j) {
         fill("red");
         square(0, 0, CELL_UNIT);
         noFill();
@@ -54,7 +54,7 @@ function drawGrid() {
       }
       let c = grid[index];
       translate(CELL_UNIT / 2, CELL_UNIT / 2);
-      rotate(c.heading() - (3 * PI) / 4);
+      rotate(PI / 4 - c.heading());
       // scale(CELL_UNIT);
       stroke(0);
       line(0, 0, CELL_UNIT, 0);
@@ -89,6 +89,6 @@ function keyPressed() {
 }
 
 function mouseMoved() {
-  target = createVector(floor(mouseX / CELL_UNIT), floor(mouseY / CELL_UNIT));
+  target = createVector(mouseX / CELL_UNIT, mouseY / CELL_UNIT);
   targetMoved = true;
 }
