@@ -24,7 +24,7 @@ class Particle {
     let index = floor(this.pos.y) * CELL_COL_COUNT + floor(this.pos.x);
     this.acc = this.grid[index];
     this.vel.add(this.acc);
-    this.pos.add(this.vel.mult(deltaTime * 0.005));
+    this.pos.add(this.vel.mult(deltaTime * 0.01));
     // console.log(this.pos.x);
 
     this.edges();
