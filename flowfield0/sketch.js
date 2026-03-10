@@ -24,9 +24,10 @@ function updateGrid() {
     for (let j = 0; j < CELL_ROW_COUNT; j++) {
       for (let i = 0; i < CELL_COL_COUNT; i++) {
         let index = j * CELL_COL_COUNT + i;
-        // let c = grid[index];
         let loc = createVector(i, j);
         let d = loc.sub(target);
+        // the flow vector for the cell is now specified by
+        // the angle between the vector from cell to target, and target.
         grid[index] = p5.Vector.fromAngle(d.angleBetween(target));
       }
     }
