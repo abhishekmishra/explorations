@@ -1,9 +1,3 @@
---- conf.lua: Config for the love2d game.
---
--- date: 4/3/2024
--- author: Abhishek Mishra
-
--- canvas size
 local canvasWidth = 400
 local canvasHeight = 400
 
