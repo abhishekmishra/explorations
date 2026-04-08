@@ -1,10 +1,16 @@
+local Vehicle = require 'vehicle'
+
+local v
+
 function love.load()
+    v = Vehicle()
 end
 
 function love.update(dt)
 end
 
 function love.draw()
+    v:draw()
 end
 
 function love.keypressed(key)
