@@ -14,6 +14,20 @@ function Vehicle:initialize(x, y)
     self.r = 6
 end
 
+function Vehicle:edges()
+    local width, height = love.graphics.getDimensions()
+    if self.position.x > width + self.r then
+        self.position.x = -self.r
+    elseif self.position.x < -self.r then
+        self.position.x = width + self.r
+    end
+    if self.position.y > height + self.r then
+        self.position.y = -self.r
+    elseif self.position.y < -self.r then
+        self.position.y = height + self.r
+    end
+end
+
 function Vehicle:update(dt)
     -- Update velocity
     self.velocity = self.velocity + self.acceleration
@@ -23,6 +37,9 @@ function Vehicle:update(dt)
     -- reset acceleration
     self.acceleration.x = 0
     self.acceleration.y = 0
+
+    -- apply edges
+    self:edges()
 end
 
 function Vehicle:applyForce(f)
