@@ -19,6 +19,7 @@ CanSeek = {
 -- away from the target.
 CanFlee = {
     flee = function(self, target, fleeDistance)
+        fleeDistance = fleeDistance or 100
         local desired = target - self.position
         if desired:mag() < fleeDistance then
             desired:setMag(self.maxSpeed)
@@ -27,6 +28,16 @@ CanFlee = {
             return steer
         end
         return Vector(0, 0)
+    end
+}
+
+--- CanPursue mixin allows the vehicle to pursue another
+-- vechicle.
+-- Note: needs the CanSeek mixin
+CanPursue = {
+    pursue = function(self, targetVehicle)
+        local targetPos = targetVehicle.position + (targetVehicle.velocity * 10)
+        return self:seek(targetPos)
     end
 }
 
@@ -39,20 +50,25 @@ Seeker:include(CanSeek)
 local Runner = Class("Runner", Vehicle)
 Runner:include(CanFlee)
 
+local Hunter = Class("Hunter", Seeker)
+Hunter:include(CanPursue)
+
 -- vehicle and target
 local v
 local target
 
 function love.load()
-    v = Seeker(50, 50)
+    -- v = Seeker(50, 50)
     -- v = Runner(170, 170)
+    v = Hunter(50, 50)
     target = Target(200, 200)
-    target.velocity = Vector(10, 10)
+    target.velocity = Vector(math.random(-50, 50), math.random(-50, 50))
 end
 
 function love.update(dt)
-    local steering = v:seek(target.position)
+    -- local steering = v:seek(target.position)
     -- local steering = v:flee(target, 100)
+    local steering = v:pursue(target)
     v:applyForce(steering)
     v:update(dt)
     target:update(dt)
