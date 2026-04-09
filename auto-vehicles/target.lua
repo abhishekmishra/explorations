@@ -1,10 +1,6 @@
 local Class = require 'middleclass'
 local Vehicle = require 'vehicle'
 
-local function mapConstrain(value, start1, stop1, start2, stop2)
-    local n = start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1))
-    return math.max(math.min(n, math.max(start2, stop2)), math.min(start2, stop2))
-end
 
 local Target = Class("Target", Vehicle)
 
