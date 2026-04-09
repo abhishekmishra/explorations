@@ -8,8 +8,8 @@ function Vehicle:initialize(x, y)
     self.position = Vector(x or 0, y or 0)
     self.velocity = Vector(0, 0)
     self.acceleration = Vector(0, 0)
-    self.maxForce = 10
-    self.maxSpeed = 10
+    self.maxForce = 1
+    self.maxSpeed = 100
     self.orientation = 0
     self.r = 6
 end
