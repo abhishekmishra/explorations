@@ -14,22 +14,40 @@ CanSeek = {
     end
 }
 
+--- CanFlee mixin adds functionality to move the vehicle
+-- away from the target.
+CanFlee = {
+    flee = function(self, target)
+        local desired = self.position - target
+        desired:setMag(self.maxSpeed)
+        local steer = desired - self.velocity
+        steer = steer:limit(self.maxForce)
+        self:applyForce(steer)
+    end
+}
+
 -- Create a simple Seeker based on the Vehicle
 -- and the CanSeek mixin
 local Seeker = Class("Seeker", Vehicle)
 Seeker:include(CanSeek)
+
+-- A Runner which flees from a target
+local Runner = Class("Runner", Vehicle)
+Runner:include(CanFlee)
 
 -- vehicle and target
 local v
 local target
 
 function love.load()
-    v = Seeker(50, 50)
+    -- v = Seeker(50, 50)
+    v = Runner(190, 190)
     target = Vector(200, 200)
 end
 
 function love.update(dt)
-    v:seek(target)
+    -- v:seek(target)
+    v:flee(target)
     v:update(dt)
 end
 
