@@ -1,5 +1,6 @@
 local Class = require 'middleclass'
 local Vehicle = require 'vehicle'
+local Target = require 'target'
 local Vector = require 'vector'
 
 --- CanSeek mixin adds functionality to move the
@@ -45,19 +46,20 @@ local target
 function love.load()
     v = Seeker(50, 50)
     -- v = Runner(170, 170)
-    target = Vector(200, 200)
+    target = Target(200, 200)
+    target.velocity = Vector(10, 10)
 end
 
 function love.update(dt)
-    local steering = v:seek(target)
+    local steering = v:seek(target.position)
     -- local steering = v:flee(target, 100)
     v:applyForce(steering)
     v:update(dt)
+    target:update(dt)
 end
 
 function love.draw()
-    love.graphics.setColor(1, 1, 0, 1)
-    love.graphics.circle("fill", target.x, target.y, 10)
+    target:draw()
     v:draw()
 end
 
