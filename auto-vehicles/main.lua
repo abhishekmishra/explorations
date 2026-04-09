@@ -10,21 +10,22 @@ CanSeek = {
         desired:setMag(self.maxSpeed)
         local steer = desired - self.velocity
         steer = steer:limit(self.maxForce)
-        self:applyForce(steer)
+        return steer
     end
 }
 
 --- CanFlee mixin adds functionality to move the vehicle
 -- away from the target.
 CanFlee = {
-    flee = function(self, target)
-        local desired = self.position - target
-        if desired:mag() < 20 then
+    flee = function(self, target, fleeDistance)
+        local desired = target - self.position
+        if desired:mag() < fleeDistance then
             desired:setMag(self.maxSpeed)
-            local steer = desired - self.velocity
+            local steer = self.velocity - desired
             steer = steer:limit(self.maxForce)
-            self:applyForce(steer)
+            return steer
         end
+        return Vector(0, 0)
     end
 }
 
@@ -42,14 +43,15 @@ local v
 local target
 
 function love.load()
-    -- v = Seeker(50, 50)
-    v = Runner(190, 190)
+    v = Seeker(50, 50)
+    -- v = Runner(170, 170)
     target = Vector(200, 200)
 end
 
 function love.update(dt)
-    -- v:seek(target)
-    v:flee(target)
+    local steering = v:seek(target)
+    -- local steering = v:flee(target, 100)
+    v:applyForce(steering)
     v:update(dt)
 end
 
