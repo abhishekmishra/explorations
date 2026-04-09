@@ -19,10 +19,12 @@ CanSeek = {
 CanFlee = {
     flee = function(self, target)
         local desired = self.position - target
-        desired:setMag(self.maxSpeed)
-        local steer = desired - self.velocity
-        steer = steer:limit(self.maxForce)
-        self:applyForce(steer)
+        if desired:mag() < 20 then
+            desired:setMag(self.maxSpeed)
+            local steer = desired - self.velocity
+            steer = steer:limit(self.maxForce)
+            self:applyForce(steer)
+        end
     end
 }
 
