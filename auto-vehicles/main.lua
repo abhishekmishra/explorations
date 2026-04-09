@@ -36,8 +36,8 @@ CanFlee = {
 -- Note: needs the CanSeek mixin
 CanPursue = {
     pursue = function(self, targetVehicle)
-        local targetPos = targetVehicle.position + (targetVehicle.velocity * 10)
-        return self:seek(targetPos)
+        local predictedPosition = targetVehicle.position + (targetVehicle.velocity * 10)
+        return self:seek(predictedPosition)
     end
 }
 
